@@ -15,6 +15,10 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 	
 	int nObjects;
 	
+	/** Random generator */
+	
+	Random randGenerator;
+	
 	//////////////////////////////////////////////
 	// ----------------------------- Constructors
 	/////////////////////////////////////////////
@@ -43,10 +47,22 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
 	
+	/**
+	 * Set the seed and initialize the random generator
+	 * 
+	 * @param seed the seed to ser
+	 */
+	
+	public void setSeed(int seed) 
+	{
+		this.seed = seed;
+		randGenerator = new Random(seed);
+	}
+	
 	@Override
 	public ISolution generate() 
 	{
-		Random randGenerator = new Random(seed);
+		
 		byte [] knapsack = new byte[nObjects];
 		
 		for(int i=0; i<nObjects; i++) {

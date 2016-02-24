@@ -1,9 +1,9 @@
 package problems.knapsack;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import problems.IInstance;
@@ -27,9 +27,6 @@ public class InstanceKnapsack implements IInstance
 	
 	protected List <KPObject> objects;
 	
-	/** Reader of the data file */
-	
-	BufferedReader dataFileReader = null;
 	
 	//////////////////////////////////////////////
 	// ------------------------------ Constructor
@@ -63,12 +60,19 @@ public class InstanceKnapsack implements IInstance
 					weight += this.objects.get(i).getWeight();
 				}
 			}
+			//System.out.println("peso total:" + weight);
 			// Check if the solution is valid
 			// TODO cambiar por --> (value - value' (si todos se cogieran)
-			if(weight > knapsackSize)
+			if(weight > knapsackSize) {
+				//System.out.println("knapsackSize:" + knapsackSize);
+				//System.out.println("weight:" + weight);
 				solution.setFitness(0);
-			else
+			}
+			else {
+				//System.out.println("knapsackSize:" + knapsackSize);
+				//System.out.println("weight:" + weight);
 				solution.setFitness(value);	
+			}
 		}
 		else {
 			System.err.println("Solution must be a SolutionKnapsack instance");
@@ -79,30 +83,44 @@ public class InstanceKnapsack implements IInstance
 	@Override
 	public IInstance loadInstance(FileReader dataFileReader) 
 	{
-		String line = "";
+		String line = "";	
+		BufferedReader br = new BufferedReader(dataFileReader);
+		int pesoTotal = 0;
+		
 		
 		try {
-			dataFileReader = new BufferedReader(new FileReader(fileName));
-		} catch (FileNotFoundException e) {
-			System.out.println("The data file couldn't be readed");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		try {
-			while (!dataFileReader.readLine().startsWith("knaPI"));
+			while (!br.readLine().startsWith("knapPI"));
 			// Read the number of objects
-			line = dataFileReader.readLine();
+			line = br.readLine();
 			nObjects = Integer.parseInt(line.split(" ")[1]);
+			System.out.println("nObjects:" + nObjects);
+			objects = new ArrayList <KPObject>(nObjects);
 			// Read the knapsack size
-			knapsackSize = Integer.parseInt(line.spli("")[1]);
-		
-			
+			line = br.readLine();
+			knapsackSize = Integer.parseInt(line.split(" ")[1]);
+			System.out.println("knapsackSize:" + knapsackSize);
+
+			// Ignore two next lines
+			br.readLine();
+			br.readLine();
+			// Read N objects
+			for(int i=0; i<nObjects; i++) {
+				KPObject obj = new KPObject();
+				line = br.readLine();
+				String[] objectInformation = line.split(",");
+				obj.setValue(Integer.parseInt(objectInformation[1]));
+				obj.setWeight(Integer.parseInt(objectInformation[2]));
+				System.out.println("nuevo peso:" +obj.getWeight());
+				pesoTotal += obj.getWeight();
+				objects.add(obj);
+			}
 		
 		} catch (IOException e) {
 			System.out.println("Problem while reading the CSV file");
 			e.printStackTrace();
 		}
+		
+		System.out.println("pesoTotal:" + pesoTotal);
 		
 		// TODO Auto-generated method stub
 		return null;
