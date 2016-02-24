@@ -1,6 +1,8 @@
 package core;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +79,14 @@ public class Run
 		}
 		
 		// Load the general parameters for the instance and the generator
-		instance.loadInstance(dataFile);
+		try{
+			FileReader fr = new FileReader(new File(dataFile));
+			instance.loadInstance(fr);
+		}
+		catch(FileNotFoundException e){
+			System.err.println(e.toString());
+			System.exit(0);
+		}
 		generator.setSeed(randSeed);
 		
 		// Configure the Knapsack generator

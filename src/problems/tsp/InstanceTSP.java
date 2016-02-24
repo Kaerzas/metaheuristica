@@ -1,6 +1,8 @@
 package problems.tsp;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,16 +38,16 @@ public class InstanceTSP implements IInstance
 				line = file.readLine();
 				
 				//Stop condition, this starts the node section
-				if(line == "NODE_COORD_SECTION"){
+				if(line.equals("NODE_COORD_SECTION")){
 					break;
 				}
 				
-				pair = line.split(" : ");
+				pair = line.split(":");
 				key = pair[0];
 				value = pair[1];
 				
-				if(key == "DIMENSION")
-					nNodes = Integer.parseInt(value);
+				if(key.startsWith("DIMENSION"))
+					nNodes = Integer.parseInt(value.trim());
 			}
 			
 			nodes = new ArrayList<TSPNode>(nNodes);
@@ -69,5 +71,18 @@ public class InstanceTSP implements IInstance
 		
 		graph = new TSPGraph(nodes);
 		return null;
+	}
+	
+	public static void main(String[] args){
+		File f = new File("examples/TSPInstances/berlin52.tsp");
+		
+		try{
+			FileReader fr = new FileReader(f);
+			IInstance inst = new InstanceTSP();
+			
+			inst.loadInstance(fr);
+		} catch(FileNotFoundException e){
+			System.out.println("File does not exist");
+		}
 	}
 }
