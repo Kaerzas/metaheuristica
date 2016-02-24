@@ -12,8 +12,8 @@ public class SolGeneratorTSP extends AbstractSolGenerator
 {
 	private int nNodes;
 	
-	public SolGeneratorTSP(int nNodes){
-		this.nNodes = nNodes;
+	public SolGeneratorTSP(){
+		
 	}
 	
 	@Override
@@ -23,10 +23,14 @@ public class SolGeneratorTSP extends AbstractSolGenerator
 		
 		List<Integer> randSol = new ArrayList<Integer>(nNodes);
 		for(int i=0 ; i < nNodes ; ++i){
-			randSol.set(i, i+1);
+			randSol.add(i);
 		}
 		Collections.shuffle(randSol, randGenerator);
 		
 		return new SolutionTSP(randSol);
+	}
+	
+	public void setNNodes(int nNodes){
+		this.nNodes = nNodes;
 	}
 }

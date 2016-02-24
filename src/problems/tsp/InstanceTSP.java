@@ -14,11 +14,21 @@ import problems.ISolution;
 public class InstanceTSP implements IInstance 
 {
 	private TSPGraph graph;
+	private int nNodes;
 	
 	@Override
 	public void evaluate(ISolution solution) 
 	{
-		// TODO Auto-generated method stub
+		List<Integer> order = ((SolutionTSP)solution).getOrder();
+		double total = 0.0;
+		
+		for(int i=0 ; i < (order.size()-1) ; ++i){
+			total += graph.distance(order.get(i), order.get(i+1));
+		}
+		System.err.println(order.size());
+		total += graph.distance(order.get(order.size()-1), 0);
+		
+		solution.setFitness(total);
 	}
 
 	@Override
@@ -28,8 +38,6 @@ public class InstanceTSP implements IInstance
 		
 		try{
 			BufferedReader file = new BufferedReader(dataFileReader);
-			
-			int nNodes=0;
 			
 			String line;
 			String[] pair;
@@ -47,7 +55,7 @@ public class InstanceTSP implements IInstance
 				value = pair[1];
 				
 				if(key.startsWith("DIMENSION"))
-					nNodes = Integer.parseInt(value.trim());
+					this.nNodes = Integer.parseInt(value.trim());
 			}
 			
 			nodes = new ArrayList<TSPNode>(nNodes);
@@ -71,6 +79,10 @@ public class InstanceTSP implements IInstance
 		
 		graph = new TSPGraph(nodes);
 		return null;
+	}
+	
+	public int getNNodes(){
+		return this.nNodes;
 	}
 	
 	public static void main(String[] args){

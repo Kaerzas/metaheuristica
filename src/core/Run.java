@@ -12,7 +12,10 @@ import org.apache.commons.configuration.XMLConfiguration;
 import problems.IInstance;
 import problems.ISolGenerator;
 import problems.ISolution;
-import problems.knapsack.*;
+import problems.knapsack.InstanceKnapsack;
+import problems.knapsack.SolGeneratorKnapsack;
+import problems.tsp.InstanceTSP;
+import problems.tsp.SolGeneratorTSP;
 import util.config.ConfigLoader;
 
 /**
@@ -94,6 +97,14 @@ public class Run
 			int nObjects = ((InstanceKnapsack)instance).getNObjects();
 			if(generator instanceof SolGeneratorKnapsack) {
 				((SolGeneratorKnapsack) generator).setnObjects(nObjects);
+			}
+		}
+		
+		// Configure the Knapsack generator
+		if(instance instanceof InstanceTSP) {
+			int nNodes = ((InstanceTSP)instance).getNNodes();
+			if(generator instanceof SolGeneratorTSP) {
+				((SolGeneratorTSP) generator).setNNodes(nNodes);
 			}
 		}
 		

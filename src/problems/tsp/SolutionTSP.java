@@ -7,6 +7,10 @@ import problems.AbstractSolution;
 public class SolutionTSP extends AbstractSolution 
 {
 	
+	public SolutionTSP(){
+		
+	}
+	
 	//private int [] order;
 	private List<Integer> order;
 	
@@ -17,11 +21,11 @@ public class SolutionTSP extends AbstractSolution
 	@Override
 	public void printSolution() 
 	{
-		System.out.print("[");
-		for (Integer i : order) {
-			System.out.print(i+",");
-		}
-		System.out.println("]");
+		System.out.println(order);
 		System.out.println("Fitness:" + getFitness());
+	}
+	
+	public List<Integer> getOrder(){
+		return order;
 	}
 }
