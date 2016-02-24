@@ -5,6 +5,13 @@ import java.util.Random;
 import problems.AbstractSolGenerator;
 import problems.ISolution;
 
+/**
+ * Generator class for the knapsack problem
+ * 
+ * @author Rafael Barbudo Lunar
+ *
+ */
+
 public class SolGeneratorKnapsack extends AbstractSolGenerator 
 {
 	//////////////////////////////////////////////
@@ -13,11 +20,11 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 	
 	/** Number of objects for the problem */
 	
-	int nObjects;
+	private int nObjects;
 	
 	/** Random generator */
 	
-	Random randGenerator;
+	private Random randGenerator;
 	
 	//////////////////////////////////////////////
 	// ----------------------------- Constructors
@@ -62,7 +69,6 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 	@Override
 	public ISolution generate() 
 	{
-		
 		byte [] knapsack = new byte[nObjects];
 		
 		for(int i=0; i<nObjects; i++) {
@@ -96,5 +102,5 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 	{
 		this.nObjects = nObjects;
 	}
-	
+
 }

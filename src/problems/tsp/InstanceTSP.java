@@ -1,20 +1,19 @@
 package problems.tsp;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import problems.IInstance;
+import problems.AbstractInstance;
 import problems.ISolution;
 
-public class InstanceTSP implements IInstance 
+public class InstanceTSP extends AbstractInstance 
 {
 	private TSPGraph graph;
 	private int nNodes;
+	
 	
 	@Override
 	public void evaluate(ISolution solution) 
@@ -25,15 +24,16 @@ public class InstanceTSP implements IInstance
 		for(int i=0 ; i < (order.size()-1) ; ++i){
 			total += graph.distance(order.get(i), order.get(i+1));
 		}
-		System.err.println(order.size());
 		total += graph.distance(order.get(order.size()-1), 0);
 		
 		solution.setFitness(total);
 	}
 
 	@Override
-	public IInstance loadInstance(FileReader dataFileReader) 
+	public void loadInstance(FileReader dataFileReader) 
 	{
+		maximize = false;
+		
 		List<TSPNode> nodes = null;
 		
 		try{
@@ -78,23 +78,10 @@ public class InstanceTSP implements IInstance
 		}
 		
 		graph = new TSPGraph(nodes);
-		return null;
 	}
 	
-	public int getNNodes(){
+	public int getNNodes()
+	{
 		return this.nNodes;
-	}
-	
-	public static void main(String[] args){
-		File f = new File("examples/TSPInstances/berlin52.tsp");
-		
-		try{
-			FileReader fr = new FileReader(f);
-			IInstance inst = new InstanceTSP();
-			
-			inst.loadInstance(fr);
-		} catch(FileNotFoundException e){
-			System.out.println("File does not exist");
-		}
 	}
 }

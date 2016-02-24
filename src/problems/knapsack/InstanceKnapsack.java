@@ -6,10 +6,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import problems.IInstance;
+import problems.AbstractInstance;
 import problems.ISolution;
 
-public class InstanceKnapsack implements IInstance 
+/**
+ * Instance class for the knapsack problem
+ * 
+ * @author Rafael Barbudo Lunar
+ *
+ */
+
+public class InstanceKnapsack extends AbstractInstance 
 {
 	//////////////////////////////////////////////
 	// -------------------------------- Variables
@@ -48,6 +55,7 @@ public class InstanceKnapsack implements IInstance
 	{
 		double value = 0;		
 		double weight = 0;
+		double totalValue = 0;
 		
 		// Check if the solution is an instance of the Knapsack problem
 		if(solution instanceof SolutionKnapsack) {
@@ -59,20 +67,13 @@ public class InstanceKnapsack implements IInstance
 					value += this.objects.get(i).getValue();
 					weight += this.objects.get(i).getWeight();
 				}
+				totalValue += this.objects.get(i).getValue();
 			}
-			//System.out.println("peso total:" + weight);
 			// Check if the solution is valid
-			// TODO cambiar por --> (value - value' (si todos se cogieran)
-			if(weight > knapsackSize) {
-				//System.out.println("knapsackSize:" + knapsackSize);
-				//System.out.println("weight:" + weight);
-				solution.setFitness(0);
-			}
-			else {
-				//System.out.println("knapsackSize:" + knapsackSize);
-				//System.out.println("weight:" + weight);
+			if(weight > knapsackSize)
+				solution.setFitness(value - totalValue);
+			else
 				solution.setFitness(value);	
-			}
 		}
 		else {
 			System.err.println("Solution must be a SolutionKnapsack instance");
@@ -81,24 +82,22 @@ public class InstanceKnapsack implements IInstance
 	}
 
 	@Override
-	public IInstance loadInstance(FileReader dataFileReader) 
+	public void loadInstance(FileReader dataFileReader) 
 	{
-		String line = "";	
-		BufferedReader br = new BufferedReader(dataFileReader);
-		int pesoTotal = 0;
+		maximize = true;
 		
+		String line = "";	
+		BufferedReader br = new BufferedReader(dataFileReader);		
 		
 		try {
 			while (!br.readLine().startsWith("knapPI"));
 			// Read the number of objects
 			line = br.readLine();
 			nObjects = Integer.parseInt(line.split(" ")[1]);
-			System.out.println("nObjects:" + nObjects);
 			objects = new ArrayList <KPObject>(nObjects);
 			// Read the knapsack size
 			line = br.readLine();
 			knapsackSize = Integer.parseInt(line.split(" ")[1]);
-			System.out.println("knapsackSize:" + knapsackSize);
 
 			// Ignore two next lines
 			br.readLine();
@@ -110,8 +109,6 @@ public class InstanceKnapsack implements IInstance
 				String[] objectInformation = line.split(",");
 				obj.setValue(Integer.parseInt(objectInformation[1]));
 				obj.setWeight(Integer.parseInt(objectInformation[2]));
-				System.out.println("nuevo peso:" +obj.getWeight());
-				pesoTotal += obj.getWeight();
 				objects.add(obj);
 			}
 		
@@ -119,11 +116,6 @@ public class InstanceKnapsack implements IInstance
 			System.out.println("Problem while reading the CSV file");
 			e.printStackTrace();
 		}
-		
-		System.out.println("pesoTotal:" + pesoTotal);
-		
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	/**

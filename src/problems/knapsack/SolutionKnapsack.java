@@ -2,6 +2,13 @@ package problems.knapsack;
 
 import problems.AbstractSolution;
 
+/**
+ * Solution class for the knapsack problem
+ * 
+ * @author Rafael Barbudo Lunar
+ *
+ */
+
 public class SolutionKnapsack extends AbstractSolution
 {
 	//////////////////////////////////////////////

@@ -12,15 +12,15 @@ public class SolGeneratorTSP extends AbstractSolGenerator
 {
 	private int nNodes;
 	
+	private Random randGenerator;
+	
 	public SolGeneratorTSP(){
 		
 	}
 	
 	@Override
 	public ISolution generate() 
-	{
-		Random randGenerator = new Random(seed);
-		
+	{		
 		List<Integer> randSol = new ArrayList<Integer>(nNodes);
 		for(int i=0 ; i < nNodes ; ++i){
 			randSol.add(i);
@@ -32,5 +32,17 @@ public class SolGeneratorTSP extends AbstractSolGenerator
 	
 	public void setNNodes(int nNodes){
 		this.nNodes = nNodes;
+	}
+	
+	/**
+	 * Set the seed and initialize the random generator
+	 * 
+	 * @param seed the seed to ser
+	 */
+	
+	public void setSeed(int seed) 
+	{
+		this.seed = seed;
+		randGenerator = new Random(seed);
 	}
 }

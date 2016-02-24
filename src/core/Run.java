@@ -123,12 +123,14 @@ public class Run
 			instance.evaluate(newSolution);
 			
 			// Check if the new solution is better
-			if((bestSolution == null) || (newSolution.getFitness() > bestSolution.getFitness()))
+			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){
 				bestSolution = newSolution;
+				// Show results
+				System.out.println("A best solution has been found in the itration " + i + ":");
+				bestSolution.printSolution();
+				System.out.println();
+			}
 		}
-		// Show the results
-		System.out.println("The best solution is:");
-		bestSolution.printSolution();
 	}
 	
 	/**

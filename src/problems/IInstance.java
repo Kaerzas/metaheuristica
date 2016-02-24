@@ -26,8 +26,18 @@ public interface IInstance
 	 * 
 	 * @param dataFileReader reader of the data file
 	 * 
-	 * @return A instance for the problem
 	 */
 	
-	public IInstance loadInstance(FileReader dataFileReader);	
+	public void loadInstance(FileReader dataFileReader);	
+	
+	/**
+	 * Compare two solution
+	 * 
+	 * @param sol1 first solution to compare
+	 * @param sol2 second solution to compare
+	 * 
+	 * @return true if the first solution is better, false anyway
+	 */
+	
+	public boolean betterThan(ISolution sol1, ISolution sol2);
 }
