@@ -1,16 +1,40 @@
 package problems.tsp;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TSPGraph {
+/**
+ * Class representing the graph for the TSP problem
+ * 
+ * @author Rafael Barbudo Lunar
+ *
+ */
+
+public class TSPGraph 
+{
+	//////////////////////////////////////////////
+	// -------------------------------- Variables
+	/////////////////////////////////////////////
+	
+	/** The graph */
 	
 	private double graph[][];
 	
-	public TSPGraph(List <TSPNode> nodes){
-		
+	//////////////////////////////////////////////
+	// ----------------------------- Constructors
+	/////////////////////////////////////////////
+	
+	/**
+	 * Create the graph given the nodes
+	 * 
+	 * @param nodes the nodes of the graph
+	 */
+	
+	public TSPGraph(List <TSPNode> nodes)
+	{
+		// Initialize the graph
 		this.graph = new double[nodes.size()][nodes.size()];
 		
+		// Fill the distances
 		for(int i = 0; i < nodes.size(); ++i){
 			for(int j = 0; j < nodes.size(); ++j){			
 				graph[i][j] = nodes.get(i).distance(nodes.get(j));
@@ -18,31 +42,22 @@ public class TSPGraph {
 		}	
 	}
 	
-	public double distance(int a, int b) {
-		return this.graph[a][b];
-	}
+	//////////////////////////////////////////////
+	// ---------------------------------- Methods
+	/////////////////////////////////////////////
 	
-	public static void main(String args[]) {
-
-        // Vectores
-        TSPNode n1 = new TSPNode(45, 76);
-        TSPNode n2 = new TSPNode(32, 48);
-        
-        List <TSPNode> lista = new ArrayList <TSPNode>();
-        
-        lista.add(n1);
-        lista.add(n2);
-        
-        TSPGraph grafo = new TSPGraph(lista);
-        
-        for(int i = 0; i < 2; i++){
-        	for(int j = 0; j < 2; j++){
-        		System.out.print(grafo.distance(i,j) + "\t");
-        	}
-        	System.out.println();
-        }
-        
+	/**
+	 * Return the distance between two nodes
+	 * 
+	 * @param origin the origin node 
+	 * @param destiny the destiny node
+	 * 
+	 * @return the distance
+	 */
+	
+	public double distance(int origin, int destiny) 
+	{
+		return this.graph[origin][destiny];
 	}
+
 }
-
-

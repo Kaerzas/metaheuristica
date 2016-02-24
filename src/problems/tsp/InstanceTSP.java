@@ -1,7 +1,6 @@
 package problems.tsp;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,58 +10,88 @@ import problems.ISolution;
 
 public class InstanceTSP extends AbstractInstance 
 {
-	private TSPGraph graph;
-	private int nNodes;
+	//////////////////////////////////////////////
+	// -------------------------------- Variables
+	/////////////////////////////////////////////
 	
+	/** The graph */
+	
+	private TSPGraph graph;
+	
+	/** The number of nodes */
+	
+	private int nNodes;
+
+	//////////////////////////////////////////////
+	// ----------------------------- Constructors
+	/////////////////////////////////////////////
+	
+	/**
+	 * Constructor that set if it is an max/min problem
+	 */
+	
+	public InstanceTSP() 
+	{
+		// It is a minimization problem
+		maximize = false;
+	}
+	
+	//////////////////////////////////////////////
+	// ---------------------------------- Methods
+	/////////////////////////////////////////////
 	
 	@Override
 	public void evaluate(ISolution solution) 
 	{
+		// Get the order of the noder
 		List<Integer> order = ((SolutionTSP)solution).getOrder();
 		double total = 0.0;
 		
+		// Get the distance between the nodes of the permutation
 		for(int i=0 ; i < (order.size()-1) ; ++i){
 			total += graph.distance(order.get(i), order.get(i+1));
 		}
 		total += graph.distance(order.get(order.size()-1), 0);
 		
+		// Set the fitness to the individual
 		solution.setFitness(total);
 	}
 
 	@Override
-	public void loadInstance(FileReader dataFileReader) 
+	public void loadInstance() 
 	{
-		maximize = false;
-		
+		// The list of nodes
 		List<TSPNode> nodes = null;
 		
 		try{
 			BufferedReader file = new BufferedReader(dataFileReader);
+		
+			// Needed variables to read the file
+			String line, key, value;
 			
-			String line;
-			String[] pair;
-			String key, value;
+			// Read file until the end condition
 			while(true){
+				
 				line = file.readLine();
 				
 				//Stop condition, this starts the node section
-				if(line.equals("NODE_COORD_SECTION")){
+				if(line.equals("NODE_COORD_SECTION"))
 					break;
-				}
 				
-				pair = line.split(":");
-				key = pair[0];
-				value = pair[1];
+				key = line.split(":")[0];
+				value = line.split(":")[1];
 				
 				if(key.startsWith("DIMENSION"))
 					this.nNodes = Integer.parseInt(value.trim());
 			}
 			
 			nodes = new ArrayList<TSPNode>(nNodes);
-			//Read nodes
+			
+			//Read the nodes
 			String[] nodeLine;
 			TSPNode auxNode;
-			double x,y;
+			double x, y;
+			
 			for(int i=0 ; i < nNodes ; ++i){
 				nodeLine = file.readLine().split(" ");
 				
@@ -77,8 +106,15 @@ public class InstanceTSP extends AbstractInstance
 			System.err.println("Error in TSP file read");
 		}
 		
+		// 	Initialize the graph
 		graph = new TSPGraph(nodes);
 	}
+	
+	/**
+	 * Get the number of nodes
+	 * 
+	 * @return the number of nodes
+	 */
 	
 	public int getNNodes()
 	{

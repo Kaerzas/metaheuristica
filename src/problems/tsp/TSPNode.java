@@ -1,32 +1,101 @@
 package problems.tsp;
 
-public class TSPNode {
+/**
+ * Class representing a node for the TSP problem
+ * 
+ * @author Rafael Barbudo Lunar
+ *
+ */
 
-	double x, y;
+public class TSPNode 
+{
+	//////////////////////////////////////////////
+	// -------------------------------- Variables
+	/////////////////////////////////////////////
 	
-	public TSPNode(double x, double y){
+	/** Coordinate X */
+	
+	private double x;
+	
+	/** Coordinate Y */
+	
+	private double y;
+	
+	//////////////////////////////////////////////
+	// ------------------------------ Constructor
+	/////////////////////////////////////////////	
+	
+	/**
+	 * Constructor that sets the coordinates
+	 * 
+	 * @param x coordinate X
+	 * @param y coordinate Y
+	 */
+	
+	public TSPNode(double x, double y)
+	{
 		this.x = x;
 		this.y = y;
 	}
 	
-	public double getY() {
+	//////////////////////////////////////////////
+	// ---------------------------------- Methods
+	/////////////////////////////////////////////	
+	
+	/**
+	 * Get the coordinate Y
+	 * 
+	 * @return the coordinate Y
+	 */
+	
+	public double getY() 
+	{
 		return y;
 	}
 
-	public void setY(double y) {
+	/**
+	 * Set the coordinate Y
+	 * 
+	 * @param y the coordinate Y
+	 */
+	
+	public void setY(double y) 
+	{
 		this.y = y;
 	}
 
-	public double getX() {
+	/**
+	 * Get the coordinate X
+	 * 
+	 * @return the coordinate X
+	 */
+	
+	public double getX() 
+	{
 		return x;
 	}
 
-	public void setX(double x) {
+	/**
+	 * Set the coordinate X
+	 * 
+	 * @param x the coordinate X
+	 */
+	
+	public void setX(double x) 
+	{
 		this.x = x;
 	}
 	
-	public double distance(TSPNode n){
-		return Math.sqrt(Math.pow(this.x - n.getX(), 2) + Math.pow((this.y - n.getY()), 2));
-	}
+	/**
+	 * Calculate the distance to other node
+	 * 
+	 * @param oNode the other node
+	 * 
+	 * @return distance between nodes
+	 */
 	
+	public double distance(TSPNode oNode)
+	{
+		return Math.sqrt(Math.pow(this.x - oNode.getX(), 2) + Math.pow((this.y - oNode.getY()), 2));
+	}
 }

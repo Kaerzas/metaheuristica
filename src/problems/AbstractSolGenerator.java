@@ -1,5 +1,7 @@
 package problems;
 
+import java.util.Random;
+
 /**
  * Abstract class for all the generators
  * 
@@ -12,24 +14,28 @@ public abstract class AbstractSolGenerator implements ISolGenerator
 	//////////////////////////////////////////////
 	// -------------------------------- Variables
 	/////////////////////////////////////////////
-	
-	/** Seed */
-	
-	protected int seed;
 
+	/** Random generator */
+	
+	protected Random randGenerator;
+	
+	/** Instance */
+	
+	protected IInstance instance;
+	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
 
 	@Override
-	public int getSeed() 
+	public void setRandom(Random random)
 	{
-		return seed;
+		this.randGenerator = random;
 	}
 
 	@Override
-	public void setSeed(int seed) 
+	public void setInstance(IInstance instance)
 	{
-		this.seed = seed;
+		this.instance = instance;
 	}
 }

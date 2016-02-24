@@ -1,5 +1,7 @@
 package problems;
 
+import java.util.Random;
+
 /**
  * Interface which has the methods needed to 
  * create solutions for a given problem
@@ -22,19 +24,21 @@ public interface ISolGenerator
 	
 	public ISolution generate();
 	
+
 	/**
-	 * Get the seed
+	 * Set the random generator
 	 * 
-	 * @return the seed
+	 * @param random the random generator
 	 */
 	
-	public int getSeed();
-	
+	void setRandom(Random random);
+
 	/**
-	 * Set the seed 
+	 * Set the instance for the generator
 	 * 
-	 * @param seed to set
+	 * @param instance the instance of the problem
 	 */
 	
-	public void setSeed(int seed);
+	public void setInstance(IInstance instance);
+
 }

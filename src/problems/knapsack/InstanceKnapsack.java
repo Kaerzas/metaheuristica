@@ -1,7 +1,6 @@
 package problems.knapsack;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +33,18 @@ public class InstanceKnapsack extends AbstractInstance
 	
 	protected List <KPObject> objects;
 	
-	
 	//////////////////////////////////////////////
 	// ------------------------------ Constructor
 	/////////////////////////////////////////////
 	
-	/** Empty constructor */
+	/**
+	 * Constructor that set if it is an max/min problem
+	 */
 	
 	public InstanceKnapsack() 
 	{
-		// TODO Auto-generated constructor stub
+		// It is a maximization problem
+		maximize = true;
 	}
 	
 	//////////////////////////////////////////////
@@ -82,10 +83,8 @@ public class InstanceKnapsack extends AbstractInstance
 	}
 
 	@Override
-	public void loadInstance(FileReader dataFileReader) 
-	{
-		maximize = true;
-		
+	public void loadInstance() 
+	{	
 		String line = "";	
 		BufferedReader br = new BufferedReader(dataFileReader);		
 		

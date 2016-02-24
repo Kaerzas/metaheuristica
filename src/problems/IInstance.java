@@ -1,6 +1,6 @@
 package problems;
 
-import java.io.FileReader;
+import util.config.IConfiguration;
 
 /**
  * Interface which has the methods needed to create 
@@ -10,7 +10,7 @@ import java.io.FileReader;
  *
  */
 
-public interface IInstance 
+public interface IInstance extends IConfiguration
 {	
 	/**
 	 * Evaluate the solution
@@ -23,12 +23,9 @@ public interface IInstance
 	
 	/**
 	 * Load an instance for a given problem
-	 * 
-	 * @param dataFileReader reader of the data file
-	 * 
 	 */
 	
-	public void loadInstance(FileReader dataFileReader);	
+	public void loadInstance();	
 	
 	/**
 	 * Compare two solution
