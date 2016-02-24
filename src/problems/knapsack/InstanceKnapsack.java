@@ -1,5 +1,9 @@
 package problems.knapsack;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 import problems.IInstance;
@@ -22,6 +26,10 @@ public class InstanceKnapsack implements IInstance
 	/** List objects */
 	
 	protected List <KPObject> objects;
+	
+	/** Reader of the data file */
+	
+	BufferedReader dataFileReader = null;
 	
 	//////////////////////////////////////////////
 	// ------------------------------ Constructor
@@ -56,6 +64,7 @@ public class InstanceKnapsack implements IInstance
 				}
 			}
 			// Check if the solution is valid
+			// TODO cambiar por --> (value - value' (si todos se cogieran)
 			if(weight > knapsackSize)
 				solution.setFitness(0);
 			else
@@ -68,8 +77,33 @@ public class InstanceKnapsack implements IInstance
 	}
 
 	@Override
-	public IInstance loadInstance(String fileName) 
+	public IInstance loadInstance(FileReader dataFileReader) 
 	{
+		String line = "";
+		
+		try {
+			dataFileReader = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("The data file couldn't be readed");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		try {
+			while (!dataFileReader.readLine().startsWith("knaPI"));
+			// Read the number of objects
+			line = dataFileReader.readLine();
+			nObjects = Integer.parseInt(line.split(" ")[1]);
+			// Read the knapsack size
+			knapsackSize = Integer.parseInt(line.spli("")[1]);
+		
+			
+		
+		} catch (IOException e) {
+			System.out.println("Problem while reading the CSV file");
+			e.printStackTrace();
+		}
+		
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,5 +1,7 @@
 package problems.tsp;
 
+import java.io.FileReader;
+
 import problems.IInstance;
 import problems.ISolution;
 
@@ -12,7 +14,7 @@ public class InstanceTSP implements IInstance
 	}
 
 	@Override
-	public IInstance loadInstance(String fileName) 
+	public IInstance loadInstance(FileReader dataFileReader) 
 	{
 		// TODO Auto-generated method stub
 		return null;

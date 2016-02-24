@@ -1,5 +1,7 @@
 package problems;
 
+import java.io.FileReader;
+
 /**
  * Interface which has the methods needed to create 
  * an instance and evaluate a problem
@@ -22,10 +24,10 @@ public interface IInstance
 	/**
 	 * Load an instance for a given problem
 	 * 
-	 * @param fileName file which has the instance
+	 * @param dataFileReader reader of the data file
 	 * 
 	 * @return A instance for the problem
 	 */
 	
-	public IInstance loadInstance(String fileName);	
+	public IInstance loadInstance(FileReader dataFileReader);	
 }
