@@ -51,7 +51,7 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 		// Get the name of the classes
 		String instanceName = configuration.getString("instance[@name]");
 		String solutionName = configuration.getString("solution");
-		String generatorName = configuration.getString("solGenerator");
+		String generatorName = configuration.getString("solGenerator[@name]");
 		
 		// Instantiate the classes used in the experiment
 		try {

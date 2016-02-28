@@ -36,7 +36,7 @@ public class RandomSearch extends AbstractAlgorithm
 		List <ISolution> solutions = new ArrayList<ISolution>();
 		ISolution bestSolution = null;
 		
-		// Create 1000 individuals
+		// Try some individuals
 		for(int i=0; i<tries; i++) {
 			
 			// Create new solution and store

@@ -1,7 +1,10 @@
 package problems.knapsack;
 
+import org.apache.commons.configuration.Configuration;
+
 import problems.AbstractSolGenerator;
 import problems.ISolution;
+import util.config.IConfiguration;
 
 /**
  * Generator class for the knapsack problem
@@ -10,8 +13,17 @@ import problems.ISolution;
  *
  */
 
-public class SolGeneratorKnapsack extends AbstractSolGenerator 
+public class SolGeneratorKnapsack extends AbstractSolGenerator implements IConfiguration
 {	
+	///////////////////////////////////////////
+	// ----------------------------- Variables
+	//////////////////////////////////////////
+	
+	/**
+	 * Probability of randomly adding an element to the knapsack
+	 */
+	private double addProbability;
+	
 	//////////////////////////////////////////////
 	// ----------------------------- Constructors
 	/////////////////////////////////////////////
@@ -35,12 +47,18 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator
 		byte [] knapsack = new byte[nObjects];
 		
 		for(int i=0; i<nObjects; i++) {
-			if(randGenerator.nextDouble() < 0.5)
-				knapsack[i] = 0;
-			else
+			if(randGenerator.nextDouble() < addProbability)
 				knapsack[i] = 1;
+			else
+				knapsack[i] = 0;
 		}
 				
 		return new SolutionKnapsack(knapsack);
+	}
+
+	@Override
+	public void configure(Configuration configuration) {
+		// Set probability of adding an element
+		this.addProbability = configuration.getDouble("probability");
 	}
 }
