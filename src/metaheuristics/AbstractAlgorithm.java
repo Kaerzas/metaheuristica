@@ -46,7 +46,12 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	public void configure(Configuration configuration) 
 	{
 		// Get the seed used
-		seed = Integer.parseInt(configuration.getString("seed"));
+		try{
+			seed = Integer.parseInt(configuration.getString("seed"));
+		} //If no seed specified, a random seed is given
+		catch(NumberFormatException e){
+			seed = new Random().nextInt();
+		}
 		
 		// Get the name of the classes
 		String instanceName = configuration.getString("instance[@name]");
