@@ -37,6 +37,9 @@ public class RandomSearch extends AbstractAlgorithm
 		ISolution bestSolution = null;
 		
 		// Try some individuals
+		Stopwatch stp = new Stopwatch();
+		
+		stp.start();
 		for(int i=0; i<tries; i++) {
 			
 			// Create new solution and store
@@ -48,11 +51,17 @@ public class RandomSearch extends AbstractAlgorithm
 			
 			// Check if the new solution is better
 			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){
+				//Calculate time since last solution/beginning
+				stp.stop();
+				
 				bestSolution = newSolution;
 				// Show results
-				System.out.println("A best solution has been found in the iteration " + i + ":");
+				System.out.println("A best solution has been found in the iteration " + i + " after " + stp.elapsed() + " ns:");
 				bestSolution.printSolution();
 				System.out.println();
+				
+				//Restart timer
+				stp.start();
 			}
 		}
 	}

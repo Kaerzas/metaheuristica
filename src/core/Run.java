@@ -2,9 +2,11 @@ package core;
 
 import java.io.File;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import metaheuristics.IAlgorithm;
+import metaheuristics.Stopwatch;
 import util.config.IConfiguration;
 
 /**
@@ -39,7 +41,7 @@ public class Run
 		File jobFile = new File(args[0]);		
 		if (jobFile.exists()) {
 			try {
-				XMLConfiguration jobConf = new XMLConfiguration(jobFile);
+				Configuration jobConf = new XMLConfiguration(jobFile);
 				String algName = jobConf.getString("algorithm[@name]");
 				
 				// Instantiate the algorithm class used in the experiment
@@ -52,8 +54,13 @@ public class Run
 					((IConfiguration) algorithm).configure(jobConf.subset("algorithm"));
 				}
 				
-				// Execute the algorithm
+				// Execute and time the algorithm
+				Stopwatch stp = new Stopwatch();
+				stp.start();
 				algorithm.execute();
+				stp.stop();
+				
+				System.out.println("Time elapsed: " + stp.elapsed() + " ns");
 			}
 			catch (Exception e) {
 				e.printStackTrace();
