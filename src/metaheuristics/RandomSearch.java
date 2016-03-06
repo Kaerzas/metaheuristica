@@ -1,7 +1,6 @@
 package metaheuristics;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -33,18 +32,16 @@ public class RandomSearch extends AbstractAlgorithm
 	public void execute() 
 	{
 		// Create, evaluate and show the solutions
-		List <ISolution> solutions = new ArrayList<ISolution>();
 		ISolution bestSolution = null;
+		bestSolutions = new ArrayList<ISolution>();
 		
 		// Try some individuals
-		Stopwatch stp = new Stopwatch();
-		
-		stp.start();
+		stopwatch.start();
+
 		for(int i=0; i<tries; i++) {
 			
 			// Create new solution and store
 			ISolution newSolution = generator.generate();
-			solutions.add(newSolution);
 				
 			// Evaluate the new solution
 			instance.evaluate(newSolution);
@@ -52,18 +49,17 @@ public class RandomSearch extends AbstractAlgorithm
 			// Check if the new solution is better
 			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){
 				//Calculate time since last solution/beginning
-				stp.stop();
+				stopwatch.lap();
 				
+				bestSolutions.add(newSolution);
 				bestSolution = newSolution;
 				// Show results
-				System.out.println("A best solution has been found in the iteration " + i + " after " + stp.elapsed() + " ns:");
-				bestSolution.printSolution();
-				System.out.println();
-				
-				//Restart timer
-				stp.start();
+				//System.out.println("A best solution has been found in the iteration " + i + " after " + stopwatch.lapTime(lastLap) + " ns:");
+				//bestSolution.printSolution();
+				//System.out.println();
 			}
 		}
+		stopwatch.stop();
 	}
 	
 	@Override

@@ -61,4 +61,12 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator implements IConfi
 		// Set probability of adding an element
 		this.addProbability = configuration.getDouble("probability");
 	}
+	
+	public void setAddProbability(double addProbability){
+		this.addProbability = addProbability;
+	}
+	
+	public double getAddProbability(){
+		return this.addProbability;
+	}
 }

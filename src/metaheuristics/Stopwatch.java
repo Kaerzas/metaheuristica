@@ -82,4 +82,12 @@ public class Stopwatch {
 		}
 		else return 0;
 	}
+	
+	/** Number of laps stored
+	 * 
+	 * @return Number of laps
+	 */
+	public int getNLaps(){
+		return laps.size();
+	}
 }

@@ -1,5 +1,9 @@
 package metaheuristics;
 
+import java.util.List;
+
+import problems.ISolGenerator;
+import problems.ISolution;
 import util.config.IConfiguration;
 
 /**
@@ -20,4 +24,8 @@ public interface IAlgorithm extends IConfiguration
 	 */
 	
 	public void execute();
+	
+	public ISolGenerator getGenerator();
+	public Stopwatch getStopwatch();
+	public List<ISolution> getBestSolutions();
 }

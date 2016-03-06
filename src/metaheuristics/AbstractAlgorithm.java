@@ -3,9 +3,12 @@
  */
 package metaheuristics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.configuration.Configuration;
+
 import problems.IInstance;
 import problems.ISolGenerator;
 import problems.ISolution;
@@ -36,7 +39,13 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	/** Random seed */
 	
 	protected static int seed;
+	
+	/** */
+	protected Stopwatch stopwatch;
 
+	/** List of best solutions found (in order being found) */
+	protected List<ISolution> bestSolutions;
+	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
@@ -45,6 +54,10 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	@Override
 	public void configure(Configuration configuration) 
 	{
+		//Instantiate the stopwatch
+		stopwatch = new Stopwatch();
+		bestSolutions = new ArrayList<ISolution>();
+		
 		// Get the seed used
 		try{
 			seed = Integer.parseInt(configuration.getString("seed"));
@@ -94,5 +107,20 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 			System.out.println(e);
 			System.exit(1);
 		}
+	}
+	
+	@Override
+	public ISolGenerator getGenerator(){
+		return generator;
+	}
+	
+	@Override
+	public Stopwatch getStopwatch(){
+		return stopwatch;
+	}
+	
+	@Override
+	public List<ISolution> getBestSolutions(){
+		return this.bestSolutions;
 	}
 }
