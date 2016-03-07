@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.configuration.Configuration;
 
+import problems.IInstance;
 import problems.ISolution;
 
 /**
@@ -70,5 +71,10 @@ public class RandomSearch extends AbstractAlgorithm
 		
 		//Metaheuristic specific configuration
 		this.tries = configuration.getInt("tries");
+	}
+
+	@Override
+	public IInstance getInstance() {
+		return instance;
 	}
 }

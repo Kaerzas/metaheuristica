@@ -1,5 +1,6 @@
 package problems;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,7 +22,7 @@ public abstract class AbstractInstance implements IInstance
 	
 	/** File with the instances */
 	
-	protected FileReader dataFileReader;
+	protected BufferedReader bufferedReader;
 	
 	/** Indicates whether a max/min problem */
 		
@@ -45,13 +46,16 @@ public abstract class AbstractInstance implements IInstance
 	@Override
 	public void configure(Configuration configuration) 
 	{
-		// Get the descriptor for the data file
-		String fileName = configuration.getString("data");
-		try {
-			dataFileReader = new FileReader(new File(fileName));
-			loadInstance();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} 
+		// Get the descriptor for the data file if it doesnt exist
+		if(bufferedReader == null){
+			String fileName = configuration.getString("data");
+			try {
+				FileReader dataFileReader = new FileReader(new File(fileName));
+				bufferedReader = new BufferedReader(dataFileReader);
+				loadInstance();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

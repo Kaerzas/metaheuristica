@@ -86,7 +86,7 @@ public class InstanceKnapsack extends AbstractInstance
 	public void loadInstance() 
 	{	
 		String line = "";	
-		BufferedReader br = new BufferedReader(dataFileReader);		
+		BufferedReader br = bufferedReader;
 		
 		try {
 			while (!br.readLine().startsWith("knapPI"));
@@ -139,4 +139,7 @@ public class InstanceKnapsack extends AbstractInstance
 		this.nObjects = nObjects;
 	}
 	
+	public int getKnapsackSize(){
+		return this.knapsackSize;
+	}
 }

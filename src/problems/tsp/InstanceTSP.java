@@ -64,7 +64,7 @@ public class InstanceTSP extends AbstractInstance
 		List<TSPNode> nodes = null;
 		
 		try{
-			BufferedReader file = new BufferedReader(dataFileReader);
+			BufferedReader file = bufferedReader;
 		
 			// Needed variables to read the file
 			String line, key, value;

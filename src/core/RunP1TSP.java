@@ -11,8 +11,6 @@ import org.apache.commons.configuration.XMLConfiguration;
 import metaheuristics.IAlgorithm;
 import metaheuristics.Stopwatch;
 import problems.ISolution;
-import problems.knapsack.InstanceKnapsack;
-import problems.knapsack.SolGeneratorKnapsack;
 import util.config.IConfiguration;
 
 /**
@@ -22,7 +20,7 @@ import util.config.IConfiguration;
  *
  */
 
-public class RunP1KP
+public class RunP1TSP
 {
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -60,33 +58,43 @@ public class RunP1KP
 					((IConfiguration) algorithm).configure(jobConf.subset("algorithm"));
 				}
 				
-				int nPruebas = 10;
-				
 				//Open results file
-				File fOut = new File("results/kp4.txt");
+				File fOut = new File("results/TSP.txt");
 				BufferedWriter writer = new BufferedWriter(new FileWriter(fOut));
-				writer.write("# Knapsack problem\n");
-				writer.write("# Probability | Max fitness achieved\n");
+				writer.write("#Traveling Salesman Problem\n");
+				writer.write("#Time | Max fitness achieved\n");
+
+				// Execute and time the algorithm
+				algorithm.execute();
 				
-				for(double prob = 0.5 ; prob > 0.0001 ; prob = prob/2){
-					((SolGeneratorKnapsack) algorithm.getGenerator()).setAddProbability(prob);
+				Stopwatch stp = algorithm.getStopwatch();
+				List<ISolution> bestSolutions = algorithm.getBestSolutions();
+				
+				//Guardar resultados
+				ISolution firstSol = bestSolutions.get(0);
+				Long firstTime = stp.lapTime(0);
+				
+				writer.write(firstTime.toString() + " " + Double.toString(firstSol.getFitness()) + "\n");
+				
+				Double lastFitness = firstSol.getFitness();
+				for(int j=1 ; j < bestSolutions.size(); ++j){
+					ISolution sol = bestSolutions.get(j);
+					Double fitness = sol.getFitness();
+					Long lapTime = stp.lapTime(j);
 					
-					double media = 0.0;
-					for(int i=0 ; i < nPruebas ; ++i){
-						// Execute and time the algorithm
-						algorithm.execute();
-						
-						List<ISolution> bestSolutions = algorithm.getBestSolutions();
-						
-						media += bestSolutions.get(bestSolutions.size()-1).getFitness();
-						
-					}
+					writer.write(lapTime.toString() + " " + lastFitness.toString() + "\n");
+					writer.write(lapTime.toString() + " " + fitness.toString() + "\n");
 					
-					media /= nPruebas;
+					lastFitness = fitness;
 					
-					//Guardar resultados
-					writer.write(Double.toString(prob) + " " + Double.toString(media)  + "\n");
+					//sol.printSolution();
+					//System.out.println(sol.getFitness());
+					//System.out.println(stp.lapTime(j));
 				}
+				//Last point
+				writer.write(Long.toString(stp.elapsed()) + " " + Double.toString(bestSolutions.get(bestSolutions.size()-1).getFitness()) + "\n");
+				
+				
 				writer.close();
 			}
 			catch (Exception e) {
