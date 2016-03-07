@@ -9,9 +9,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import metaheuristics.IAlgorithm;
-import metaheuristics.Stopwatch;
 import problems.ISolution;
-import problems.knapsack.InstanceKnapsack;
 import problems.knapsack.SolGeneratorKnapsack;
 import util.config.IConfiguration;
 
