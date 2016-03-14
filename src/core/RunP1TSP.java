@@ -59,10 +59,10 @@ public class RunP1TSP
 				}
 				
 				//Open results file
-				File fOut = new File("results/TSP.txt");
+				File fOut = new File("results/tsp3_4.txt");
 				BufferedWriter writer = new BufferedWriter(new FileWriter(fOut));
-				writer.write("#Traveling Salesman Problem\n");
-				writer.write("#Time | Max fitness achieved\n");
+				writer.write("# Traveling Salesman Problem (d2103)\n");
+				writer.write("# Time | Max fitness achieved\n");
 
 				// Execute and time the algorithm
 				algorithm.execute();
