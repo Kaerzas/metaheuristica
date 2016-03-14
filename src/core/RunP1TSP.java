@@ -9,9 +9,9 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import metaheuristics.IAlgorithm;
-import metaheuristics.Stopwatch;
 import problems.ISolution;
 import util.config.IConfiguration;
+import util.config.Stopwatch;
 
 /**
  * Main class used for execute an experiment

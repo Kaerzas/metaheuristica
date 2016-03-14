@@ -1,4 +1,4 @@
-package metaheuristics;
+package util.config;
 
 import java.util.ArrayList;
 import java.util.List;
