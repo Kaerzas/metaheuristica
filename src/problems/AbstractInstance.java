@@ -37,7 +37,7 @@ public abstract class AbstractInstance implements IInstance
 	{
 		if((sol1.getFitness() > sol2.getFitness()) && maximize)
 			return true;
-		if((sol1.getFitness() <= sol2.getFitness()) && !maximize)
+		if((sol1.getFitness() < sol2.getFitness()) && !maximize)
 			return true;
 
 		return false;

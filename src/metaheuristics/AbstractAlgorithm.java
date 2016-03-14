@@ -1,6 +1,3 @@
-/**
- * 
- */
 package metaheuristics;
 
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ import problems.IInstance;
 import problems.ISolGenerator;
 import problems.ISolution;
 import util.config.IConfiguration;
+import util.config.Stopwatch;
 
 /**
  * @author i22balur
@@ -44,7 +42,12 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	protected Stopwatch stopwatch;
 
 	/** List of best solutions found (in order being found) */
+	
 	protected List<ISolution> bestSolutions;
+	
+	/** Number of iterations */
+	
+	protected int tries;
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -122,5 +125,10 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	@Override
 	public List<ISolution> getBestSolutions(){
 		return this.bestSolutions;
+	}
+	
+	@Override
+	public IInstance getInstance() {
+		return instance;
 	}
 }
