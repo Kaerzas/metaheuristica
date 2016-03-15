@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import problems.ISolution;
-import problems.knapsack.SolutionKnapsack;
 import problems.tsp.SolutionTSP;
 
 public class NodeSwapTSP implements INeighOperator{
