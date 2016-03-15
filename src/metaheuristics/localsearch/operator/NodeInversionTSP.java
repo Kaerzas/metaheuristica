@@ -18,7 +18,7 @@ public class NodeInversionTSP implements INeighOperator
 	 * Generate a neighbour for a given individual
 	 * 
 	 * @param individual The individual
-	 * @param param Parameter used to generate the neighbour (must be an ArrayList)
+	 * @param param Parameter used to generate the neighbour (must be an ArrayList with two elements)
 	 * 
 	 * @return a neighbour for the individual
 	 */
