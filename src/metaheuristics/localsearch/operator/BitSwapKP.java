@@ -1,7 +1,5 @@
 package metaheuristics.localsearch.operator;
 
-import java.util.ArrayList;
-
 import problems.ISolution;
 import problems.knapsack.SolutionKnapsack;
 
@@ -21,7 +19,6 @@ public class BitSwapKP implements INeighOperator
 	 * @return a neighbour for the individual
 	 */
 	
-	@SuppressWarnings("rawtypes")
 	public ISolution generateNeighbour(ISolution individual, Object param) 
 	{
 		if(individual instanceof SolutionKnapsack) {
@@ -29,8 +26,8 @@ public class BitSwapKP implements INeighOperator
 			int nObjects = ((SolutionKnapsack) individual).getObjects().length;
 			byte [] newObjects = new byte[nObjects];
 			System.arraycopy(((SolutionKnapsack) individual).getObjects(), 0, newObjects, 0, nObjects);
-			int pos1 = (int) ((ArrayList)param).get(0); 
-			int pos2 = (int) ((ArrayList)param).get(1);
+			int pos1 = ((int[]) param)[0];
+			int pos2 = ((int[]) param)[1];
 			byte aux;
 			
 			SolutionKnapsack newInd = new SolutionKnapsack(newObjects);
