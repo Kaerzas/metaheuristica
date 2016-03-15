@@ -41,7 +41,20 @@ public class BISNeighExplorator extends AbstractNeighExplorator
 			/////////////////////////////////////////////
 			
 			else if(operator instanceof BitSwapKP) {
-				// TODO pendiente
+				//Go over all combinations
+				for(int i=0; i<((SolutionKnapsack)individual).getObjects().length; i++) {
+					for(int j=i+1; j<((SolutionKnapsack)individual).getObjects().length; j++) {
+						int pos[] = {i, j};
+						newInd = (SolutionKnapsack) operator.generateNeighbour(individual, pos);
+						instance.evaluate(newInd);
+						if(instance.betterThan(newInd, individual)){
+							betterInd = newInd;
+						}
+					}
+				}
+				
+				if(betterInd != individual)
+					return betterInd;
 			}
 			else {
 				System.out.println("Operator isn't valid");
