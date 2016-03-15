@@ -14,12 +14,14 @@ public class LocalSearch extends AbstractAlgorithm
 	public void execute() {
 		// Generate some random individuals
 		stopwatch.start();
+		
 
+		// Starting solution
+		ISolution newSolution = generator.generate();
+		// Evaluate the starting solution
+		instance.evaluate(newSolution);
+		
 		for(int i=0; i<tries; i++) {
-			// Create new solution and store
-			ISolution newSolution = generator.generate();
-			// Evaluate the new solution
-			instance.evaluate(newSolution);
 			// Generate the neighbour
 			ISolution neighbour = explorator.generateBestNeighbour(newSolution);
 			
@@ -31,9 +33,11 @@ public class LocalSearch extends AbstractAlgorithm
 				System.out.println("The neighbour is:");
 				neighbour.printSolution();
 				System.out.println();
+				newSolution = neighbour;
 			}
 			else {
 				System.out.println("Not better solution found\n");
+				break;
 			}
 		}	
 		stopwatch.stop();
