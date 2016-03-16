@@ -17,9 +17,7 @@ public class NodeSwapTSP implements INeighOperator{
 	 */
 	public ISolution generateNeighbour(ISolution individual, Object param){
 		if(individual instanceof SolutionTSP) {
-			int nNodes = ((SolutionTSP) individual).getOrder().size();
-			List<Integer> newNodes = new ArrayList<Integer> (nNodes);
-			System.arraycopy(((SolutionTSP) individual).getOrder(), 0, newNodes, 0, nNodes);
+			List<Integer> newNodes = new ArrayList<Integer> (((SolutionTSP) individual).getOrder());
 			int pos1 = ((int[]) param)[0]; 
 			int pos2 = ((int[]) param)[1];
 			SolutionTSP newInd = new SolutionTSP(newNodes);

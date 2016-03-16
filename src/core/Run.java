@@ -1,11 +1,13 @@
 package core;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import metaheuristics.IAlgorithm;
+import problems.ISolution;
 import util.config.IConfiguration;
 import util.config.Stopwatch;
 
@@ -60,7 +62,9 @@ public class Run
 				algorithm.execute();
 				stp.stop();
 				
+				List<ISolution> bestSolutions = algorithm.getBestSolutions();
 				System.out.println("Time elapsed: " + stp.elapsed() + " ns");
+				System.out.println("Best fitness found: " + bestSolutions.get(bestSolutions.size()-1).getFitness());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

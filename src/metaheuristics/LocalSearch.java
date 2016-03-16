@@ -25,14 +25,14 @@ public class LocalSearch extends AbstractAlgorithm
 			// Generate the neighbour
 			ISolution neighbour = explorator.generateBestNeighbour(newSolution);
 			
-			System.out.println("Iteration " + i);
+			//System.out.println("Iteration " + i);
 			
 			if(neighbour != null) {
-				System.out.println("The individual is:");
+				/*System.out.println("The individual is:");
 				newSolution.printSolution();
 				System.out.println("The neighbour is:");
 				neighbour.printSolution();
-				System.out.println();
+				System.out.println();*/
 				newSolution = neighbour;
 			}
 			else {

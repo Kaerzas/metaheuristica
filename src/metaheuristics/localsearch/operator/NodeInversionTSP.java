@@ -1,10 +1,9 @@
 package metaheuristics.localsearch.operator;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import problems.ISolution;
-import problems.knapsack.SolutionKnapsack;
 import problems.tsp.SolutionTSP;
 
 public class NodeInversionTSP implements INeighOperator 
@@ -28,9 +27,7 @@ public class NodeInversionTSP implements INeighOperator
 		
 		if(individual instanceof SolutionTSP) {
 
-			int nObjects = ((SolutionTSP) individual).getOrder().size();
-			List <Integer> newObjects = new ArrayList<Integer>();
-			System.arraycopy(((SolutionTSP) individual).getOrder(), 0, newObjects, 0, nObjects);
+			List<Integer> newObjects = new ArrayList<Integer>(((SolutionTSP) individual).getOrder());
 			
 			SolutionTSP newInd = new SolutionTSP(newObjects);
 			

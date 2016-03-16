@@ -1,7 +1,6 @@
 package metaheuristics.localsearch;
 
-import metaheuristics.localsearch.operator.BitInversionKP;
-import metaheuristics.localsearch.operator.BitSwapKP;
+import metaheuristics.localsearch.operator.*;
 import problems.ISolution;
 import problems.knapsack.SolutionKnapsack;
 import problems.tsp.SolutionTSP;
@@ -61,7 +60,40 @@ public class FISNeighExplorator extends AbstractNeighExplorator
 		/////////////////////////////////////////////
 		
 		else if (individual instanceof SolutionTSP) {
-			// TODO pendiente
+			SolutionTSP individualTSP = (SolutionTSP) individual;
+			SolutionTSP newInd;
+			
+			//////////////////////////////////////////////
+			// ---------------------------- Node Inversion
+			/////////////////////////////////////////////
+			if(operator instanceof NodeInversionTSP){
+				for(int i=0 ; i < individualTSP.getOrder().size() ; ++i){
+					for(int j=i+1 ; j < individualTSP.getOrder().size() ; ++j){
+						int pos[] = {i, j};
+						newInd = (SolutionTSP) operator.generateNeighbour(individual, pos);
+						instance.evaluate(newInd);
+						
+						if(instance.betterThan(newInd, individualTSP))
+							return newInd;
+					}
+				}
+			}
+			
+			//////////////////////////////////////////////
+			// ---------------------------- Node Swap
+			/////////////////////////////////////////////
+			else if(operator instanceof NodeSwapTSP){
+				for(int i=0 ; i < individualTSP.getOrder().size() ; ++i){
+					for(int j=i+1 ; j < individualTSP.getOrder().size() ; ++j){
+						int pos[] = {i, j};
+						newInd = (SolutionTSP) operator.generateNeighbour(individual, pos);
+						instance.evaluate(newInd);
+						
+						if(instance.betterThan(newInd, individualTSP))
+							return newInd;
+					}
+				}
+			}
 		}
 		
 		
