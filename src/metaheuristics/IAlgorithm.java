@@ -22,7 +22,7 @@ public interface IAlgorithm extends IConfiguration
 	/////////////////////////////////////////////
 	
 	/**
-	 * Execution method
+	 * Timed execution
 	 */
 	
 	public void execute();

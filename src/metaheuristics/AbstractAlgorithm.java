@@ -53,6 +53,21 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
 	
+	@Override
+	public void execute() {
+		stopwatch = new Stopwatch();
+		bestSolutions = new ArrayList<ISolution>();
+		
+		stopwatch.start();
+		search();
+		stopwatch.stop();
+	}
+	
+	/**
+	 * Execute the search itself
+	 */
+	abstract protected void search();
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void configure(Configuration configuration) 

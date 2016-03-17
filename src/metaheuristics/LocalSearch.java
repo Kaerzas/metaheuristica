@@ -11,11 +11,7 @@ public class LocalSearch extends AbstractAlgorithm
 	INeighExplorator explorator;
 	
 	@Override
-	public void execute() {
-		// Generate some random individuals
-		stopwatch.start();
-		
-
+	public void search() {
 		// Starting solution
 		ISolution newSolution = generator.generate();
 		// Evaluate the starting solution
@@ -28,6 +24,8 @@ public class LocalSearch extends AbstractAlgorithm
 			//System.out.println("Iteration " + i);
 			
 			if(neighbour != null) {
+				stopwatch.lap();
+				bestSolutions.add(newSolution);
 				/*System.out.println("The individual is:");
 				newSolution.printSolution();
 				System.out.println("The neighbour is:");
@@ -39,8 +37,7 @@ public class LocalSearch extends AbstractAlgorithm
 				System.out.println("Not better solution found\n");
 				break;
 			}
-		}	
-		stopwatch.stop();
+		}
 	}
 
 	@SuppressWarnings("unchecked")

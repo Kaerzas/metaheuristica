@@ -1,7 +1,5 @@
 package metaheuristics;
 
-import java.util.ArrayList;
-
 import org.apache.commons.configuration.Configuration;
 
 import problems.IInstance;
@@ -30,15 +28,12 @@ public class RandomSearch extends AbstractAlgorithm
 	/////////////////////////////////////////////
 	
 	@Override
-	public void execute() 
+	public void search() 
 	{
 		// Create, evaluate and show the solutions
 		ISolution bestSolution = null;
-		bestSolutions = new ArrayList<ISolution>();
 		
 		// Try some individuals
-		stopwatch.start();
-
 		for(int i=0; i<tries; i++) {
 			
 			// Create new solution and store
@@ -60,7 +55,6 @@ public class RandomSearch extends AbstractAlgorithm
 				//System.out.println();
 			}
 		}
-		stopwatch.stop();
 	}
 	
 	@Override
