@@ -103,8 +103,8 @@ public class RunP2Javi
 	public static void main(String[] args) 
 	{		
 		
-		for(int i=4 ; i < 5 ; ++i){
-			IAlgorithm algorithm = loadAlgorithm("configuration/p2/1/tsp_" + i + ".config");
+		for(int i=0 ; i < 5 ; ++i){
+			IAlgorithm algorithm = loadAlgorithm("configuration/p2/kp6/kp_" + i + ".config");
 	
 			// Execute and time the algorithm
 			algorithm.execute();
@@ -115,10 +115,10 @@ public class RunP2Javi
 			
 			//Open results file
 			String header = "";
-			header += "# Traveling Salesman Problem (berlin52)\n";
+			header += "# Knapsack Problem (kp6)\n";
 			//header += "# Local Search BIS, NodeSwap operator, 1.000 iterations\n";
 			
-			logResults(header, stp, bestSolutions, "results/p2/ch150_"+i+".txt");
+			logResults(header, stp, bestSolutions, "results/kp6/kp_"+i+".txt");
 			
 			System.out.println("Done!");
 		}
