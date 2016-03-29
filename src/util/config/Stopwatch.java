@@ -83,6 +83,16 @@ public class Stopwatch {
 		else return 0;
 	}
 	
+	/**
+	 * Current elapsed time (must be running)
+	 * @return Elapsed time since starting the stopwatch
+	 */
+	public long currentElapsed(){
+		if(isStarted())
+			return System.nanoTime()-start;
+		else return 0;
+	}
+	
 	/** Number of laps stored
 	 * 
 	 * @return Number of laps
