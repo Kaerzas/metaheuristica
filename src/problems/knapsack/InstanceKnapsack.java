@@ -33,10 +33,20 @@ public class InstanceKnapsack extends AbstractInstance
 	
 	protected List <KPObject> objects;
 	
+	protected double totalValue;
+	
 	//////////////////////////////////////////////
 	// ------------------------------ Constructor
 	/////////////////////////////////////////////
 	
+	public double getTotalValue() {
+		return totalValue;
+	}
+
+	public void setTotalValue(double totalValue) {
+		this.totalValue = totalValue;
+	}
+
 	/**
 	 * Constructor that set if it is an max/min problem
 	 */
@@ -56,7 +66,6 @@ public class InstanceKnapsack extends AbstractInstance
 	{
 		double value = 0;		
 		double weight = 0;
-		double totalValue = 0;
 		
 		// Check if the solution is an instance of the Knapsack problem
 		if(solution instanceof SolutionKnapsack) {
@@ -68,8 +77,9 @@ public class InstanceKnapsack extends AbstractInstance
 					value += this.objects.get(i).getValue();
 					weight += this.objects.get(i).getWeight();
 				}
-				totalValue += this.objects.get(i).getValue();
 			}
+			
+			((SolutionKnapsack)solution).setTotalWeight(weight);
 			// Check if the solution is valid
 			if(weight > knapsackSize)
 				solution.setFitness(value - totalValue);
@@ -88,6 +98,8 @@ public class InstanceKnapsack extends AbstractInstance
 		String line = "";	
 		BufferedReader br = bufferedReader;
 		
+		double totalValue = 0;
+		
 		try {
 			while (!br.readLine().startsWith("knapPI"));
 			// Read the number of objects
@@ -97,7 +109,7 @@ public class InstanceKnapsack extends AbstractInstance
 			// Read the knapsack size
 			line = br.readLine();
 			knapsackSize = Integer.parseInt(line.split(" ")[1]);
-
+			
 			// Ignore two next lines
 			br.readLine();
 			br.readLine();
@@ -109,7 +121,10 @@ public class InstanceKnapsack extends AbstractInstance
 				obj.setValue(Integer.parseInt(objectInformation[1]));
 				obj.setWeight(Integer.parseInt(objectInformation[2]));
 				objects.add(obj);
+				totalValue += obj.getValue();
 			}
+			
+			this.totalValue = totalValue;
 		
 		} catch (IOException e) {
 			System.out.println("Problem while reading the CSV file");
@@ -141,5 +156,9 @@ public class InstanceKnapsack extends AbstractInstance
 	
 	public int getKnapsackSize(){
 		return this.knapsackSize;
+	}
+	
+	public List <KPObject> getObjects(){
+		return this.objects;
 	}
 }

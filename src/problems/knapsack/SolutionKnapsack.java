@@ -19,10 +19,20 @@ public class SolutionKnapsack extends AbstractSolution
 	
 	byte [] objects;
 	
+	double totalWeight;
+	
 	//////////////////////////////////////////////
 	// ----------------------------- Constructors
 	/////////////////////////////////////////////
 	
+	public double getTotalWeight() {
+		return totalWeight;
+	}
+
+	public void setTotalWeight(double totalWeight) {
+		this.totalWeight = totalWeight;
+	}
+
 	/** Empty constructor */
 	
 	public SolutionKnapsack() 
