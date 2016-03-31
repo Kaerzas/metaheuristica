@@ -18,20 +18,11 @@ public class SolutionKnapsack extends AbstractSolution
 	/** Array representing the objects in the knapsack */
 	
 	byte [] objects;
-	
-	double totalWeight;
+	int totalWeight;
 	
 	//////////////////////////////////////////////
 	// ----------------------------- Constructors
 	/////////////////////////////////////////////
-	
-	public double getTotalWeight() {
-		return totalWeight;
-	}
-
-	public void setTotalWeight(double totalWeight) {
-		this.totalWeight = totalWeight;
-	}
 
 	/** Empty constructor */
 	
@@ -77,6 +68,14 @@ public class SolutionKnapsack extends AbstractSolution
 	public void setObjects(byte[] objects) 
 	{
 		this.objects = objects;
+	}
+	
+	public int getTotalWeight() {
+		return totalWeight;
+	}
+
+	public void setTotalWeight(int totalWeight) {
+		this.totalWeight = totalWeight;
 	}
 
 	@Override

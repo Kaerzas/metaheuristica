@@ -3,16 +3,31 @@ package metaheuristics.localsearch.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import problems.IInstance;
 import problems.ISolution;
+import problems.tsp.InstanceTSP;
 import problems.tsp.SolutionTSP;
 
-public class NodeInversionTSP implements INeighOperator 
+public class NodeInversionTSP extends INeighOperator 
 {
+	private InstanceTSP instance;
+	private SolutionTSP original;
+	private int firstNextIndex;
+	private int secondNextIndex;
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
 
+	@Override
+	public void initialize(IInstance instance, ISolution original){
+		this.instance = (InstanceTSP) instance;
+		this.original = (SolutionTSP) original;
+		
+		this.firstNextIndex = 0;
+		this.secondNextIndex = 1;
+	}
+	
 	/**
 	 * Generate a neighbour for a given individual
 	 * 
@@ -22,33 +37,48 @@ public class NodeInversionTSP implements INeighOperator
 	 * @return a neighbour for the individual
 	 */
 	
-	public ISolution generateNeighbour(ISolution individual, Object param) 
+	private SolutionTSP generateNeighbour(int first, int second) 
 	{
-		
-		if(individual instanceof SolutionTSP) {
 
-			List<Integer> newObjects = new ArrayList<Integer>(((SolutionTSP) individual).getOrder());
-			
-			SolutionTSP newInd = new SolutionTSP(newObjects);
-			
-			int aux;
-		    int start = ((int[])param)[0];
-		    int end = ((int[])param)[1];
-		    
-		    for (int i = start; i <= ((end-start) / 2)+start; i++) {
-		        aux = newObjects.get(i);
-		        newObjects.set(i,newObjects.get(end-(i-start)));
-		        newObjects.set(end-(i-start), aux);
-		    }
-			
-			return newInd;
+		List<Integer> newObjects = new ArrayList<Integer>(original.getOrder());
+		
+		SolutionTSP newInd = new SolutionTSP(newObjects);
+		
+		int aux;
+	    
+	    for (int i = first; i <= ((second-first) / 2)+first; i++) {
+	        aux = newObjects.get(i);
+	        newObjects.set(i,newObjects.get(second-(i-first)));
+	        newObjects.set(second-(i-first), aux);
+	    }
+	    
+	    instance.evaluate(newInd);
+		
+		return newInd;
+	}
+
+	@Override
+	public boolean hasNext() {
+		return firstNextIndex < (this.original.getOrder().size()-1);
+	}
+
+	@Override
+	public ISolution next() {
+		ISolution sol = generateNeighbour(firstNextIndex, secondNextIndex);
+		
+		//Update index
+		secondNextIndex++;
+		if(secondNextIndex >= this.original.getOrder().size()){
+			firstNextIndex++;
+			secondNextIndex = firstNextIndex + 1;
 		}
-		else {
-			System.out.println("The individual must be a SolutionTSP");
-			System.exit(0);
-		}
-		// This point should never e reached
-		return null;
+		
+		return sol;
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 	
 	

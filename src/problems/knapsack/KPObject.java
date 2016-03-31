@@ -15,11 +15,11 @@ public class KPObject
 	
 	/** Weight of the object */
 	
-	private double weight; 
+	private int weight; 
 	
 	/** Value of the object */
 	
-	private double value;
+	private int value;
 
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -31,7 +31,7 @@ public class KPObject
 	 * @return the weight
 	 */
 	
-	public double getWeight() 
+	public int getWeight() 
 	{
 		return weight;
 	}
@@ -42,7 +42,7 @@ public class KPObject
 	 * @param weight the weight to set
 	 */
 	
-	public void setWeight(double weight) 
+	public void setWeight(int weight) 
 	{
 		this.weight = weight;
 	}
@@ -53,7 +53,7 @@ public class KPObject
 	 * @return the value
 	 */
 	
-	public double getValue() 
+	public int getValue() 
 	{
 		return value;
 	}
@@ -64,7 +64,7 @@ public class KPObject
 	 * @param value the value to set
 	 */
 	
-	public void setValue(double value) 
+	public void setValue(int value) 
 	{
 		this.value = value;
 	}	

@@ -45,15 +45,20 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator implements IConfi
 		int nObjects = ((InstanceKnapsack)instance).getNObjects();
 		
 		byte [] knapsack = new byte[nObjects];
+		int totalWeight = 0;
 		
 		for(int i=0; i<nObjects; i++) {
-			if(randGenerator.nextDouble() < addProbability)
+			if(randGenerator.nextDouble() < addProbability){
 				knapsack[i] = 1;
+				totalWeight += ((InstanceKnapsack)instance).getObjects().get(i).getWeight();
+			}
 			else
 				knapsack[i] = 0;
 		}
-				
-		return new SolutionKnapsack(knapsack);
+		
+		SolutionKnapsack sol = new SolutionKnapsack(knapsack);
+		sol.setTotalWeight(totalWeight);
+		return sol;
 	}
 
 	@Override

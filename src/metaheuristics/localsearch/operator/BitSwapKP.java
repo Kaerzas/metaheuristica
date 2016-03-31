@@ -1,15 +1,31 @@
 package metaheuristics.localsearch.operator;
 
+import problems.IInstance;
 import problems.ISolution;
+import problems.knapsack.InstanceKnapsack;
 import problems.knapsack.SolutionKnapsack;
 
-public class BitSwapKP implements INeighOperator 
+public class BitSwapKP extends INeighOperator 
 {
+
+	private InstanceKnapsack instance;
+	private SolutionKnapsack original;
+	private int firstNextIndex;
+	private int secondNextIndex;
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
-
+	
+	@Override
+	public void initialize(IInstance instance, ISolution original){
+		this.instance = (InstanceKnapsack) instance;
+		this.original = (SolutionKnapsack) original;
+		
+		this.firstNextIndex = 0;
+		this.secondNextIndex = 1;
+	}
+	
 	/**
 	 * Generate a neighbour for a given individual
 	 * 
@@ -19,30 +35,90 @@ public class BitSwapKP implements INeighOperator
 	 * @return a neighbour for the individual
 	 */
 	
-	public ISolution generateNeighbour(ISolution individual, Object param) 
+	private SolutionKnapsack generateNeighbour(int first, int last) 
 	{
-		if(individual instanceof SolutionKnapsack) {
 			
-			int nObjects = ((SolutionKnapsack) individual).getObjects().length;
-			byte [] newObjects = new byte[nObjects];
-			System.arraycopy(((SolutionKnapsack) individual).getObjects(), 0, newObjects, 0, nObjects);
-			int pos1 = ((int[]) param)[0];
-			int pos2 = ((int[]) param)[1];
-			byte aux;
+		int nObjects = this.original.getObjects().length;
+		byte [] newObjects = new byte[nObjects];
+		System.arraycopy(this.original.getObjects(), 0, newObjects, 0, nObjects);
+		byte aux;
+		
+		SolutionKnapsack newInd = new SolutionKnapsack(newObjects);
+						
+		aux = newInd.getObjects()[first];
+		newInd.getObjects()[first] = newInd.getObjects()[last];
+		newInd.getObjects()[last] = aux;
+		
+		//Compute fitness from original solution
+		double newFitness = original.getFitness();
+		int newWeight = original.getTotalWeight();
+		
+		//Assumes the swapped elements are different, since that's already checked in hasNext()
+		if(newInd.getObjects()[first] == 0){
+			newFitness -= instance.getObjects().get(first).getValue();
+			newFitness += instance.getObjects().get(last).getValue();
 			
-			SolutionKnapsack newInd = new SolutionKnapsack(newObjects);
-							
-			aux = ((SolutionKnapsack) newInd).getObjects()[pos1];
-			((SolutionKnapsack) newInd).getObjects()[pos1] = ((SolutionKnapsack) newInd).getObjects()[pos2];
-			((SolutionKnapsack) newInd).getObjects()[pos2] = aux;
+			newWeight -= instance.getObjects().get(first).getWeight();
+			newWeight += instance.getObjects().get(last).getWeight();
+		}else{
+			newFitness += instance.getObjects().get(first).getValue();
+			newFitness -= instance.getObjects().get(last).getValue();
 			
-			return newInd;
+			newWeight += instance.getObjects().get(first).getWeight();
+			newWeight -= instance.getObjects().get(last).getWeight();
 		}
-		else {
-			System.out.println("The individual must be a SolutionKnapsack");
-			System.exit(0);
+		
+		//Still has to check if solution is valid
+		if(original.getTotalWeight() <= instance.getKnapsackSize()){ //Original solution was valid
+			if(newWeight > instance.getKnapsackSize()) //but new solution is invalid
+				newFitness -= instance.getTotalValue();
 		}
-		// This point should never e reached
-		return null;
+		else{ //Original solution was invalid
+			if(newWeight <= instance.getKnapsackSize()) //but new solution is invalid
+				newFitness += instance.getTotalValue();
+		}
+		
+		newInd.setFitness(newFitness);
+		newInd.setTotalWeight(newWeight);
+		
+		return newInd;
+	}
+
+	@Override
+	public boolean hasNext() {
+		while(firstNextIndex < (this.original.getObjects().length-1)){
+			
+			//If next neighbour is not redundant, hasNext is true
+			if(original.getObjects()[firstNextIndex] != original.getObjects()[secondNextIndex])
+				return true;
+			
+			//Update index
+			secondNextIndex++;
+			if(secondNextIndex >= this.original.getObjects().length){
+				firstNextIndex++;
+				secondNextIndex = firstNextIndex + 1;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public ISolution next() {
+		ISolution sol = generateNeighbour(firstNextIndex, secondNextIndex);
+		
+		//Update index
+		secondNextIndex++;
+		if(secondNextIndex >= this.original.getObjects().length){
+			firstNextIndex++;
+			secondNextIndex = firstNextIndex + 1;
+		}
+		
+		return sol;
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 }

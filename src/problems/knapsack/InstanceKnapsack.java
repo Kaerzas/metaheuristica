@@ -64,8 +64,8 @@ public class InstanceKnapsack extends AbstractInstance
 	@Override
 	public void evaluate(ISolution solution) 
 	{
-		double value = 0;		
-		double weight = 0;
+		int value = 0;		
+		int weight = 0;
 		
 		// Check if the solution is an instance of the Knapsack problem
 		if(solution instanceof SolutionKnapsack) {
@@ -129,6 +129,12 @@ public class InstanceKnapsack extends AbstractInstance
 		} catch (IOException e) {
 			System.out.println("Problem while reading the CSV file");
 			e.printStackTrace();
+		}
+		
+		//Compute total value of all objects
+		totalValue = 0.0;
+		for(KPObject obj : objects){
+			totalValue += obj.getValue();
 		}
 	}
 	

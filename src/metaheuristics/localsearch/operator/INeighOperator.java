@@ -1,17 +1,23 @@
 package metaheuristics.localsearch.operator;
 
+import java.util.Iterator;
+
+import problems.IInstance;
 import problems.ISolution;
 
 /**
  * @author i22balur
  *
  */
-public interface INeighOperator 
+public abstract class INeighOperator implements Iterator<ISolution>
 {
+	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
-
+	
+	public abstract void initialize(IInstance instance, ISolution original);
+	
 	/**
 	 * Generate a neighbour for a given individual
 	 * 
@@ -21,6 +27,6 @@ public interface INeighOperator
 	 * @return a neighbour for the individual
 	 */
 	
-	public ISolution generateNeighbour (ISolution individual, Object param);
+	//public ISolution generateNeighbour (ISolution individual, Object param);
 	
 }

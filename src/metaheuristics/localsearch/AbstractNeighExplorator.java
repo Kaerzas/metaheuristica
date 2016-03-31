@@ -45,13 +45,13 @@ public abstract class AbstractNeighExplorator implements INeighExplorator
 	{
 		try {
 			// Get the name of the explorator class
-			String instanceName = configuration.getString("operator");
+			String operatorName = configuration.getString("operator");
 	
 			// Instance class
-			Class<? extends INeighOperator> instanceClass = 
-					(Class<? extends INeighOperator>) Class.forName(instanceName);
+			Class<? extends INeighOperator> operatorClass = 
+					(Class<? extends INeighOperator>) Class.forName(operatorName);
 			
-			operator = instanceClass.newInstance();
+			operator = operatorClass.newInstance();
 		}
 		catch(Exception e) {
 			System.out.println(e);

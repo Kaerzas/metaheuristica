@@ -3,10 +3,27 @@ package metaheuristics.localsearch.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import problems.IInstance;
 import problems.ISolution;
+import problems.tsp.InstanceTSP;
 import problems.tsp.SolutionTSP;
 
-public class NodeSwapTSP implements INeighOperator{
+public class NodeSwapTSP extends INeighOperator{
+	
+	private InstanceTSP instance;
+	private SolutionTSP original;
+	private int firstNextIndex;
+	private int secondNextIndex;
+	
+	@Override
+	public void initialize(IInstance instance, ISolution original){
+		this.instance = (InstanceTSP) instance;
+		this.original = (SolutionTSP) original;
+		
+		this.firstNextIndex = 0;
+		this.secondNextIndex = 1;
+	}
+	
 	/**
 	 * Generate a neighbour for a given individual
 	 * 
@@ -15,23 +32,38 @@ public class NodeSwapTSP implements INeighOperator{
 	 * 
 	 * @return a neighbour for the individual
 	 */
-	public ISolution generateNeighbour(ISolution individual, Object param){
-		if(individual instanceof SolutionTSP) {
-			List<Integer> newNodes = new ArrayList<Integer> (((SolutionTSP) individual).getOrder());
-			int pos1 = ((int[]) param)[0]; 
-			int pos2 = ((int[]) param)[1];
-			SolutionTSP newInd = new SolutionTSP(newNodes);
-			
-			((SolutionTSP) newInd).getOrder().set(pos1, ((SolutionTSP) individual).getOrder().get(pos2));
-			((SolutionTSP) newInd).getOrder().set(pos2, ((SolutionTSP) individual).getOrder().get(pos1));
-			
-			return newInd;
+	private SolutionTSP generateNeighbour(int first, int second){
+		List<Integer> newNodes = new ArrayList<Integer> (original.getOrder());
+		SolutionTSP newInd = new SolutionTSP(newNodes);
+		
+		newInd.getOrder().set(first, original.getOrder().get(second));
+		newInd.getOrder().set(second, original.getOrder().get(first));
+		
+		instance.evaluate(newInd);
+		return newInd;
+	}
+
+	@Override
+	public boolean hasNext() {
+		return firstNextIndex < (this.original.getOrder().size()-1);
+	}
+
+	@Override
+	public ISolution next() {
+		ISolution sol = generateNeighbour(firstNextIndex, secondNextIndex);
+		
+		//Update index
+		secondNextIndex++;
+		if(secondNextIndex >= this.original.getOrder().size()){
+			firstNextIndex++;
+			secondNextIndex = firstNextIndex + 1;
 		}
-		else {
-			System.out.println("The individual must be a SolutionTSP");
-			System.exit(0);
-		}
-		// This point should never e reached
-		return null;
+		
+		return sol;
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 }
