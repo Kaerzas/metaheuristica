@@ -22,7 +22,7 @@ public class RunP2Aurora {
 	private static List<String> explorators = Arrays.asList("metaheuristics.localsearch.BISNeighExplorator", "metaheuristics.localsearch.FISNeighExplorator");
 	private static List<String> operators = Arrays.asList("metaheuristics.localsearch.operator.BitInversionKP", "metaheuristics.localsearch.operator.BitSwapKP");
 	private static List<String> outputs = Arrays.asList("BIS_inversion", "BIS_swap", "FIS_inversion", "FIS_swap");
-	private static boolean setSeed = true;
+	private static boolean setSeed = false;
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -118,12 +118,12 @@ public class RunP2Aurora {
 	
 	public static void main(String[] args) 
 	{
-		int i=0, j=0, k=1; // kp1 - Testing BIS - Swap
-//		for(int i=0; i < instances.size(); ++i){
-//			for(int j=0; j < explorators.size(); ++j){
-//				for(int k=0; k < operators.size(); ++k){
+//		int i=0, j=0, k=1; // kp1 - Testing BIS - Swap
+		for(int i=0; i < instances.size(); ++i){
+			for(int j=0; j < explorators.size(); ++j){
+				for(int k=0; k < operators.size(); ++k){
 					// Seed
-					for(int l=0; l<5; ++l){
+//					for(int l=0; l<10; ++l){
 						IAlgorithm algorithm = loadAlgorithm(i,j,k);
 						
 						// Execute and time the algorithm
@@ -149,15 +149,15 @@ public class RunP2Aurora {
 						String idx = String.format("%d%d", j,k);
 						int index = Integer.parseInt(idx,2);
 						result += outputs.get(index);
-						if(setSeed)
-							result += l;
+						//if(setSeed)
+						//	result += l;
 						result += ".txt";
 						
 						logResults(header, stp, bestSolutions, result);
 						System.out.println("Done!");
 					}
-				}
-//			}
-//		}
-//	}
+//				}
+			}
+		}
+	}
 }
