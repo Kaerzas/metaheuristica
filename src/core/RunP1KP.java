@@ -10,7 +10,7 @@ import org.apache.commons.configuration.XMLConfiguration;
 
 import metaheuristics.IAlgorithm;
 import problems.ISolution;
-import problems.knapsack.SolGeneratorKnapsack;
+import problems.knapsack.SolGenRandomKP;
 import util.config.IConfiguration;
 
 /**
@@ -67,7 +67,7 @@ public class RunP1KP
 				writer.write("# Probability | Max fitness achieved\n");
 				
 				for(double prob = 0.5 ; prob > 0.0001 ; prob = prob/2){
-					((SolGeneratorKnapsack) algorithm.getGenerator()).setAddProbability(prob);
+					((SolGenRandomKP) algorithm.getGenerator()).setAddProbability(prob);
 					
 					double media = 0.0;
 					for(int i=0 ; i < nPruebas ; ++i){

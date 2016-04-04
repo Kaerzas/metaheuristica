@@ -6,11 +6,11 @@ import java.util.List;
 import problems.AbstractSolGenerator;
 import problems.ISolution;
 
-public class SolGeneratorTSP extends AbstractSolGenerator
+public class SolGenRandomTSP extends AbstractSolGenerator
 {
 	
 	
-	public SolGeneratorTSP(){
+	public SolGenRandomTSP(){
 		
 	}
 	

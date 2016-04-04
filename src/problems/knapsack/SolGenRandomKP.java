@@ -13,7 +13,7 @@ import util.config.IConfiguration;
  *
  */
 
-public class SolGeneratorKnapsack extends AbstractSolGenerator implements IConfiguration
+public class SolGenRandomKP extends AbstractSolGenerator implements IConfiguration
 {	
 	///////////////////////////////////////////
 	// ----------------------------- Variables
@@ -30,7 +30,7 @@ public class SolGeneratorKnapsack extends AbstractSolGenerator implements IConfi
 	
 	/** Empty constructor */
 	
-	public SolGeneratorKnapsack() 
+	public SolGenRandomKP() 
 	{
 
 	}
