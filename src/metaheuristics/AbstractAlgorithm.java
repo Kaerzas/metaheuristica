@@ -103,6 +103,8 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 			if(instance instanceof IConfiguration)
 				((IConfiguration) instance).configure(configuration.subset("instance"));
 			
+			instance.setRandom(random);
+			
 			// Solution class
 			Class<? extends ISolution> solutionClass = 
 					(Class<? extends ISolution>) Class.forName(solutionName);
@@ -117,11 +119,12 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 					(Class<? extends ISolGenerator>) Class.forName(generatorName);
 		
 			generator = generatorClass.newInstance();
-			generator.setRandom(random);
-			generator.setInstance(instance);
 			
 			if(generator instanceof IConfiguration)
 				((IConfiguration) generator).configure(configuration.subset("solGenerator"));
+			
+			generator.setRandom(random);
+			generator.setInstance(instance);
 		}
 		catch(Exception e) {
 			System.out.println(e);

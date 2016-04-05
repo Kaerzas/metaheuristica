@@ -84,7 +84,8 @@ public class BitInversionKP extends INeighOperator
 	}
 
 	@Override
-	public ISolution randomNeighbour(Random random) {
+	public ISolution randomNeighbour() {
+		Random random = instance.getRandom();
 		return generateNeighbour(random.nextInt(this.instance.getNObjects()));
 	}
 }

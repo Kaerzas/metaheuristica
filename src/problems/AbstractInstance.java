@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Random;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -27,6 +28,8 @@ public abstract class AbstractInstance implements IInstance
 	/** Indicates whether a max/min problem */
 		
 	protected boolean maximize;
+	
+	private Random random;
 
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -57,5 +60,15 @@ public abstract class AbstractInstance implements IInstance
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public Random getRandom() {
+		return random;
+	}
+
+	@Override
+	public void setRandom(Random random) {
+		this.random = random;
 	}
 }

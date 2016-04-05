@@ -58,6 +58,7 @@ public class SolGenRandomKP extends AbstractSolGenerator implements IConfigurati
 		
 		SolutionKnapsack sol = new SolutionKnapsack(knapsack);
 		sol.setTotalWeight(totalWeight);
+		instance.evaluate(sol);
 		return sol;
 	}
 

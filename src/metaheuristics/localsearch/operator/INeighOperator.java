@@ -1,7 +1,6 @@
 package metaheuristics.localsearch.operator;
 
 import java.util.Iterator;
-import java.util.Random;
 
 import problems.IInstance;
 import problems.ISolution;
@@ -23,7 +22,7 @@ public abstract class INeighOperator implements Iterator<ISolution>
 	 * Generates a random neighbour for the specified neighbourhood
 	 * @return A random neighbour in the neighbourhood
 	 */
-	public ISolution randomNeighbour(Random random){
+	public ISolution randomNeighbour(){
 		throw new UnsupportedOperationException();
 	}
 

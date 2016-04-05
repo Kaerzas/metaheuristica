@@ -38,9 +38,6 @@ public class RandomSearch extends AbstractAlgorithm
 			
 			// Create new solution and store
 			ISolution newSolution = generator.generate();
-				
-			// Evaluate the new solution
-			instance.evaluate(newSolution);
 			
 			// Check if the new solution is better
 			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){

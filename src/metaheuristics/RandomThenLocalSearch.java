@@ -21,9 +21,6 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		for(int i=0; i<randomTries; i++) {
 			// Create new solution and store
 			newSolution = generator.generate();
-				
-			// Evaluate the new solution
-			instance.evaluate(newSolution);
 			
 			// Check if the new solution is better
 			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){

@@ -1,5 +1,7 @@
 package problems;
 
+import java.util.Random;
+
 import util.config.IConfiguration;
 
 /**
@@ -37,4 +39,8 @@ public interface IInstance extends IConfiguration
 	 */
 	
 	public boolean betterThan(ISolution sol1, ISolution sol2);
+
+	Random getRandom();
+
+	void setRandom(Random random);
 }

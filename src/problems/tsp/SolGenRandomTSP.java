@@ -25,7 +25,10 @@ public class SolGenRandomTSP extends AbstractSolGenerator
 		}
 		Collections.shuffle(randSol, randGenerator);
 		
-		return new SolutionTSP(randSol);
+		ISolution sol = new SolutionTSP(randSol);
+		instance.evaluate(sol);
+		
+		return sol;
 	}
 		
 }

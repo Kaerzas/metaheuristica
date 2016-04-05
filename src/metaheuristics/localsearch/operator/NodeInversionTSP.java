@@ -78,7 +78,8 @@ public class NodeInversionTSP extends INeighOperator
 	}
 	
 	@Override
-	public ISolution randomNeighbour(Random random) {
+	public ISolution randomNeighbour() {
+		Random random = instance.getRandom();
 		int first, second;
 		
 		first = random.nextInt(this.instance.getNNodes());
