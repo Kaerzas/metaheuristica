@@ -52,36 +52,37 @@ public class BitSwapKP extends INeighOperator
 		newInd.getObjects()[last] = aux;
 		
 		//Compute fitness from original solution
-		double newFitness = original.getFitness();
 		int newWeight = original.getTotalWeight();
 		
 		//Assumes the swapped elements are different, since that's already checked in hasNext()
 		if(newInd.getObjects()[first] == 0){
-			newFitness -= instance.getObjects().get(first).getValue();
-			newFitness += instance.getObjects().get(last).getValue();
-			
 			newWeight -= instance.getObjects().get(first).getWeight();
 			newWeight += instance.getObjects().get(last).getWeight();
 		}else{
-			newFitness += instance.getObjects().get(first).getValue();
-			newFitness -= instance.getObjects().get(last).getValue();
-			
 			newWeight += instance.getObjects().get(first).getWeight();
 			newWeight -= instance.getObjects().get(last).getWeight();
 		}
-		
-		//Still has to check if solution is valid
-		if(original.getTotalWeight() <= instance.getKnapsackSize()){ //Original solution was valid
-			if(newWeight > instance.getKnapsackSize()) //but new solution is invalid
-				newFitness -= instance.getTotalValue();
-		}
-		else{ //Original solution was invalid
-			if(newWeight <= instance.getKnapsackSize()) //but new solution is invalid
-				newFitness += instance.getTotalValue();
-		}
-		
-		newInd.setFitness(newFitness);
+
 		newInd.setTotalWeight(newWeight);
+		
+		if(newWeight > instance.getKnapsackSize()) //New solution is invalid
+			newInd.setFitness(instance.getKnapsackSize() - newWeight);
+		else{ //New solution is valid
+			if(original.getTotalWeight() > instance.getKnapsackSize()) //Previous solution was invalid
+				instance.evaluate(newInd); //Fitness has to be computed from scratch
+			else{
+				double newFitness = original.getFitness();
+				
+				if(newInd.getObjects()[first] == 0){
+					newFitness -= instance.getObjects().get(first).getValue();
+					newFitness += instance.getObjects().get(last).getValue();
+				}else{
+					newFitness += instance.getObjects().get(first).getValue();
+					newFitness -= instance.getObjects().get(last).getValue();
+				}
+				newInd.setFitness(newFitness);
+			}
+		}
 		
 		return newInd;
 	}

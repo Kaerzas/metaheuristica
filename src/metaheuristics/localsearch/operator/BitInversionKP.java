@@ -41,32 +41,36 @@ public class BitInversionKP extends INeighOperator
 		
 		SolutionKnapsack newInd = new SolutionKnapsack(newObjects);
 		
-		double newFitness = original.getFitness();
 		int newWeight = original.getTotalWeight();
 		
-		if(newInd.getObjects()[idx] == 0){
+		if(newInd.getObjects()[idx] == 0){ //Adding an element
 			newInd.getObjects()[idx] = 1;
-			newFitness += instance.getObjects().get(idx).getValue();
+			//newFitness += instance.getObjects().get(idx).getValue();
 			newWeight += instance.getObjects().get(idx).getWeight();
 		}
-		else{
+		else{ //Subtracting an element
 			newInd.getObjects()[idx] = 0;
-			newFitness -= instance.getObjects().get(idx).getValue();
+			//newFitness -= instance.getObjects().get(idx).getValue();
 			newWeight  -= instance.getObjects().get(idx).getWeight();
 		}
 		
-		//Still has to check if solution is valid
-		if(original.getTotalWeight() <= instance.getKnapsackSize()){ //Original solution was valid
-			if(newWeight > instance.getKnapsackSize()) //but new solution is invalid
-				newFitness -= instance.getTotalValue();
-		}
-		else{ //Original solution was invalid
-			if(newWeight <= instance.getKnapsackSize()) //but new solution is valid
-				newFitness += instance.getTotalValue();
-		}
-		
-		newInd.setFitness(newFitness);
 		newInd.setTotalWeight(newWeight);
+		
+		// Evaluate new solution from original solution
+		if(newWeight > instance.getKnapsackSize()) //New solution is invalid
+			newInd.setFitness(instance.getKnapsackSize() - newWeight);
+		else{ // New solution is valid
+			double newFitness = original.getFitness();
+			
+			if(newInd.getObjects()[idx] == 1){ //An element was added
+				newFitness += instance.getObjects().get(idx).getValue();
+			}
+			else{ //An element was subtracted
+				newFitness -= instance.getObjects().get(idx).getValue();
+			}
+			
+			newInd.setFitness(newFitness);
+		}
 		
 		return newInd;
 	}

@@ -82,7 +82,7 @@ public class InstanceKnapsack extends AbstractInstance
 			((SolutionKnapsack)solution).setTotalWeight(weight);
 			// Check if the solution is valid
 			if(weight > knapsackSize)
-				solution.setFitness(value - totalValue);
+				solution.setFitness(knapsackSize - weight);
 			else
 				solution.setFitness(value);	
 		}
