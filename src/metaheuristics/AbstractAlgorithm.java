@@ -24,19 +24,18 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	
 	/** Generator used in the creation */
 	
-	protected static ISolGenerator generator;
+	protected ISolGenerator generator;
 	
 	/** Solution used in the representation */
 	
-	protected static ISolution solution;
+	protected ISolution solution;
 	
 	/** Instance of the problem */
 	
-	protected static IInstance instance;
+	protected IInstance instance;
 	
 	/** Random seed */
-	
-	protected static int seed;
+	protected Random random;
 	
 	/** */
 	protected Stopwatch stopwatch;
@@ -76,12 +75,15 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 		stopwatch = new Stopwatch();
 		bestSolutions = new ArrayList<ISolution>();
 		
+		
 		// Get the seed used
 		try{
-			seed = Integer.parseInt(configuration.getString("seed"));
+			long seed;
+			seed = Long.parseLong(configuration.getString("seed"));
+			random = new Random(seed);
 		} //If no seed specified, a random seed is given
 		catch(NumberFormatException e){
-			seed = new Random().nextInt();
+			random = new Random();
 		}
 		
 		// Get the name of the classes
@@ -115,7 +117,7 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 					(Class<? extends ISolGenerator>) Class.forName(generatorName);
 		
 			generator = generatorClass.newInstance();
-			generator.setRandom(new Random(seed));
+			generator.setRandom(random);
 			generator.setInstance(instance);
 			
 			if(generator instanceof IConfiguration)
@@ -145,5 +147,10 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	@Override
 	public IInstance getInstance() {
 		return instance;
+	}
+	
+	@Override
+	public Random getRandom(){
+		return this.random;
 	}
 }

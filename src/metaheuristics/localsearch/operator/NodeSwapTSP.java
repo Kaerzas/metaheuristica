@@ -2,6 +2,7 @@ package metaheuristics.localsearch.operator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import problems.IInstance;
 import problems.ISolution;
@@ -61,9 +62,17 @@ public class NodeSwapTSP extends INeighOperator{
 		
 		return sol;
 	}
-
+	
 	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
+	public ISolution randomNeighbour(Random random) {
+		int first, second;
+		
+		first = random.nextInt(this.instance.getNNodes());
+		second = random.nextInt(this.instance.getNNodes()-1);
+		
+		if(second >= first)
+			second++;
+		
+		return generateNeighbour(first, second);
 	}
 }

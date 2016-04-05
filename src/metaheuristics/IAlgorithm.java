@@ -1,6 +1,7 @@
 package metaheuristics;
 
 import java.util.List;
+import java.util.Random;
 
 import problems.IInstance;
 import problems.ISolGenerator;
@@ -58,4 +59,6 @@ public interface IAlgorithm extends IConfiguration
 	 */
 	
 	public List<ISolution> getBestSolutions();
+	
+	public Random getRandom();
 }

@@ -1,5 +1,7 @@
 package metaheuristics.localsearch.operator;
 
+import java.util.Random;
+
 import problems.IInstance;
 import problems.ISolution;
 import problems.knapsack.InstanceKnapsack;
@@ -82,7 +84,7 @@ public class BitInversionKP extends INeighOperator
 	}
 
 	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
+	public ISolution randomNeighbour(Random random) {
+		return generateNeighbour(random.nextInt(this.instance.getNObjects()));
 	}
 }

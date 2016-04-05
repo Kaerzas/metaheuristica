@@ -1,5 +1,7 @@
 package metaheuristics.localsearch.operator;
 
+import java.util.Random;
+
 import problems.IInstance;
 import problems.ISolution;
 import problems.knapsack.InstanceKnapsack;
@@ -116,9 +118,17 @@ public class BitSwapKP extends INeighOperator
 		
 		return sol;
 	}
-
+	
 	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
+	public ISolution randomNeighbour(Random random) {
+		int first, second;
+		
+		first = random.nextInt(this.instance.getNObjects());
+		second = random.nextInt(this.instance.getNObjects()-1);
+		
+		if(second >= first)
+			second++;
+		
+		return generateNeighbour(first, second);
 	}
 }
