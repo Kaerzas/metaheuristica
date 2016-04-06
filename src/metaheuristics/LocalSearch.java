@@ -14,7 +14,7 @@ public class LocalSearch extends AbstractAlgorithm
 	public void search() {
 		// Starting solution
 		ISolution newSolution = generator.generate();
-		
+				
 		for(int i=0; i<tries; i++) {
 			// Generate the neighbour
 			ISolution neighbour = explorator.generateBestNeighbour(newSolution);

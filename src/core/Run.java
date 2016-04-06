@@ -38,7 +38,7 @@ public class Run
 			System.out.println("You must set the config file");
 			System.exit(0);
 		}
-
+		
 		// Try open job file
 		File jobFile = new File(args[0]);		
 		if (jobFile.exists()) {
@@ -69,6 +69,9 @@ public class Run
 			catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		else {
+			System.out.println("Configuration file doesn't exist");
 		}
 	}
 }
