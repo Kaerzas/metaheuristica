@@ -59,9 +59,8 @@ public class RunP2Aurora {
 			algorithm = algClass.newInstance();
 			
 			// Configure the algorithm
-			if(algorithm instanceof IConfiguration) {
+			if(algorithm instanceof IConfiguration) 
 				((IConfiguration) algorithm).configure(jobConf.subset("algorithm"));
-			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -86,18 +85,18 @@ public class RunP2Aurora {
 			
 			Double lastFitness = firstSol.getFitness();
 			for(int j=1 ; j < solutions.size(); ++j){
-			ISolution sol = solutions.get(j);
-			Double fitness = sol.getFitness();
-			Long lapTime = stp.lapTime(j);
-			
-			writer.write(lapTime.toString() + " " + lastFitness.toString() + "\n");
-			writer.write(lapTime.toString() + " " + fitness.toString() + "\n");
-			
-			lastFitness = fitness;
-			
-			//sol.printSolution();
-			//System.out.println(sol.getFitness());
-			//System.out.println(stp.lapTime(j));
+				ISolution sol = solutions.get(j);
+				Double fitness = sol.getFitness();
+				Long lapTime = stp.lapTime(j);
+				
+				writer.write(lapTime.toString() + " " + lastFitness.toString() + "\n");
+				writer.write(lapTime.toString() + " " + fitness.toString() + "\n");
+				
+				lastFitness = fitness;
+				
+				//sol.printSolution();
+				//System.out.println(sol.getFitness());
+				//System.out.println(stp.lapTime(j));
 			}
 			//Last point
 			writer.write(Long.toString(stp.elapsed()) + " " + Double.toString(solutions.get(solutions.size()-1).getFitness()) + "\n");

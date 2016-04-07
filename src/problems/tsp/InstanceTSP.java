@@ -16,7 +16,7 @@ public class InstanceTSP extends AbstractInstance
 	
 	/** The graph */
 	
-	private TSPGraph graph;
+	public TSPGraph graph;
 	
 	/** The number of nodes */
 	
@@ -43,7 +43,7 @@ public class InstanceTSP extends AbstractInstance
 	@Override
 	public void evaluate(ISolution solution) 
 	{
-		// Get the order of the noder
+		// Get the order of the nodes
 		List<Integer> order = ((SolutionTSP)solution).getOrder();
 		double total = 0.0;
 		
