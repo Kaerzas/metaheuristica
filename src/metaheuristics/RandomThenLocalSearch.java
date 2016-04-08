@@ -30,9 +30,9 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 				bestSolutions.add(newSolution);
 				bestSolution = newSolution;
 				// Show results
-				//System.out.println("A best solution has been found in the iteration " + i + " after " + stopwatch.lapTime(lastLap) + " ns:");
-				//bestSolution.printSolution();
-				//System.out.println();
+//				System.out.println("A best solution has been found in the iteration " + i + " after " + stopwatch.lapTime(i) + " ns:");
+//				bestSolution.printSolution();
+//				System.out.println();
 			}
 		}
 		
@@ -41,7 +41,7 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		System.out.println("Starting local search at " + stopwatch.currentElapsed() + " ns");
 		
 		for(int i=0; i<localTries; i++) {
-			// Generate the neighbour
+			// Generate the neighbor
 			ISolution neighbour = explorator.generateBestNeighbour(newSolution);
 			
 			//System.out.println("Iteration " + i);
@@ -51,11 +51,11 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 				bestSolutions.add(newSolution);
 				/*System.out.println("The individual is:");
 				newSolution.printSolution();
-				System.out.println("The neighbour is:");
+				System.out.println("The neighbor is:");
 				neighbour.printSolution();
 				System.out.println();*/
 				newSolution = neighbour;
-				//System.out.println("Better solution found at iteration " + i);
+				//System.out.println("Better solution found at iteration " + i + ": "+newSolution.getFitness());
 			}
 			else {
 				System.out.println("No better solution found, iteration " + i);
@@ -76,7 +76,7 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		this.localTries = configuration.getInt("localTries");
 		
 		try {
-			// Get the name of the explorator class
+			// Get the name of the explorer class
 			String instanceName = configuration.getString("explorator[@name]");
 			
 			// Instance class

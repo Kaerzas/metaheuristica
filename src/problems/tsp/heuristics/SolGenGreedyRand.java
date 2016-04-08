@@ -14,17 +14,16 @@ import problems.tsp.SolutionTSP;
 
 public class SolGenGreedyRand extends SolGenRandomTSP {
 
-	/** Number of nodes for doing the selection **/
+	private int nNodes;				// Problem's number of nodes
+	private int nCandidates=50;		// Number of candidates to select one node
+	private List<Integer> order;	// Visit's order of nodes
 	
-	private int nNodes;
-	private int nCandidates=50;
-	private List<Integer> order;
-	
-	public ISolution generate() {		
-		// Get the node number for the problem
+	public ISolution generate() {
 		nNodes = ((InstanceTSP)instance).getNNodes();
 		order = new ArrayList<Integer>();
+		// First node is random
 		order.add(new Random().nextInt(nNodes));
+		// Next ones are selected by heuristic (closest from current)
 		for(int i=1; i<nNodes; ++i){
 			order.add(heuristic(order.get(order.size()-1)));
 		}
@@ -40,13 +39,17 @@ public class SolGenGreedyRand extends SolGenRandomTSP {
 	}
 	
 	private Integer heuristic(Integer origin) {
+		// List of candidates
 		List<Integer> candidates = new ArrayList<Integer>();
-		int tries;
+		// Candidates number has to get smaller when there's little nodes without visiting
+		int nSelection;
 		if(nNodes-order.size()>=nCandidates)
-			tries=nCandidates;
+			nSelection=nCandidates;
 		else
-			tries=nNodes-order.size();
-		for(int i=0; i < tries; ++i){
+			nSelection=nNodes-order.size();
+		
+		// Get "nSelection" nodes who have not been in "order"
+		for(int i=0; i < nSelection; ++i){
 			Integer candidate;
 			do{
 				candidate = new Random().nextInt(nNodes);
@@ -54,11 +57,16 @@ public class SolGenGreedyRand extends SolGenRandomTSP {
 			//TODO Should consider also candidates can't repeat between themselves??????
 			candidates.add(candidate);
 		}
+		//TODO More efficient if set of possible nodes is becoming smaller
 		
+		// Calculate distances between origin and selected nodes 
 		List<Double> distances = new ArrayList<Double>();
-		for(int i=0; i < tries; ++i){
+		for(int i=0; i < nSelection; ++i){
 			distances.add(((InstanceTSP)instance).graph.distance(origin, candidates.get(i)));
+			//TODO I had to change graph attribute to public
 		}
+		
+		// Return index of node with smallest distance
 		int index = distances.indexOf(Collections.min(distances));
 		return candidates.get(index);
 	}
