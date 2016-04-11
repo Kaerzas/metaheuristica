@@ -43,7 +43,7 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 	
 	@Override
 	protected void search() {
-		iteration = 0;
+		iteration = 1;
 		currentTemperature = initialTemperature;
 		
 		//Initial (random) solution
@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 		bestSolutions.add(currentSolution);
 		
 		while(currentTemperature > minimumTemperature){
-			//System.out.println(currentTemperature);
+			System.out.println(currentTemperature);
 			ISolution newSol = explorator.generateBestNeighbour(currentSolution);
 			
 			if(accept(currentSolution, newSol)){
@@ -75,6 +75,9 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 		double probability; //Acceptance probability
 		
 		fitnessInc = newSol.getFitness() - previousSol.getFitness();
+		
+		if(!instance.maximize()) //Invert delta E if it is a minimization problem (ex. TSP)
+			fitnessInc = -fitnessInc;
 		
 		switch(acceptanceRule){
 		case "metropolis":
