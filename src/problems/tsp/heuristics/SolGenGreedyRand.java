@@ -11,14 +11,16 @@ import problems.ISolution;
 import problems.tsp.SolGenRandomTSP;
 import problems.tsp.InstanceTSP;
 import problems.tsp.SolutionTSP;
+import util.config.IConfiguration;
 
-public class SolGenGreedyRand extends SolGenRandomTSP {
+public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 
 	private int nNodes;				// Problem's number of nodes
 	private int nCandidates;		// Number of candidates to select one node
 	private List<Integer> order;	// Visit's order of nodes
 	
 	public ISolution generate() {
+		System.out.println(nCandidates);
 		nNodes = ((InstanceTSP)instance).getNNodes();
 		order = new ArrayList<Integer>(nNodes);
 		// First node is random
@@ -28,10 +30,11 @@ public class SolGenGreedyRand extends SolGenRandomTSP {
 			order.add(heuristic(order.get(order.size()-1)));
 		
 		ISolution sol = new SolutionTSP(order);
-		instance.evaluate(sol);		
+		instance.evaluate(sol);
 		return sol;
 	}
 
+	@Override
 	public void configure(Configuration configuration) {
 		this.nCandidates = configuration.getInt("nCandidates");
 	}
@@ -53,10 +56,10 @@ public class SolGenGreedyRand extends SolGenRandomTSP {
 		// List of candidates
 		List<Integer> candidates = new ArrayList<Integer>(nSelection);
 		Collections.shuffle(possibles);
-		candidates.subList(0, nSelection);
+		candidates=possibles.subList(0, nSelection);
 		
 		// Calculate distances between origin and selected nodes 
-		List<Double> distances = new ArrayList<Double>();
+		List<Double> distances = new ArrayList<Double>(nSelection);
 		for(int i=0; i < nSelection; ++i)
 			distances.add(((InstanceTSP)instance).graph.distance(origin, candidates.get(i)));
 		
