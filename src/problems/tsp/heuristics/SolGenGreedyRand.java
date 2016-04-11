@@ -54,17 +54,23 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 				possibles.add(i);
 		
 		// List of candidates
-		List<Integer> candidates = new ArrayList<Integer>(nSelection);
 		Collections.shuffle(possibles);
-		candidates=possibles.subList(0, nSelection);
+		List<Integer> candidates=possibles.subList(0, nSelection);
 		
-		// Calculate distances between origin and selected nodes 
-		List<Double> distances = new ArrayList<Double>(nSelection);
-		for(int i=0; i < nSelection; ++i)
-			distances.add(((InstanceTSP)instance).graph.distance(origin, candidates.get(i)));
+		// Calculate distances between origin and selected nodes
+		int best = 0;
+		double min = ((InstanceTSP)instance).graph.distance(origin, candidates.get(0));
+		double d;
+		
+		for(int i=0; i < nSelection; ++i){
+			d = ((InstanceTSP)instance).graph.distance(origin, candidates.get(i));
+			if(d < min){
+				best = i;
+				min = d;
+			}
+		}
 		
 		// Return index of node with smallest distance
-		int index = distances.indexOf(Collections.min(distances));
-		return candidates.get(index);
+		return candidates.get(best);
 	}
 }
