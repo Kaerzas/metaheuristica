@@ -45,6 +45,11 @@ public abstract class AbstractInstance implements IInstance
 
 		return false;
 	}
+	
+	@Override
+	public boolean maximize(){
+		return maximize;
+	}
 
 	@Override
 	public void configure(Configuration configuration) 

@@ -30,6 +30,11 @@ public interface IInstance extends IConfiguration
 	public void loadInstance();	
 	
 	/**
+	 * Is it a maximization problem? Otherwise, it's a minimization problem (duh)
+	 */
+	public boolean maximize();
+	
+	/**
 	 * Compare two solution
 	 * 
 	 * @param sol1 first solution to compare
