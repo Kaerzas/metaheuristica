@@ -28,32 +28,13 @@ public class SolGenRatioKP extends SolGenRandomKP
 		int totalWeight = 0;
 		
 		// Create an array with the best elements sorted by ratio
-		List<KPObject> aux = new ArrayList<KPObject>(((InstanceKnapsack)instance).getObjects());
-
-		//System.out.println("reference aux:"+aux);
-		//System.out.println("reference org:"+((InstanceKnapsack)instance).getObjects());
+		List<KPObject> aux = new ArrayList<KPObject>(((InstanceKnapsack)instance).getObjects());		
 		
-		
+		Collections.shuffle(aux, instance.getRandom());			
 		aux = aux.subList(0, nObjectsSelecion);
-		Collections.shuffle(aux);	
 		Collections.sort(aux, new ComparatorRatioKP());
 		
-		/*
-		System.out.println("weight:"+aux.get(0).getWeight());
-		System.out.println("fitness:"+aux.get(0).getValue());
 		
-		System.out.println("weight:"+aux.get(1).getWeight());
-		System.out.println("fitness:"+aux.get(1).getValue());
-		
-		System.out.println("weight:"+aux.get(2).getWeight());
-		System.out.println("fitness:"+aux.get(2).getValue());
-	
-		System.out.println("weight:"+aux.get(9).getWeight());
-		System.out.println("fitness:"+aux.get(9).getValue());
-		*/
-		
-		//System.out.println("reference aux (sorted and delimitied):"+aux);
-	
 		for(int i=0; i<aux.size(); i++) {
 			int index = ((InstanceKnapsack)instance).getObjects().indexOf(aux.get(i));
 			totalWeight += aux.get(i).getWeight();
