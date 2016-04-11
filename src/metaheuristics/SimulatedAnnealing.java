@@ -52,7 +52,7 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 		bestSolutions.add(currentSolution);
 		
 		while(currentTemperature > minimumTemperature){
-			System.out.println(currentTemperature);
+			//System.out.println(currentTemperature);
 			ISolution newSol = explorator.generateBestNeighbour(currentSolution);
 			
 			if(accept(currentSolution, newSol)){
