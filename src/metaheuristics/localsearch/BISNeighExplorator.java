@@ -15,7 +15,7 @@ public class BISNeighExplorator extends AbstractNeighExplorator
 			
 			if(instance.betterThan(neigh, solution)){
 				solution = neigh;
-				operator.initialize(instance, solution);
+				//operator.initialize(instance, solution);
 			}
 		}
 		

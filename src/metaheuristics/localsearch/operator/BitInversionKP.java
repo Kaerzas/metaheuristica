@@ -62,14 +62,21 @@ public class BitInversionKP extends INeighOperator
 		else{ // New solution is valid
 			double newFitness = original.getFitness();
 			
-			if(newInd.getObjects()[idx] == 1){ //An element was added
-				newFitness += instance.getObjects().get(idx).getValue();
-			}
-			else{ //An element was subtracted
-				newFitness -= instance.getObjects().get(idx).getValue();
+			if(original.getFitness() < 0.0){	// Previous solution was invalid
+				//System.out.println("hola");
+				instance.evaluate(newInd);
 			}
 			
-			newInd.setFitness(newFitness);
+			else {
+				if(newInd.getObjects()[idx] == 1){ //An element was added
+					newFitness += instance.getObjects().get(idx).getValue();
+				}
+				else{ //An element was subtracted
+					newFitness -= instance.getObjects().get(idx).getValue();
+				}
+				newInd.setFitness(newFitness);
+			}
+			
 		}
 		
 		return newInd;
@@ -83,6 +90,7 @@ public class BitInversionKP extends INeighOperator
 	@Override
 	public ISolution next() {
 		ISolution sol = generateNeighbour(nextModified);
+		//System.out.println(nextModified + ": " + sol.getFitness());
 		nextModified++;
 		return sol;
 	}
