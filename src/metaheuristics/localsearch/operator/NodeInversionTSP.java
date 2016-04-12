@@ -8,6 +8,8 @@ import problems.IInstance;
 import problems.ISolution;
 import problems.tsp.InstanceTSP;
 import problems.tsp.SolutionTSP;
+import problems.tsp.TSPGraph;
+
 
 public class NodeInversionTSP extends INeighOperator 
 {
@@ -41,20 +43,43 @@ public class NodeInversionTSP extends INeighOperator
 	private SolutionTSP generateNeighbour(int first, int second) 
 	{
 
-		List<Integer> newObjects = new ArrayList<Integer>(original.getOrder());
+		List<Integer> oldOrder = new ArrayList<Integer>(original.getOrder());
 		
-		SolutionTSP newInd = new SolutionTSP(newObjects);
+		SolutionTSP newInd = new SolutionTSP(oldOrder);
+
+		
+		boolean firstIsFirst = (first==0);
+		boolean lastIsLast = (second==oldOrder.size()-1);
+
 		
 		int aux;
 	    
-	    for (int i = first; i <= ((second-first) / 2)+first; i++) {
-	        aux = newObjects.get(i);
-	        newObjects.set(i,newObjects.get(second-(i-first)));
-	        newObjects.set(second-(i-first), aux);
+		for (int i = first; i <= ((second-first) / 2)+first; i++) {
+	        aux = oldOrder.get(i);
+	        oldOrder.set(i,oldOrder.get(second-(i-first)));
+	        oldOrder.set(second-(i-first), aux);
 	    }
+
 	    
-	    instance.evaluate(newInd);
+		TSPGraph graph = instance.graph;
+		double newFitness = original.getFitness();
+		List<Integer> newOrder = new ArrayList<Integer> (newInd.getOrder());
 		
+		if(firstIsFirst && !lastIsLast){
+			newFitness = newFitness - graph.distance(oldOrder.get(oldOrder.size()-1),oldOrder.get(0)) + graph.distance(newOrder.get(newOrder.size()-1),newOrder.get(0));
+			newFitness = newFitness - graph.distance(oldOrder.get(second),oldOrder.get(second+1)) + graph.distance(newOrder.get(second),newOrder.get(second+1));		
+		}
+		else if(!firstIsFirst && lastIsLast){
+			newFitness = newFitness - graph.distance(oldOrder.get(oldOrder.size()-1),oldOrder.get(0)) + graph.distance(newOrder.get(newOrder.size()-1),newOrder.get(0));
+			newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(first-1)) + graph.distance(newOrder.get(first),newOrder.get(first-1));		
+		}
+		else if(!firstIsFirst && !lastIsLast){
+			newFitness = newFitness - graph.distance(oldOrder.get(second),oldOrder.get(second+1)) + graph.distance(newOrder.get(second),newOrder.get(second+1));		
+			newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(first-1)) + graph.distance(newOrder.get(first),newOrder.get(first-1));		
+		}
+
+		newInd.setFitness(newFitness);
+
 		return newInd;
 	}
 
