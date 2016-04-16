@@ -47,9 +47,9 @@ public class RandomSearch extends AbstractAlgorithm
 				bestSolutions.add(newSolution);
 				bestSolution = newSolution;
 				// Show results
-				//System.out.println("A best solution has been found in the iteration " + i + " after " + stopwatch.lapTime(lastLap) + " ns:");
-				//bestSolution.printSolution();
-				//System.out.println();
+				System.out.println("A best solution has been found in the iteration " + i + " ");
+				bestSolution.printSolution();
+				System.out.println();
 			}
 		}
 	}
