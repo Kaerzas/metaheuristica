@@ -8,7 +8,7 @@ import util.config.IConfiguration;
 
 public class LocalSearch extends AbstractAlgorithm 
 {
-	INeighExplorator explorator;
+	INeighExplorator explorer;
 	
 	@Override
 	public void search() {
@@ -16,23 +16,23 @@ public class LocalSearch extends AbstractAlgorithm
 		ISolution newSolution = generator.generate();
 		ISolution neighbour = newSolution;
 		
-		System.out.println("Solucion inicial:");
-		newSolution.printSolution();		
+//		System.out.println("Solucion inicial:");
+//		newSolution.printSolution();		
 		
 
 		for(int i=0; i<tries; i++) {
-			// Generate the neighbour
-			neighbour = explorator.generateBestNeighbour(newSolution);
-			bestSolutions.add(newSolution);			
+			// Generate the neighbor
+			neighbour = explorer.generateBestNeighbour(newSolution);
+		
 			if(neighbour != null) {
 				stopwatch.lap();
 				bestSolutions.add(neighbour);
-				System.out.println("Solucion mejorada en la iteracion "+ i + ":");
-				System.out.println("The individual is:");
-				newSolution.printSolution();
-				System.out.println("The neighbour is:");
-				neighbour.printSolution();
-				System.out.println();
+//				System.out.println("Solucion mejorada en la iteracion "+ i + ":");
+//				System.out.println("The individual is:");
+//				newSolution.printSolution();
+//				System.out.println("The neighbor is:");
+//				neighbour.printSolution();
+//				System.out.println();
 				newSolution = neighbour;
 			}
 			else {
@@ -53,18 +53,18 @@ public class LocalSearch extends AbstractAlgorithm
 		this.tries = configuration.getInt("tries");
 		
 		try {
-			// Get the name of the explorator class
-			String instanceName = configuration.getString("explorator[@name]");
+			// Get the name of the explorer class
+			String instanceName = configuration.getString("explorer[@name]");
 			
 			// Instance class
 			Class<? extends INeighExplorator> instanceClass = 
 					(Class<? extends INeighExplorator>) Class.forName(instanceName);
 			
-			explorator = instanceClass.newInstance();
-			explorator.setInstance(instance);
+			explorer = instanceClass.newInstance();
+			explorer.setInstance(instance);
 			
-			if(explorator instanceof IConfiguration)
-				((IConfiguration) explorator).configure(configuration.subset("explorator"));
+			if(explorer instanceof IConfiguration)
+				((IConfiguration) explorer).configure(configuration.subset("explorer"));
 		}
 		catch(Exception e) {
 			System.out.println(e);

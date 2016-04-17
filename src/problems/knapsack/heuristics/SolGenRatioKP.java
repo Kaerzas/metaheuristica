@@ -17,7 +17,8 @@ public class SolGenRatioKP extends SolGenRandomKP
 
 	/** Number of objects for doing the selection **/
 
-	private int nObjectsSelecion;
+	private int nObjectsSelection;
+	private float startCapacity=1;
 	
 	public ISolution generate() 
 	{		
@@ -31,11 +32,15 @@ public class SolGenRatioKP extends SolGenRandomKP
 		List<KPObject> aux = new ArrayList<KPObject>(((InstanceKnapsack)instance).getObjects());		
 		
 		Collections.shuffle(aux, instance.getRandom());			
-		aux = aux.subList(0, nObjectsSelecion);
+		aux = aux.subList(0, nObjectsSelection);
 		Collections.sort(aux, new ComparatorRatioKP());
 		
 		
 		for(int i=0; i<aux.size(); i++) {
+			if(totalWeight+aux.get(i).getWeight() > ((InstanceKnapsack)instance).getKnapsackSize()*startCapacity){
+				System.out.println("Start capacity achieved");
+				break;
+			}
 			int index = ((InstanceKnapsack)instance).getObjects().indexOf(aux.get(i));
 			totalWeight += aux.get(i).getWeight();
 			knapsack[index] = 1;
@@ -51,6 +56,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 	public void configure(Configuration configuration) {
 		// Super class configure method		
 		super.configure(configuration);
-		this.nObjectsSelecion = configuration.getInt("objSelecion");
+		this.nObjectsSelection = configuration.getInt("nCandidates");
+		this.startCapacity = configuration.getFloat("startCapacity");
 	}	
 }

@@ -19,8 +19,7 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 	private int nCandidates;		// Number of candidates to select one node
 	private List<Integer> order;	// Visit's order of nodes
 	
-	public ISolution generate() {
-		System.out.println(nCandidates);
+	public ISolution generate(){
 		nNodes = ((InstanceTSP)instance).getNNodes();
 		order = new ArrayList<Integer>(nNodes);
 		// First node is random
@@ -37,6 +36,10 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 	@Override
 	public void configure(Configuration configuration) {
 		this.nCandidates = configuration.getInt("nCandidates");
+		if(nCandidates > nNodes){
+			System.err.println("nCandidates must be less than problem's nodes");
+			System.exit(0);
+		}
 	}
 	
 	private Integer heuristic(Integer origin) {
