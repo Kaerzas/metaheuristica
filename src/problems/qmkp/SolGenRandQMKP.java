@@ -36,15 +36,19 @@ public class SolGenRandQMKP extends AbstractSolGenerator implements IConfigurati
 	{
 		int nObjects = ((InstanceQMKP)instance).getNObjects();
 		int nKnapsacks = ((InstanceQMKP)instance).getNKnapsacks();
-		byte [][] knapsack = new byte[nObjects][nKnapsacks];
-		// TODO Revisar que se inicializa a 0
-		int [] totalWeight = new int[nObjects];
+		int [] knapsack = new int[nObjects];
+		
+		// Initialize with -1 (no objects)
+		for(int i=0; i<nObjects; i++)
+			knapsack[i] = -1;
+		
+		int [] totalWeight = new int[nKnapsacks];
 		int chosenKP;
 		
 		for(int i=0; i<nObjects; i++) {
 			if(randGenerator.nextDouble() < addProbability){
 				chosenKP = Math.abs(randGenerator.nextInt())%nKnapsacks;
-				knapsack[i][chosenKP] = 1;
+				knapsack[i] = chosenKP;
 				totalWeight[chosenKP] += ((InstanceQMKP)instance).getObjects().get(i).getWeight();
 			}
 		}
@@ -60,5 +64,4 @@ public class SolGenRandQMKP extends AbstractSolGenerator implements IConfigurati
 		// Set probability of adding an element
 		this.addProbability = configuration.getDouble("probability");
 	}
-
 }

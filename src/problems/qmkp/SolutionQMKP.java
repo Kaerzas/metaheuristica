@@ -8,13 +8,9 @@ public class SolutionQMKP extends AbstractSolution
 	// -------------------------------- Variables
 	/////////////////////////////////////////////	
 	
-	/** Array representing the objects in the different 
-	 * knapsacks, where the columns represents the knapsacks 
-	 * and the row the objects 
-	 **/
+	/** Array representing the objects in the different knapsacks */
 	
-	// TODO revisar que se inicializa a 0 (creo que si)
-	byte [][] objects;
+	int [] objects;
 	
 	/** Array representing the total weight in the knapsacks */
 	
@@ -36,10 +32,9 @@ public class SolutionQMKP extends AbstractSolution
 	 * the knapsack
 	 * 
 	 * @param objects objects in the knapsack
-	 * 
 	 */
 	
-	public SolutionQMKP(byte [][] objects) 
+	public SolutionQMKP(int [] objects) 
 	{
 		this.objects = objects;
 	}
@@ -54,7 +49,7 @@ public class SolutionQMKP extends AbstractSolution
 	 * @return the objects
 	 */
 	
-	public byte[][] getObjects() 
+	public int [] getObjects() 
 	{
 		return objects;
 	}
@@ -65,7 +60,7 @@ public class SolutionQMKP extends AbstractSolution
 	 * @param objects the objects
 	 */
 	
-	public void setObjects(byte[][] objects) 
+	public void setObjects(int[] objects) 
 	{
 		this.objects = objects;
 	}	
@@ -94,19 +89,15 @@ public class SolutionQMKP extends AbstractSolution
 	
 	@Override
 	public void printSolution() 
-	{
-		// TODO revisar porque puede que falle
-		
-		for(int i=0; i<objects[0].length; i++) {
-			System.out.println("Knapsack " + i + ":");
-			System.out.print("[");
-			// Read the columns (objects)
-			for (int j=0; j< objects.length; j++) {
-				System.out.print(objects[j][i]+",");
-			}
-			System.out.println("]");
+	{		
+		System.out.print("[");
+		for(int i=0; i<objects.length; i++) {
+			if(objects[i]!=-1)
+				System.out.print(objects[i]+",");
+			else
+				System.out.print("_,");
 		}
+		System.out.println("]");
 		System.out.println("Fitness:" + getFitness());
 	}
-	
 }
