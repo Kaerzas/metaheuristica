@@ -45,7 +45,6 @@ public class SolGenRatioKP extends SolGenRandomKP
 			totalWeight += aux.get(i).getWeight();
 			knapsack[index] = 1;
 		}
-		System.out.println("Capacidad actual: "+ totalWeight +"Tope: "+ ((InstanceKnapsack)instance).getKnapsackSize());
 		
 		SolutionKnapsack sol = new SolutionKnapsack(knapsack);
 		sol.setTotalWeight(totalWeight);
