@@ -35,38 +35,35 @@ public class NodeSwapTSP extends INeighOperator{
 	 * @return a neighbour for the individual
 	 */
 	private SolutionTSP generateNeighbour(int first, int second){
-		List<Integer> oldOrder = new ArrayList<Integer> (original.getOrder());
-		SolutionTSP newInd = new SolutionTSP(oldOrder);
+		List<Integer> oldOrder = original.getOrder();
+		List<Integer> newOrder = new ArrayList<Integer>(oldOrder);
+		SolutionTSP newSol = new SolutionTSP(newOrder);
 		
-		boolean firstIsFirst = (first==0);
-		boolean lastIsLast = (second==oldOrder.size()-1);
-		
-		newInd.getOrder().set(first, original.getOrder().get(second));
-		newInd.getOrder().set(second, original.getOrder().get(first));
+		newOrder.set(first, oldOrder.get(second));
+		newOrder.set(second, oldOrder.get(first));
 
 		TSPGraph graph = instance.graph;
 		double newFitness = original.getFitness();
-		List<Integer> newOrder = new ArrayList<Integer> (newInd.getOrder());
 		
-		newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(first+1)) - graph.distance(oldOrder.get(second-1),oldOrder.get(second));
-		newFitness = newFitness + graph.distance(newOrder.get(first),newOrder.get(first+1)) + graph.distance(newOrder.get(second-1),newOrder.get(second));
+		int prevToFirst  = (first + newOrder.size() - 1) % newOrder.size();
+		int nextToFirst  = (first + 1) % newOrder.size();
+		int prevToSecond = (second - 1) % newOrder.size();
+		int nextToSecond = (second + 1) % newOrder.size();
 		
-		if(firstIsFirst && !lastIsLast){
-			newFitness = newFitness - graph.distance(oldOrder.get(oldOrder.size()-1),oldOrder.get(0)) + graph.distance(newOrder.get(newOrder.size()-1),newOrder.get(0));
-			newFitness = newFitness - graph.distance(oldOrder.get(second),oldOrder.get(second+1)) + graph.distance(newOrder.get(second),newOrder.get(second+1));		
-		}
-		else if(!firstIsFirst && lastIsLast){
-			newFitness = newFitness - graph.distance(oldOrder.get(oldOrder.size()-1),oldOrder.get(0)) + graph.distance(newOrder.get(newOrder.size()-1),newOrder.get(0));
-			newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(first-1)) + graph.distance(newOrder.get(first),newOrder.get(first-1));		
-		}
-		else if(!firstIsFirst && !lastIsLast){
-			newFitness = newFitness - graph.distance(oldOrder.get(second),oldOrder.get(second+1)) + graph.distance(newOrder.get(second),newOrder.get(second+1));		
-			newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(first-1)) + graph.distance(newOrder.get(first),newOrder.get(first-1));		
-		}
+		newFitness = newFitness - graph.distance(oldOrder.get(first),oldOrder.get(nextToFirst))
+								- graph.distance(oldOrder.get(prevToSecond),oldOrder.get(second));
+		newFitness = newFitness + graph.distance(newOrder.get(first),newOrder.get(nextToFirst))
+								+ graph.distance(newOrder.get(prevToSecond),newOrder.get(second));
 		
-		newInd.setFitness(newFitness);
+		
+		newFitness = newFitness - graph.distance(oldOrder.get(prevToFirst),oldOrder.get(first))
+								- graph.distance(oldOrder.get(second),oldOrder.get(nextToSecond));
+		newFitness = newFitness + graph.distance(newOrder.get(prevToFirst),newOrder.get(first))
+								+ graph.distance(newOrder.get(second),newOrder.get(nextToSecond));
+		
+		newSol.setFitness(newFitness);
 
-		return newInd;
+		return newSol;
 	}
 
 	@Override
@@ -96,7 +93,13 @@ public class NodeSwapTSP extends INeighOperator{
 		first = random.nextInt(this.instance.getNNodes());
 		second = random.nextInt(this.instance.getNNodes()-1);
 		
-		if(second >= first)
+		
+		if(second < first){
+			int aux = first;
+			first = second;
+			second = aux;
+		}
+		else if(second >= first)
 			second++;
 		
 		return generateNeighbour(first, second);

@@ -58,28 +58,27 @@ public class InstanceQMKP extends AbstractInstance
 	{
 		// TODO El peso lo omito porque el generador ya se lo pone (habria que ver si no da problemas)
 		
-		byte knapsacks [][] = ((SolutionQMKP)solution).getObjects();
+		int knapsacks [] = ((SolutionQMKP)solution).getObjects();
 		int fitness = 0;
 		
 		// Get the individual values
 		for(int i=0; i<nObjects; i++)
-			for(int j=0; j<nKnapsacks; j++)
-				if(knapsacks[i][j] == 1)
-					fitness += this.objects.get(j).getValue();
+			if(knapsacks[i] != -1)
+				fitness += this.objects.get(i).getValue();
+		
 		
 		// Get the pairs values
-		for(int i=0; i<nObjects-1; i++) 
-			for(int j=i+1; j<nObjects; j++) 
-				for(int k=0; k<nKnapsacks; k++)
-					if((knapsacks[i][k]==1) && (knapsacks[j][k]==1)) {
+		int position;
+		for(int i=0; i<nObjects-1; i++) {
+			position = knapsacks[i];
+			if(position != -1) {
+				for(int j=i+1; j<nObjects; j++) {
+					if(knapsacks[j] == position) {
 						fitness += profits[i][j];
-						// Quitar cuando se vea que no hay errores
-						if(i == j) {
-							System.out.println("Error, los indices no pueden ser iguales porque estariamos calculando un valor individual");
-							System.exit(0);
-						}
 					}
-
+				}
+			}
+		}
 		
 		// TODO Habría que mirar si se usa esto o se cambia
 		int [] totalWeight = ((SolutionQMKP)solution).getTotalWeight();
@@ -126,7 +125,7 @@ public class InstanceQMKP extends AbstractInstance
 			// Initialize the profits array
 			profits = new int [nObjects][nObjects];
 
-			// Read the values individual values
+			// Read the individual values
 			line = br.readLine();
 			String [] iValues = line.trim().split("\\s+");
 
@@ -138,10 +137,9 @@ public class InstanceQMKP extends AbstractInstance
 				line = br.readLine();
 				String [] values = line.trim().split("\\s+");
 				for(int j=0; j<values.length; j++) {
-					if (i!=j) {
-						profits[i][j] = Integer.parseInt(values[j]);
-						profits[j][i] = Integer.parseInt(values[j]);
-					}
+					profits[i][i+1+j] = Integer.parseInt(values[j]);
+					profits[i+1+j][i] = Integer.parseInt(values[j]);
+
 				}
 			}
 						
