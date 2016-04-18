@@ -18,7 +18,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 	/** Number of objects for doing the selection **/
 
 	private int nObjectsSelection;
-	private float startCapacity=1;
+	private float startCapacity;
 	
 	public ISolution generate() 
 	{		
@@ -45,6 +45,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 			totalWeight += aux.get(i).getWeight();
 			knapsack[index] = 1;
 		}
+		System.out.println("Capacidad actual: "+ totalWeight +"Tope: "+ ((InstanceKnapsack)instance).getKnapsackSize());
 		
 		SolutionKnapsack sol = new SolutionKnapsack(knapsack);
 		sol.setTotalWeight(totalWeight);
