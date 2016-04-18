@@ -38,7 +38,7 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		
 		//Start local search from Random Search best solution
 		newSolution = bestSolution;
-		System.out.println("Starting local search at " + stopwatch.currentElapsed() + " ns");
+		//System.out.println("Starting local search at " + stopwatch.currentElapsed() + " ns");
 		
 		for(int i=0; i<localTries; i++) {
 			// Generate the neighbor
@@ -48,7 +48,7 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 			
 			if(neighbour != null) {
 				stopwatch.lap();
-				bestSolutions.add(newSolution);
+				bestSolutions.add(neighbour);
 				/*System.out.println("The individual is:");
 				newSolution.printSolution();
 				System.out.println("The neighbor is:");
