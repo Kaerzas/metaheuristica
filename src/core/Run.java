@@ -38,11 +38,13 @@ public class Run
 			System.out.println("You must set the config file");
 			System.exit(0);
 		}
-		
+
 		// Try open job file
 		File jobFile = new File(args[0]);		
 		if (jobFile.exists()) {
 			try {
+				
+
 				Configuration jobConf = new XMLConfiguration(jobFile);
 				String algName = jobConf.getString("algorithm[@name]");
 				
@@ -51,20 +53,27 @@ public class Run
 						(Class<? extends IAlgorithm>) Class.forName(algName);
 				IAlgorithm algorithm = algClass.newInstance();
 				
+
+				
 				// Configure the algorithm
 				if(algorithm instanceof IConfiguration) {
 					((IConfiguration) algorithm).configure(jobConf.subset("algorithm"));
 				}
 				
+				
 				// Execute and time the algorithm
 				Stopwatch stp = new Stopwatch();
 				stp.start();
+
 				algorithm.execute();
 				stp.stop();
 				
 				List<ISolution> bestSolutions = algorithm.getBestSolutions();
 				System.out.println("Time elapsed: " + stp.elapsed() + " ns");
-				System.out.println("Best fitness found: " + bestSolutions.get(bestSolutions.size()-1).getFitness());
+				if(bestSolutions.size()>0)
+					System.out.println("Best fitness found: " + bestSolutions.get(bestSolutions.size()-1).getFitness());
+				else
+					System.out.println("No se ha podido mejorar la solucion inicial");
 			}
 			catch (Exception e) {
 				e.printStackTrace();
