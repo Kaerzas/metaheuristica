@@ -48,6 +48,13 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	
 	protected int tries;
 	
+	/** Is the algorithm limited by time? */
+	protected boolean limitedTime;
+	
+	/** Max time in nanoseconds*/
+	protected long maxTime;
+	
+	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
 	/////////////////////////////////////////////
@@ -125,6 +132,13 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 			
 			generator.setRandom(random);
 			generator.setInstance(instance);
+			
+			if(configuration.containsKey("maxTime")){
+				limitedTime = true;
+				maxTime = (long) configuration.getDouble("maxTime");
+			}
+			else
+				limitedTime = false;
 		}
 		catch(Exception e) {
 			System.out.println(e);
