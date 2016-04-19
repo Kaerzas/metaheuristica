@@ -18,9 +18,17 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 	private int nNodes;				// Problem's number of nodes
 	private int nCandidates;		// Number of candidates to select one node
 	private List<Integer> order;	// Visit's order of nodes
+	private float percentCandidates;
 	
 	public ISolution generate(){
-		nNodes = ((InstanceTSP)instance).getNNodes();
+		this.nNodes = ((InstanceTSP)instance).getNNodes();
+		if(percentCandidates >= 0.0 || percentCandidates <= 1.0)
+			this.nCandidates = (int) (nNodes*percentCandidates);
+		else{
+			System.err.println("Incorrect percent CL");
+			System.exit(0);
+		}
+		
 		order = new ArrayList<Integer>(nNodes);
 		// First node is random
 		order.add(new Random().nextInt(nNodes));
@@ -35,11 +43,7 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 
 	@Override
 	public void configure(Configuration configuration) {
-		this.nCandidates = configuration.getInt("nCandidates");
-		if(nCandidates > nNodes){
-			System.err.println("nCandidates must be less than problem's nodes");
-			System.exit(0);
-		}
+		percentCandidates = configuration.getFloat("nCandidates");
 	}
 	
 	private Integer heuristic(Integer origin) {
@@ -73,6 +77,7 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 			}
 		}
 		
+		//System.out.println("Percent: "+percentCandidates+" candidates: "+nCandidates+" total: "+nNodes);
 		// Return index of node with smallest distance
 		return candidates.get(best);
 	}

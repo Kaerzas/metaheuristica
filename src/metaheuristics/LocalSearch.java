@@ -17,8 +17,7 @@ public class LocalSearch extends AbstractAlgorithm
 		ISolution neighbour = newSolution;
 		
 //		System.out.println("Solucion inicial:");
-//		newSolution.printSolution();		
-		
+//		newSolution.printSolution();
 
 		for(int i=0; i<tries; i++) {
 			// Generate the neighbor
@@ -36,7 +35,7 @@ public class LocalSearch extends AbstractAlgorithm
 				newSolution = neighbour;
 			}
 			else {
-				System.out.println("Not better solution found\n");
+//				System.out.println("Not better solution found\n");
 				break;
 			}
 		}
@@ -55,7 +54,7 @@ public class LocalSearch extends AbstractAlgorithm
 		try {
 			// Get the name of the explorer class
 			String instanceName = configuration.getString("explorer[@name]");
-			
+			//System.out.println(instanceName);
 			// Instance class
 			Class<? extends INeighExplorator> instanceClass = 
 					(Class<? extends INeighExplorator>) Class.forName(instanceName);
