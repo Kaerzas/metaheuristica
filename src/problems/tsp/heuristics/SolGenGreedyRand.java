@@ -43,7 +43,7 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 
 	@Override
 	public void configure(Configuration configuration) {
-		percentCandidates = configuration.getFloat("nCandidates");
+		percentCandidates = configuration.getFloat("percentCandidates");
 	}
 	
 	private Integer heuristic(Integer origin) {
