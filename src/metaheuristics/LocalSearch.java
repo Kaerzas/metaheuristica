@@ -38,6 +38,10 @@ public class LocalSearch extends AbstractAlgorithm
 //				System.out.println("Not better solution found\n");
 				break;
 			}
+			
+			if(limitedTime && stopwatch.currentElapsed() >= maxTime){
+				break;
+			}
 		}
 	}
 
