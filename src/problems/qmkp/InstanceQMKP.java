@@ -80,19 +80,20 @@ public class InstanceQMKP extends AbstractInstance
 			}
 		}
 		
+		// TODO Habría que mirar si se usa esto o se cambia
 		int [] totalWeight = ((SolutionQMKP)solution).getTotalWeight();
-		int exceded = 0;
+		int sumWeights = 0;
+		boolean exceded = false;
 		
 		// Sum the weight o
 		for(int i=0; i<totalWeight.length; i++) {
+			sumWeights += totalWeight[i];
 			if(totalWeight[i] > knapsackSize)
-				exceded += knapsackSize - totalWeight[i] ;
+				exceded = true;
 		}
 		
-		// At least one bag is exceded
-		if(exceded<0)
-			solution.setFitness(exceded);
-		// The solution is valid
+		if(exceded)
+			solution.setFitness(knapsackSize*nKnapsacks-sumWeights);
 		else
 			solution.setFitness(fitness);
 		
@@ -141,15 +142,7 @@ public class InstanceQMKP extends AbstractInstance
 
 				}
 			}
-			/*
-			for(int i=0; i<nObjects;i++) {
-				for(int j=0; j<nObjects;j++) {
-					System.out.print(profits[i][j] + " ");
-				}
-				System.out.println();
-			}
-			*/
-			
+						
 			// Read two blank lines
 			line = br.readLine();
 			line = br.readLine();
@@ -184,22 +177,6 @@ public class InstanceQMKP extends AbstractInstance
 	public List <KPObject> getObjects()
 	{
 		return objects;
-	}
-
-	public int getKnapsackSize() {
-		return knapsackSize;
-	}
-
-	public void setKnapsackSize(int knapsackSize) {
-		this.knapsackSize = knapsackSize;
-	}
-
-	public int[][] getProfits() {
-		return profits;
-	}
-
-	public void setProfits(int[][] profits) {
-		this.profits = profits;
 	}
 
 }

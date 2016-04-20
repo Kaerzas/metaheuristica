@@ -80,7 +80,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 	public void configure(Configuration configuration) {
 		// Super class configure method		
 		super.configure(configuration);
-		this.percentCandidates = configuration.getFloat("nCandidates");
-		this.percentCapacity = configuration.getFloat("startCapacity");
+		this.percentCandidates = configuration.getFloat("percentCandidates");
+		this.percentCapacity = configuration.getFloat("percentStartCapacity");
 	}	
 }

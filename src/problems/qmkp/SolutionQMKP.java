@@ -1,10 +1,5 @@
 package problems.qmkp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.ArrayUtils;
-
 import problems.AbstractSolution;
 
 public class SolutionQMKP extends AbstractSolution 
@@ -104,16 +99,5 @@ public class SolutionQMKP extends AbstractSolution
 		}
 		System.out.println("]");
 		System.out.println("Fitness:" + getFitness());
-	}
-
-	public int[] getObjectsInBag(int bag) {
-		List <Integer> obj = new ArrayList<>();
-		
-		for(int i=0; i<objects.length; i++) {
-			if(objects[i] == bag)
-				obj.add(i);
-		}
-		
-		return ArrayUtils.toPrimitive(obj.toArray(new Integer[obj.size()]));
 	}
 }
