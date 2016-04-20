@@ -11,6 +11,10 @@ import problems.qmkp.SolutionQMKP;
 
 public class ChangeBagQMKP extends INeighOperator 
 {
+	//////////////////////////////////////////////
+	// -------------------------------- Variables
+	/////////////////////////////////////////////
+	
 	/** The instance */
 	
 	private InstanceQMKP instance;
@@ -50,31 +54,38 @@ public class ChangeBagQMKP extends INeighOperator
 	@Override
 	public void initialize(IInstance instance, ISolution original)
 	{
-		this.inserted = 0;
+		// Load the instance and the individual
 		this.instance = (InstanceQMKP) instance;
-		this.original = (SolutionQMKP) original;
+		this.original = (SolutionQMKP) original;	
 		
-		List <Integer> aux = new ArrayList<>();
-		
+		// Get the objects
 		int [] objects = this.original.getObjects();
 		
-		for(int i=0; i<objects.length; i++)
-			if(objects[i] != -1) {
-				inserted++;
-				aux.add(i);
-			}
-		
-		objIndex = new int [aux.size()];
-		for(int i =0; i<aux.size();i++)
-			objIndex[i] = aux.get(i);
+		// The inserted objects need to be initialized only once
+		if(inserted == 0) {
+			//System.out.println("Inserted is equal to 0");
+			// Create an auxiliary list with the index of the objects inserted
+			List <Integer> aux = new ArrayList<>();
+			for(int i=0; i<objects.length; i++)
+				if(objects[i] != -1) {
+					inserted++;
+					aux.add(i);
+				}
 			
+			// Convert the auxiliary list into an array
+			objIndex = new int [aux.size()];
+			for(int i =0; i<aux.size();i++)
+				objIndex[i] = aux.get(i);
+		}
 		
-		//this.neighborhoodSize = (int) Math.pow(inserted, this.instance.getNKnapsacks()-1);
+		// Set the size of the neighborhood
 		this.neighborhoodSize = inserted * (this.instance.getNKnapsacks()-1);
+		// The number of solutions explorated
 		this.modified = 0;
+		// A index to read the actual object inserted that it's going to change
 		this.idxModified = 0;
-		this.step = 1;
-		
+		// The step used to change an object from one bag to another
+		this.step = 1;	
 	}
 	
 	/**
@@ -87,36 +98,41 @@ public class ChangeBagQMKP extends INeighOperator
 	
 	private ISolution generateNeighbour(int idx) 
 	{
-		// Get the objects
+		// Get the objects of the original solution
 		int nObjects = this.original.getObjects().length;
 		int [] newObjects = new int[nObjects];
 		System.arraycopy(this.original.getObjects(), 0, newObjects, 0, nObjects);
+		// Get the weight of the original solution
+		int nKnapsacks = this.instance.getNKnapsacks();
+		int [] weight = new int [nKnapsacks];
+		System.arraycopy(this.original.getTotalWeight(), 0, weight, 0, nKnapsacks);	
 		
-		SolutionQMKP newInd = new SolutionQMKP(newObjects);
-		int [] weight = original.getTotalWeight();		
+		// Generate a new individual (the neighbor)
+		SolutionQMKP newInd = new SolutionQMKP(newObjects);		
 		
 		// The bag where the item was stored
-		int oldBag = newInd.getObjects()[objIndex[idxModified]];
+		int oldBag = newInd.getObjects()[objIndex[idx]];
 		// The bag where the item is going to be stores
 		int newBag = (oldBag + step)%instance.getNKnapsacks();
 
 		// Change the bag
-		newInd.getObjects()[objIndex[idxModified]] = newBag;
+		newInd.getObjects()[objIndex[idx]] = newBag;
 
 		// Change the weights in the bags
-		weight[oldBag] = weight[oldBag] - instance.getObjects().get(objIndex[idxModified]).getWeight();
-		weight[newBag] = weight[newBag] + instance.getObjects().get(objIndex[idxModified]).getWeight();
+		weight[oldBag] = weight[oldBag] - instance.getObjects().get(objIndex[idx]).getWeight();
+		weight[newBag] = weight[newBag] + instance.getObjects().get(objIndex[idx]).getWeight();
 		newInd.setTotalWeight(weight);
 		
-		
+		// Flag used to see if the solution is invalid based on the weights
 		boolean invalid = false;
-		
+		// See if any knapsack is overflow
 		for(int i=0; i<weight.length;i++) {
 			if(weight[i]>instance.getKnapsackSize())
 				invalid = true;
 		}
 		
-		// Reevaluate (solution invalid)
+		// Reevaluate the solution
+		// The solution is invalid
 		if(invalid) {
 			int exceded = 0;
 			for(int i=0; i<weight.length; i++)
@@ -128,25 +144,23 @@ public class ChangeBagQMKP extends INeighOperator
 		else {
 			// The previous was invalid
 			if(original.getFitness()<0) {
+				// It is needed to evaluate from the begining
 				instance.evaluate(newInd);
 			}
 			// The previous was valid
 			else {
-				double fitness = original.getFitness();
-				//System.out.println(fitness);
-				
+				// Get the previoud fitness
+				double fitness = original.getFitness();				
+				// Get the old and the new partners element from the object that has been moved
 				int [] oldPartners = newInd.getObjectsInBag(oldBag);
 				int [] newPartners = newInd.getObjectsInBag(newBag);
 				
 				// Disassociate with the objects of the old bag
-				for(int i=0; i<oldPartners.length; i++) {
-					fitness -= instance.getProfits()[objIndex[idxModified]][oldPartners[i]];
-				}
-				
+				for(int i=0; i<oldPartners.length; i++) 
+					fitness -= instance.getProfits()[objIndex[idx]][oldPartners[i]];
 				// Associate with the objects the new bag
-				for(int i=0; i<newPartners.length; i++) {
-					fitness += instance.getProfits()[objIndex[idxModified]][newPartners[i]];
-				}
+				for(int i=0; i<newPartners.length; i++)
+					fitness += instance.getProfits()[objIndex[idx]][newPartners[i]];
 				
 				// Assign the fitness
 				newInd.setFitness(fitness);
@@ -165,12 +179,17 @@ public class ChangeBagQMKP extends INeighOperator
 	@Override
 	public ISolution next() 
 	{
-		ISolution sol = generateNeighbour(modified);
+		// Generate a neighbour
+		ISolution sol = generateNeighbour(idxModified);
+		// Increment the number of modifications and the index
 		modified++;
 		idxModified = modified % inserted;
-		if(idxModified == 0)
+		// Check if we have read all the object inserted
+		if(idxModified == 0) {
+			// Increment the step
 			step++;
-		
+			//System.out.println("Step:" + step);
+		}
 		return sol;
 	}
 

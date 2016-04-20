@@ -16,9 +16,6 @@ public class LocalSearch extends AbstractAlgorithm
 		ISolution newSolution = generator.generate();
 		ISolution neighbour = newSolution;
 		
-		
-
-		
 		System.out.println("Solucion inicial:");
 		newSolution.printSolution();
 		System.out.println();
