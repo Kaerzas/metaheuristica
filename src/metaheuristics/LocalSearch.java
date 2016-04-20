@@ -40,7 +40,6 @@ public class LocalSearch extends AbstractAlgorithm
 			}
 			
 			if(limitedTime && stopwatch.currentElapsed() >= maxTime){
-				System.out.println("Max time achieved");
 				break;
 			}
 		}
