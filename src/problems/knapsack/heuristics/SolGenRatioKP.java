@@ -72,7 +72,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 		SolutionKnapsack sol = new SolutionKnapsack(knapsack);
 		sol.setTotalWeight(totalWeight);
 		instance.evaluate(sol);
-		System.out.println(sol.getFitness());
+//		System.out.println(sol.getFitness());
 		return sol;
 	}
 	
