@@ -22,11 +22,15 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 		// Get the information
 		int nObjects = ((InstanceQMKP)instance).getNObjects();
 		int nKnapsacks = ((InstanceQMKP)instance).getNKnapsacks();
-		
-		// Create the objects and weights arrays
+				
+		// Create the objects and the solution
 		int [] objects = new int [nObjects];
+		// Initialize with -1 (no objects)
+		for(int i=0; i<nObjects; i++)
+			objects[i] = -1;
 		SolutionQMKP sol = new SolutionQMKP(objects);
 
+		// Create the weight array and the fitness
 		int [] weights = new int [nKnapsacks];
 		double fitness = 0;
 		
@@ -37,7 +41,6 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			System.err.println("Incorrect percent CL");
 			System.exit(0);
 		}
-		
 		
 		// Check if the number of candidates is correct
 		if(nObjectsSelection < nKnapsacks) {
@@ -63,7 +66,7 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			// Sum the fitness
 			fitness += ((InstanceQMKP)instance).getObjects().get(idxObj).getValue();
 			// Remove the last object
-			listObj.remove(idxObj);
+			listObj.remove(listObj.size()-1);
 		}
 		
 		// Put the other objects
@@ -91,7 +94,7 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			
 			// Insert the best object in the best knapsack
 			sol.getObjects()[bestObj] = bestKP;
-			weights[bestKP] = ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
+			weights[bestKP] += ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
 			fitness += bestValue * ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
 			
 			// Remove the object from candidate list
