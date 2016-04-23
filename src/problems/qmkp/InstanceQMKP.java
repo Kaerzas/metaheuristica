@@ -202,4 +202,20 @@ public class InstanceQMKP extends AbstractInstance
 		this.profits = profits;
 	}
 
+	
+	public double getIncrememtalValue(SolutionQMKP sol, int object, int knapsack) 
+	{
+		// Set the individual value
+		double value = objects.get(object).getValue();
+		
+		// Get the partners
+		int [] partners = sol.getObjectsInBag(knapsack);
+		
+		// Get the pair values
+		for(int i=0; i<partners.length; i++)
+			value += profits[object][partners[i]];
+		
+		// Return the values
+		return value;
+	}
 }
