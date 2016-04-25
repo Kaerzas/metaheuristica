@@ -73,8 +73,8 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 		while(!listObj.isEmpty()) {
 			
 			// Index to the best object to add to the best knapsack
-			int bestObj = 0;
-			int bestKP = 0;
+			int bestObj = -1;
+			int bestKP = -1;
 			double bestValue = 0;
 			double auxValue = 0;
 			int removeIdx = 0;
@@ -82,20 +82,25 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			// See which object add
 			for(int i=0; i<listObj.size(); i++) {
 				for(int j=0; j<nKnapsacks; j++) {
-					auxValue = ((InstanceQMKP)instance).getIncrememtalValue(sol, listObj.get(i), j)/((InstanceQMKP)instance).getObjects().get(listObj.get(i)).getWeight();
-					if(auxValue > bestValue) {
-						bestObj = listObj.get(i);
-						bestKP = j;
-						bestValue = auxValue;
-						removeIdx = i;
+					int auxWeight = ((InstanceQMKP)instance).getObjects().get(listObj.get(i)).getWeight();
+					if(auxWeight + weights[j] <= ((InstanceQMKP)instance).getKnapsackSize()) {
+						auxValue = ((InstanceQMKP)instance).getIncrememtalValue(sol, listObj.get(i), j)/((InstanceQMKP)instance).getObjects().get(listObj.get(i)).getWeight();
+						if(auxValue > bestValue) {
+							bestObj = listObj.get(i);
+							bestKP = j;
+							bestValue = auxValue;
+							removeIdx = i;
+						}
 					}
 				}
 			}
 			
-			// Insert the best object in the best knapsack
-			sol.getObjects()[bestObj] = bestKP;
-			weights[bestKP] += ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
-			fitness += bestValue * ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
+			if(bestObj != -1) {
+				// Insert the best object in the best knapsack
+				sol.getObjects()[bestObj] = bestKP;
+				weights[bestKP] += ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
+				fitness += bestValue * ((InstanceQMKP)instance).getObjects().get(bestObj).getWeight();
+			}
 			
 			// Remove the object from candidate list
 			listObj.remove(removeIdx);
