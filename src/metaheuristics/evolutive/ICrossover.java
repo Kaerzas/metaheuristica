@@ -1,5 +1,6 @@
 package metaheuristics.evolutive;
 
+import problems.IInstance;
 import problems.ISolution;
 import util.config.IConfiguration;
 
