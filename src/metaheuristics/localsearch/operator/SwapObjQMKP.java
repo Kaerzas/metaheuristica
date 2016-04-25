@@ -135,20 +135,19 @@ public class SwapObjQMKP extends INeighOperator
 			else {
 				// Get the previous fitness
 				double fitness = original.getFitness();			
-				// Get the old and the new partners element from the object that has been moved
-				int [] oldPartners = newInd.getObjectsInBag(oldBag);
-				int [] newPartners = newInd.getObjectsInBag(newBag);
+				// Get the partners
+				int [] partners = newInd.getObjectsInBag(newBag);
 				
 				// Change the individual fitness
 				fitness += instance.getObjects().get(added).getValue();
 				fitness -= instance.getObjects().get(removed).getValue();
 				
 				// Disassociate with the objects of the old bag
-				for(int i=0; i<oldPartners.length; i++) 
-					fitness -= instance.getProfits()[removed][oldPartners[i]];
+				for(int i=0; i<partners.length; i++) 
+					fitness -= instance.getProfits()[removed][partners[i]];
 				// Associate with the objects the new bag
-				for(int i=0; i<newPartners.length; i++)
-					fitness += instance.getProfits()[added][newPartners[i]];
+				for(int i=0; i<partners.length; i++)
+					fitness += instance.getProfits()[added][partners[i]];
 				
 				// Assign the fitness
 				newInd.setFitness(fitness);			
