@@ -12,7 +12,7 @@ import problems.ISolution;
 import problems.tsp.InstanceTSP;
 import problems.tsp.SolutionTSP;
 
-public class HUXTSP extends AbstractCrossover {
+public class OXTSP extends AbstractCrossover {
 
 	InstanceTSP instance;
 	
@@ -24,25 +24,31 @@ public class HUXTSP extends AbstractCrossover {
 		SolutionTSP tspA = ((SolutionTSP)parentA);
 		SolutionTSP tspB = ((SolutionTSP)parentB);
 		
-		int start = random.nextInt(tspA.getOrder().size());
-		int end = (start + (tspA.getOrder().size())/2) % tspA.getOrder().size();
-				
-		List<Integer> order = new ArrayList<Integer>(tspA.getOrder());
-		List<Integer> subvector = createSubvector(tspA, tspB, start, end);
+		int start = random.nextInt(tspA.getOrder().size()/2);
+		int end = (start + (tspA.getOrder().size())/2);
 		
-		int sub = 0;
-		for(int i = 0; i < order.size(); ++i){
-			
-			if(start < end && (i < start || i > end)){
-				order.set(i,subvector.get(sub));
-				sub++;
-			}
+		List<Integer> order = new ArrayList<Integer>(tspA.getOrder());
+		List<Integer> aux = new ArrayList<Integer>(tspB.getOrder().size());
+		
+		int idx;
+		
+		for(int i = 0; i < order.size(); i++){
+			 idx = (end + 1 + i) % order.size();
+			 aux.add(tspB.getOrder().get(idx));
+		}
+		
+		idx = (end + 1) % aux.size();
 
-			else if(i < start && i > end){
-				order.set(i,subvector.get(sub));
-				sub++;
+		for(int i = 0; i < aux.size(); i++){
+			boolean flag = false;
+			for(int j = start; j <= end; j++ ){
+				if(order.get(j) == aux.get(i))
+					flag = true;
 			}
-
+			if(!flag){
+				order.set(idx, aux.get(i));
+				idx = (idx+1) % aux.size();
+			}
 		}
 		
 		SolutionTSP child = new SolutionTSP(order);
@@ -63,49 +69,6 @@ public class HUXTSP extends AbstractCrossover {
 		this.instance = (InstanceTSP) instance;
 		
 	}
-	
-	public List<Integer> createSubvector (SolutionTSP tspA, SolutionTSP tspB, int start, int end){
-		
-		List<Integer> subvector = new ArrayList<Integer>();
-		
-		if (start < end){
-			
-			for(int i = 0; i < tspB.getOrder().size(); ++i){
-				
-				boolean aux = false;
-				
-				for(int j = start; j <= end; ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
-						aux = true;
-				}
-				
-				if(!aux)
-					subvector.add(tspB.getOrder().get(i));
-			}
-		}
-		else{
-			
-			for(int i = 0; i < tspB.getOrder().size(); ++i){
-				
-				boolean aux = false;
-				
-				for(int j = start; j < tspA.getOrder().size(); ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
-						aux = true;
-				}
-				
-				for(int j = 0; j <= end; ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
-						aux = true;
-				}
-				
-				if(!aux)
-					subvector.add(tspB.getOrder().get(i));
-			}
-		}
-		
-		return subvector;
-	}
 
 	public static void main(String[] args){
 		
@@ -113,7 +76,7 @@ public class HUXTSP extends AbstractCrossover {
 		InstanceTSP it = new InstanceTSP();
 		it.setRandom(r);
 		
-		HUXTSP htsp = new HUXTSP();
+		OXTSP htsp = new OXTSP();
 		htsp.initialize(it);
 		
 		List<Integer> a = new ArrayList<Integer>();
@@ -127,14 +90,15 @@ public class HUXTSP extends AbstractCrossover {
 		a.add(5);
 		a.add(1);
 		
-		b.add(2);
-		b.add(5);
+		b.add(0);
 		b.add(4);
 		b.add(1);
-		b.add(0);
-		b.add(3);
+		b.add(5);
+		b.add(2);
 		b.add(6);
+		b.add(3);
 
+		
 		SolutionTSP s1 = new SolutionTSP(a);
 		SolutionTSP s2 = new SolutionTSP(b);
 		
