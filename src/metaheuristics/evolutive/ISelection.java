@@ -7,5 +7,5 @@ import util.config.IConfiguration;
 
 public interface ISelection extends IConfiguration{
 	
-	public List<ISolution> select(List<ISolution> population);
+	public List<ISolution> select(List<ISolution> population, int popSize);
 }
