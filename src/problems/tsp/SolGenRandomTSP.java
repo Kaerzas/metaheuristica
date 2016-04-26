@@ -17,7 +17,7 @@ public class SolGenRandomTSP extends AbstractSolGenerator
 	@Override
 	public ISolution generate() 
 	{		
-		int nNodes = ((InstanceTSP)instance).getNNodes();
+		int nNodes = ((InstanceTSP)instance).getLength();
 		
 		List<Integer> randSol = new ArrayList<Integer>(nNodes);
 		for(int i=0 ; i < nNodes ; ++i){

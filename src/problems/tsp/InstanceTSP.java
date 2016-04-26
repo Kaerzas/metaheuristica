@@ -112,12 +112,19 @@ public class InstanceTSP extends AbstractInstance
 	
 	/**
 	 * Get the number of nodes
-	 * 
 	 * @return the number of nodes
 	 */
-	
-	public int getNNodes()
-	{
+	public int getLength(){
 		return this.nNodes;
+	}
+	
+	public int hamming(ISolution sol1, ISolution sol2){
+		List<Integer> order1 = ((SolutionTSP)sol1).getOrder();
+		List<Integer> order2 = ((SolutionTSP)sol2).getOrder();
+		int distance=0;
+		for(int i=0; i<this.getLength(); ++i)
+			if(order1.get(i) != order2.get(i))
+				distance++;
+		return distance;
 	}
 }

@@ -21,7 +21,7 @@ public class SolGenGreedyRand extends SolGenRandomTSP implements IConfiguration{
 	private float percentCandidates;
 	
 	public ISolution generate(){
-		this.nNodes = ((InstanceTSP)instance).getNNodes();
+		this.nNodes = ((InstanceTSP)instance).getLength();
 		if(percentCandidates >= 0.0 || percentCandidates <= 1.0)
 			this.nCandidates = (int) (nNodes*percentCandidates);
 		else{
