@@ -90,8 +90,8 @@ public class NodeSwapTSP extends INeighOperator{
 		Random random = instance.getRandom();
 		int first, second;
 		
-		first = random.nextInt(this.instance.getNNodes());
-		second = random.nextInt(this.instance.getNNodes()-1);
+		first = random.nextInt(this.instance.getLength());
+		second = random.nextInt(this.instance.getLength()-1);
 		
 		
 		if(second < first){

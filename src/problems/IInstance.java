@@ -42,10 +42,19 @@ public interface IInstance extends IConfiguration
 	 * 
 	 * @return true if the first solution is better, false anyway
 	 */
-	
 	public boolean betterThan(ISolution sol1, ISolution sol2);
 
 	Random getRandom();
 
 	void setRandom(Random random);
+	
+	/**
+	 * Get Hamming distance between two solutions
+	 */
+	public int hamming(ISolution sol1, ISolution sol2);
+	
+	/**
+	 * Get length of the solution's problem
+	 */
+	public int getLength();
 }

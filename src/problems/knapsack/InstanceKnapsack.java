@@ -160,11 +160,21 @@ public class InstanceKnapsack extends AbstractInstance
 		this.nObjects = nObjects;
 	}
 	
-	public int getKnapsackSize(){
+	public int getLength(){
 		return this.knapsackSize;
 	}
 	
 	public List <KPObject> getObjects(){
 		return this.objects;
+	}
+	
+	public int hamming(ISolution sol1, ISolution sol2){
+		byte knapsack1 [] = ((SolutionKnapsack)sol1).getObjects();
+		byte knapsack2 [] = ((SolutionKnapsack)sol2).getObjects();
+		int distance=0;
+		for(int i=0; i<this.getLength(); ++i)
+			if(knapsack1[i] != knapsack2[i])
+				distance++;
+		return distance;
 	}
 }

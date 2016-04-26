@@ -31,7 +31,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 			System.exit(0);
 		}
 		if(percentCapacity > 0)
-			this.startCapacity = ((InstanceKnapsack)instance).getKnapsackSize()*percentCapacity;
+			this.startCapacity = ((InstanceKnapsack)instance).getLength()*percentCapacity;
 		else{
 			System.out.println("Knapsack capacity to fill must be greater than 0");
 			System.exit(-1);

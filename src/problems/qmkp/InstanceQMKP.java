@@ -218,4 +218,16 @@ public class InstanceQMKP extends AbstractInstance
 		// Return the values
 		return value;
 	}
+
+	@Override
+	public int hamming(ISolution sol1, ISolution sol2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

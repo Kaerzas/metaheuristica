@@ -57,8 +57,8 @@ public class BitInversionKP extends INeighOperator
 		newInd.setTotalWeight(newWeight);
 		
 		// Evaluate new solution from original solution
-		if(newWeight > instance.getKnapsackSize()) //New solution is invalid
-			newInd.setFitness(instance.getKnapsackSize() - newWeight);
+		if(newWeight > instance.getLength()) //New solution is invalid
+			newInd.setFitness(instance.getLength() - newWeight);
 		else{ // New solution is valid
 			double newFitness = original.getFitness();
 			
