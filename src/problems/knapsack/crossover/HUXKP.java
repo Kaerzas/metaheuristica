@@ -55,7 +55,7 @@ public class HUXKP extends AbstractCrossover {
 		}
 		
 		SolutionKnapsack sk = new SolutionKnapsack(genNew);
-		//instance.evaluate(sk);
+		instance.evaluate(sk);
 		return sk;
 	}
 
