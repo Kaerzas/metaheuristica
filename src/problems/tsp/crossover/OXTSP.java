@@ -52,7 +52,7 @@ public class OXTSP extends AbstractCrossover {
 		}
 		
 		SolutionTSP child = new SolutionTSP(order);
-		//instance.evaluate(child);
+		instance.evaluate(child);
 		
 		return child;
 		
