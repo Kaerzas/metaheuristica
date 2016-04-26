@@ -39,7 +39,7 @@ public class CHC extends AbstractAlgorithm{
 				threshold--;
 			else{
 				newPopulation.addAll(children);
-				selection.select(newPopulation);
+				selection.select(newPopulation, nPopulation);
 			}
 			if(threshold > 0)
 				restart(newPopulation);
