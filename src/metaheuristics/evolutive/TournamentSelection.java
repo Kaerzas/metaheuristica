@@ -19,7 +19,7 @@ public class TournamentSelection extends AbstractSelection {
 			System.exit(0);
 		}
 		
-		List <ISolution> newPop = new ArrayList<ISolution>();
+		List <ISolution> newPop = new ArrayList<ISolution>(population.size());
 		
 		while(newPop.size()<popSize) {
 			
