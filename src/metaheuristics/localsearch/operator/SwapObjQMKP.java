@@ -66,44 +66,32 @@ public class SwapObjQMKP extends INeighOperator
 		SolutionQMKP newInd = new SolutionQMKP(newObjects);		
 		
 		
-		// Flag used to see which object is out
-		boolean firstIsOut;		
-		if(newInd.getObjects()[fIdx] == -1)
-			firstIsOut = true;
-		else
-			firstIsOut = false;
-			
-		// The bag where the item was stored
-		int newBag, oldBag;
-		// Position of the object added and removed
+		// Which object was added, which was removed
 		int added, removed;
-		// Control the position of the objects
-		if(firstIsOut == false) {
-			// Swap the object
-			newBag = newInd.getObjects()[fIdx];
-			oldBag = newInd.getObjects()[sIdx];
-			newInd.getObjects()[fIdx] = -1;
-			newInd.getObjects()[sIdx] = newBag;
-			// Change the weights in the bag
-			weight[newBag] = weight[newBag] + instance.getObjects().get(sIdx).getWeight();
-			weight[newBag] = weight[newBag] - instance.getObjects().get(fIdx).getWeight();
-			// Set added and removed
-			added = sIdx;
-			removed = fIdx;
-		}
-		else {
-			// Swap the object
-			newBag = newInd.getObjects()[sIdx];
-			oldBag = newInd.getObjects()[fIdx];
-			newInd.getObjects()[sIdx] = -1;
-			newInd.getObjects()[fIdx] = newBag;
-			// Change the weights in the bag
-			weight[newBag] = weight[newBag] - instance.getObjects().get(sIdx).getWeight();
-			weight[newBag] = weight[newBag] + instance.getObjects().get(fIdx).getWeight();
-			// Set added and removed
+		
+		//Which bag is modified
+		int bag;
+		
+		if(original.getObjects()[fIdx] == -1){
 			added = fIdx;
 			removed = sIdx;
+			bag = newInd.getObjects()[sIdx];
 		}
+		else{
+			added = sIdx;
+			removed = fIdx;
+			bag = newInd.getObjects()[fIdx];
+		}
+		
+		//Swap objectsnewInd
+		int aux = newObjects[fIdx];
+		newObjects[fIdx] = newObjects[sIdx];
+		newObjects[sIdx] = aux;
+		
+		// Update weights
+		weight[bag] -= instance.getObjects().get(removed).getWeight();
+		weight[bag] += instance.getObjects().get(added).getWeight();
+		
 		// Set the weights to the solution
 		newInd.setTotalWeight(weight);
 		
@@ -128,7 +116,7 @@ public class SwapObjQMKP extends INeighOperator
 		else {
 			// The previous was invalid
 			if(original.getFitness()<0) {
-				// It is needed to evaluate from the begining
+				// It is needed to evaluate from the beginning
 				instance.evaluate(newInd);
 			}
 			// The previous was valid
@@ -136,7 +124,7 @@ public class SwapObjQMKP extends INeighOperator
 				// Get the previous fitness
 				double fitness = original.getFitness();			
 				// Get the partners
-				int [] partners = newInd.getObjectsInBag(newBag);
+				int [] partners = newInd.getObjectsInBag(bag);
 				
 				// Change the individual fitness
 				fitness += instance.getObjects().get(added).getValue();
