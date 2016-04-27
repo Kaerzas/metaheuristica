@@ -20,11 +20,7 @@ public class ElitistSelection extends AbstractSelection {
 		
 		// TODO no se si esto se podra hacer (yo creo que si)
 		List <ISolution> newPop = new ArrayList<ISolution>(population);
-		Collections.sort(newPop, new FitnessComparator());
-		
-		// If it is a maximization problem we have to reverse the array
-		if(instance.maximize())
-			Collections.reverse(newPop);
+		Collections.sort(newPop, new FitnessComparator(instance));
 		
 		newPop = newPop.subList(0, popSize);	
 		return newPop;
