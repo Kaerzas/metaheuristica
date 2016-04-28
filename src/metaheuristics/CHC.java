@@ -72,7 +72,7 @@ public class CHC extends AbstractAlgorithm{
 		
 		boolean thereIs=false;
 		for(int i=0; i<nPopulation-1; i+=2){
-			if(instance.hamming(population.get(i), population.get(i+1)) > threshold){
+			if(instance.hamming(population.get(indices.get(i)), population.get(indices.get(i+1))) > threshold){
 				ISolution child = crossover.cross(population.get(i), population.get(i+1));
 				children.add(child);
 				thereIs=true;
