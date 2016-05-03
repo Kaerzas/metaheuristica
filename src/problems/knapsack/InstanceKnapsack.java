@@ -21,10 +21,6 @@ public class InstanceKnapsack extends AbstractInstance
 	// -------------------------------- Variables
 	/////////////////////////////////////////////
 	
-	/** Number of objects for the problem */
-	
-	protected int nObjects;
-	
 	/** Size of the knapsack */
 	
 	protected int knapsackSize;
@@ -104,7 +100,7 @@ public class InstanceKnapsack extends AbstractInstance
 			while (!br.readLine().startsWith("knapPI"));
 			// Read the number of objects
 			line = br.readLine();
-			nObjects = Integer.parseInt(line.split(" ")[1]);
+			int nObjects = Integer.parseInt(line.split(" ")[1]);
 			objects = new ArrayList <KPObject>(nObjects);
 			// Read the knapsack size
 			line = br.readLine();
@@ -146,22 +142,12 @@ public class InstanceKnapsack extends AbstractInstance
 	
 	public int getNObjects() 
 	{
-		return nObjects;
-	}
-
-	/**
-	 * Set the number of objects 
-	 * 
-	 * @param the number of objects
-	 */
-	
-	public void setNObjects(int nObjects) 
-	{
-		this.nObjects = nObjects;
+		return objects.size();
 	}
 	
+	@Override
 	public int getLength(){
-		return this.knapsackSize;
+		return this.getNObjects();
 	}
 	
 	public List <KPObject> getObjects(){
