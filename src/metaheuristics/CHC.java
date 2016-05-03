@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import metaheuristics.evolutive.ICrossover;
-import metaheuristics.evolutive.ISelection;
-
 import org.apache.commons.configuration.Configuration;
 
+import metaheuristics.evolutive.ICrossover;
+import metaheuristics.evolutive.ISelection;
 import problems.ISolution;
 import util.config.IConfiguration;
 
@@ -29,20 +28,29 @@ public class CHC extends AbstractAlgorithm{
 		threshold = instance.getLength()*percentThreshold;
 		
 		initialize();
-		//TODO evaluate
 		
-		while(stopwatch.currentElapsed() < maxTime){
+		while(!maxTimeReached()){
+			//Log best solution in generation
+			int best = 0;
+			for(int i=1 ; i < nPopulation ; ++i){
+				if(instance.betterThan(population.get(i), population.get(best)))
+					best = i;
+			}
+			logSolution(population.get(best));
+			
 			List<ISolution> newPopulation = new ArrayList<ISolution>(population);
 			List<ISolution> children = new ArrayList<ISolution>(nPopulation/2);
 			
 			if(!crossover(children))
-				threshold--;
+				threshold -= 1.0;
 			else{
 				newPopulation.addAll(children);
 				newPopulation = selection.select(newPopulation, nPopulation);
 			}
-			if(threshold > 0)
+			if(threshold <= 0){
+				System.err.println("Population restarted");
 				restart(newPopulation);
+			}
 			
 			population=newPopulation;
 		}
@@ -72,8 +80,10 @@ public class CHC extends AbstractAlgorithm{
 		
 		boolean thereIs=false;
 		for(int i=0; i<nPopulation-1; i+=2){
-			if(instance.hamming(population.get(indices.get(i)), population.get(indices.get(i+1))) > threshold){
-				ISolution child = crossover.cross(population.get(i), population.get(i+1));
+			int parentA = indices.get(i);
+			int parentB = indices.get(i+1);
+			if(instance.hamming(population.get(parentA), population.get(parentB)) > threshold){
+				ISolution child = crossover.cross(population.get(parentA), population.get(parentB));
 				children.add(child);
 				thereIs=true;
 			}
@@ -94,7 +104,7 @@ public class CHC extends AbstractAlgorithm{
 		
 		newPopulation.clear();
 		newPopulation.add(kept);
-		for(int i=0; i<newPopulation.size()-1; ++i)
+		for(int i=0; i< nPopulation-1; ++i)
 			newPopulation.add(generator.generate()); //TODO how to assure rand generator????????
 	}
 	
@@ -113,16 +123,27 @@ public class CHC extends AbstractAlgorithm{
 		}
 		
 		try{
-			// Get the name of the explorer class
-			String instanceName = configuration.getString("selection[@name]");
+			// Get the name of the selection class
+			String selectionName = configuration.getString("selection[@name]");
 			// Instance class
-			Class<? extends ISelection> instanceClass = 
-					(Class<? extends ISelection>) Class.forName(instanceName);
+			Class<? extends ISelection> selectionClass = 
+					(Class<? extends ISelection>) Class.forName(selectionName);
 			
-			selection = instanceClass.newInstance();
-			//selection.setInstance(instance);
+			selection = selectionClass.newInstance();
+			selection.setInstance(instance);
 			if(selection instanceof IConfiguration)
 				((IConfiguration) selection).configure(configuration.subset("selection"));
+			
+			// Get the name of the crossover class
+			String crossName = configuration.getString("crossover[@name]");
+			// Instance class
+			Class<? extends ICrossover> crossClass = 
+					(Class<? extends ICrossover>) Class.forName(crossName);
+			
+			crossover = crossClass.newInstance();
+			crossover.initialize(instance);
+			if(crossover instanceof IConfiguration)
+				((IConfiguration) crossover).configure(configuration.subset("crossover"));
 		}
 		catch(Exception e) {
 			System.out.println(e);

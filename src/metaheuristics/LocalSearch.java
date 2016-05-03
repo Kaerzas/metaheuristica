@@ -20,28 +20,22 @@ public class LocalSearch extends AbstractAlgorithm
 		newSolution.printSolution();
 		System.out.println();
 		
-		for(int i=0; i<tries; i++) {
+		for(int i=0; (i<tries) && (!maxTimeReached()); i++) {
 			// Generate the neighbor
 			neighbour = explorer.generateBestNeighbour(newSolution);			
 			
 			if(neighbour != null) {
-				stopwatch.lap();
-				bestSolutions.add(neighbour);
-				System.out.println("Solucion mejorada en la iteracion "+ i + ":");
+				logSolution(neighbour);
+				/*System.out.println("Solucion mejorada en la iteracion "+ i + ":");
 				System.out.println("The individual is:");
 				newSolution.printSolution();
 				System.out.println("The neighbor is:");
 				neighbour.printSolution();
-				System.out.println();
+				System.out.println();*/
 				newSolution = neighbour;
 			}
 			else {
 				System.out.println("Not better solution found\n");
-				break;
-			}
-			
-			if(limitedTime && stopwatch.currentElapsed() >= maxTime){
-				System.out.println("Time out\n");
 				break;
 			}
 		}

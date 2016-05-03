@@ -18,16 +18,14 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		ISolution newSolution;
 		
 		//Random search
-		for(int i=0; i<randomTries; i++) {
+		for(int i=0; (i<randomTries) && (!maxTimeReached()); i++) {
 			// Create new solution and store
 			newSolution = generator.generate();
 			
 			// Check if the new solution is better
 			if((bestSolution == null) || (instance.betterThan(newSolution, bestSolution))){
 				//Calculate time since last solution/beginning
-				stopwatch.lap();
-				
-				bestSolutions.add(newSolution);
+				logSolution(newSolution);
 				bestSolution = newSolution;
 				// Show results
 //				System.out.println("A best solution has been found in the iteration " + i + " after " + stopwatch.lapTime(i) + " ns:");
@@ -40,15 +38,14 @@ public class RandomThenLocalSearch extends AbstractAlgorithm
 		newSolution = bestSolution;
 		//System.out.println("Starting local search at " + stopwatch.currentElapsed() + " ns");
 		
-		for(int i=0; i<localTries; i++) {
+		for(int i=0; (i<localTries) && (!maxTimeReached()); i++) {
 			// Generate the neighbor
 			ISolution neighbour = explorator.generateBestNeighbour(newSolution);
 			
 			//System.out.println("Iteration " + i);
 			
 			if(neighbour != null) {
-				stopwatch.lap();
-				bestSolutions.add(neighbour);
+				logSolution(neighbour);
 				/*System.out.println("The individual is:");
 				newSolution.printSolution();
 				System.out.println("The neighbor is:");

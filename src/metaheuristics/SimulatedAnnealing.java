@@ -48,16 +48,14 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 		
 		//Initial (random) solution
 		ISolution currentSolution = generator.generate();
-		stopwatch.lap();
-		bestSolutions.add(currentSolution);
+		logSolution(currentSolution);
 		
-		while(currentTemperature > minimumTemperature){
+		while((currentTemperature > minimumTemperature) && (!maxTimeReached())){
 			//System.out.println(currentTemperature);
 			ISolution newSol = explorator.generateBestNeighbour(currentSolution);
 			
 			if(accept(currentSolution, newSol)){
-				stopwatch.lap();
-				bestSolutions.add(newSol);
+				logSolution(newSol);
 				currentSolution = newSol;
 			}
 			

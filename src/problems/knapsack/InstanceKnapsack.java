@@ -172,9 +172,10 @@ public class InstanceKnapsack extends AbstractInstance
 		byte knapsack1 [] = ((SolutionKnapsack)sol1).getObjects();
 		byte knapsack2 [] = ((SolutionKnapsack)sol2).getObjects();
 		int distance=0;
-		for(int i=0; i<this.getLength(); ++i)
+		for(int i=0; i<this.getNObjects(); ++i){
 			if(knapsack1[i] != knapsack2[i])
 				distance++;
+		}
 		return distance;
 	}
 }
