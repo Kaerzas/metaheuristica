@@ -57,8 +57,8 @@ public class BitInversionKP extends INeighOperator
 		newInd.setTotalWeight(newWeight);
 		
 		// Evaluate new solution from original solution
-		if(newWeight > instance.getLength()) //New solution is invalid
-			newInd.setFitness(instance.getLength() - newWeight);
+		if(newWeight > instance.getKnapsackSize()) //New solution is invalid
+			newInd.setFitness(instance.getKnapsackSize() - newWeight);
 		else{ // New solution is valid
 			double newFitness = original.getFitness();
 			
@@ -98,6 +98,6 @@ public class BitInversionKP extends INeighOperator
 	@Override
 	public ISolution randomNeighbour() {
 		Random random = instance.getRandom();
-		return generateNeighbour(random.nextInt(this.instance.getNObjects()));
+		return generateNeighbour(random.nextInt(this.instance.getLength()));
 	}
 }

@@ -65,10 +65,10 @@ public class BitSwapKP extends INeighOperator
 
 		newInd.setTotalWeight(newWeight);
 		
-		if(newWeight > instance.getLength()) //New solution is invalid
-			newInd.setFitness(instance.getLength() - newWeight);
+		if(newWeight > instance.getKnapsackSize()) //New solution is invalid
+			newInd.setFitness(instance.getKnapsackSize() - newWeight);
 		else{ //New solution is valid
-			if(original.getTotalWeight() > instance.getLength()) //Previous solution was invalid
+			if(original.getTotalWeight() > instance.getKnapsackSize()) //Previous solution was invalid
 				instance.evaluate(newInd); //Fitness has to be computed from scratch
 			else{
 				double newFitness = original.getFitness();
@@ -125,8 +125,8 @@ public class BitSwapKP extends INeighOperator
 		Random random = instance.getRandom();
 		int first, second;
 		
-		first = random.nextInt(this.instance.getNObjects());
-		second = random.nextInt(this.instance.getNObjects()-1);
+		first = random.nextInt(this.instance.getLength());
+		second = random.nextInt(this.instance.getLength()-1);
 		
 		if(second >= first)
 			second++;

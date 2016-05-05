@@ -23,7 +23,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 	
 	public ISolution generate(){		
 		// Get the object number for the problem
-		int nObjects = ((InstanceKnapsack)instance).getNObjects();
+		int nObjects = ((InstanceKnapsack)instance).getLength();
 		if(percentCandidates > 0.0 || percentCandidates < 1.0)
 			this.nObjectsSelection = (int) (nObjects*percentCandidates);
 		else{
@@ -31,7 +31,7 @@ public class SolGenRatioKP extends SolGenRandomKP
 			System.exit(0);
 		}
 		if(percentCapacity > 0)
-			this.startCapacity = ((InstanceKnapsack)instance).getLength()*percentCapacity;
+			this.startCapacity = ((InstanceKnapsack)instance).getKnapsackSize()*percentCapacity;
 		else{
 			System.out.println("Knapsack capacity to fill must be greater than 0");
 			System.exit(-1);

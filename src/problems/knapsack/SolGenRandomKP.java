@@ -42,7 +42,7 @@ public class SolGenRandomKP extends AbstractSolGenerator implements IConfigurati
 	@Override
 	public ISolution generate() 
 	{
-		int nObjects = ((InstanceKnapsack)instance).getNObjects();
+		int nObjects = ((InstanceKnapsack)instance).getLength();
 		
 		byte [] knapsack = new byte[nObjects];
 		int totalWeight = 0;
