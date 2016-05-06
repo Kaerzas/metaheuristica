@@ -25,7 +25,8 @@ public class CHC extends AbstractAlgorithm{
 	
 	@Override
 	protected void search(){
-		threshold = (int) (instance.getLength() * percentThreshold);
+		int initialThreshold = (int) (instance.getLength() * percentThreshold);
+		threshold = initialThreshold;
 		
 		initialize();
 		
@@ -50,6 +51,7 @@ public class CHC extends AbstractAlgorithm{
 			if(threshold < 0){
 				System.err.println("Population restarted");
 				restart(newPopulation);
+				threshold = initialThreshold;
 			}
 			
 			population=newPopulation;
