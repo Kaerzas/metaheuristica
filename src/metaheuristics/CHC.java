@@ -14,7 +14,7 @@ import util.config.IConfiguration;
 public class CHC extends AbstractAlgorithm{
 		
 	private List<ISolution> population;
-	private double threshold; // Incest's limit
+	private int threshold; // Incest's limit
 	
 	// Configurable params
 	private int nPopulation;
@@ -25,7 +25,7 @@ public class CHC extends AbstractAlgorithm{
 	
 	@Override
 	protected void search(){
-		threshold = instance.getLength()*percentThreshold;
+		threshold = (int) (instance.getLength() * percentThreshold);
 		
 		initialize();
 		
@@ -42,12 +42,12 @@ public class CHC extends AbstractAlgorithm{
 			List<ISolution> children = new ArrayList<ISolution>(nPopulation/2);
 			
 			if(!crossover(children))
-				threshold -= 1.0;
+				threshold--;
 			else{
 				newPopulation.addAll(children);
 				newPopulation = selection.select(newPopulation, nPopulation);
 			}
-			if(threshold <= 0){
+			if(threshold < 0){
 				System.err.println("Population restarted");
 				restart(newPopulation);
 			}

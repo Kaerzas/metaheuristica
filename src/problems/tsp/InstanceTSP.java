@@ -3,7 +3,9 @@ package problems.tsp;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import problems.AbstractInstance;
 import problems.ISolution;
@@ -123,10 +125,24 @@ public class InstanceTSP extends AbstractInstance
 	public int hamming(ISolution sol1, ISolution sol2){
 		List<Integer> order1 = ((SolutionTSP)sol1).getOrder();
 		List<Integer> order2 = ((SolutionTSP)sol2).getOrder();
-		int distance=0;
-		for(int i=0; i<this.getLength(); ++i)
-			if(order1.get(i) != order2.get(i))
+		
+		int curr, next;
+		Map<Integer,Integer> edge1 = new HashMap<>();
+		for(int i=0 ; i < order1.size() ; ++i){
+			curr = order1.get(i);
+			next = order1.get((i+1) % order1.size());
+			edge1.put(curr, next);
+		}
+
+		int distance = 0;
+		for(int i=0 ; i < order2.size(); ++i){
+			curr = order2.get(i);
+			next = order2.get((i+1) % order2.size());
+			
+			if(edge1.get(curr) != next)
 				distance++;
+		}
+		
 		return distance;
 	}
 }
