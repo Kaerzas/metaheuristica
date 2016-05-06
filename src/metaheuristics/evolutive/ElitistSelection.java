@@ -22,7 +22,7 @@ public class ElitistSelection extends AbstractSelection {
 		List <ISolution> newPop = new ArrayList<ISolution>(population);
 		Collections.sort(newPop, new FitnessComparator(instance));
 		
-		newPop = newPop.subList(0, popSize);	
+		newPop = newPop.subList(newPop.size()-popSize, newPop.size());	
 		return newPop;
 	}
 

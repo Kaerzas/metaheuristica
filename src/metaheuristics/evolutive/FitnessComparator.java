@@ -20,9 +20,9 @@ public class FitnessComparator implements Comparator<ISolution>{
     @Override
     public int compare(ISolution o1, ISolution o2) {
     	if(instance.maximize())
-    		return Double.compare(o2.getFitness(), o1.getFitness());
-    	else
     		return Double.compare(o1.getFitness(), o2.getFitness());
+    	else
+    		return Double.compare(o2.getFitness(), o1.getFitness());
     }
     
     public static void main(String[] args){
