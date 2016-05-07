@@ -42,7 +42,7 @@ public class OXTSP extends AbstractCrossover {
 		for(int i = 0; i < aux.size(); i++){
 			boolean flag = false;
 			for(int j = start; j <= end; j++ ){
-				if(order.get(j) == aux.get(i))
+				if(order.get(j).intValue() == aux.get(i).intValue())
 					flag = true;
 			}
 			if(!flag){
