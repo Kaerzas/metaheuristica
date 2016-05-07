@@ -75,7 +75,7 @@ public class HUXTSP extends AbstractCrossover {
 				boolean aux = false;
 				
 				for(int j = start; j <= end; ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
+					if(tspB.getOrder().get(i).intValue() == tspA.getOrder().get(j).intValue())
 						aux = true;
 				}
 				
@@ -90,12 +90,12 @@ public class HUXTSP extends AbstractCrossover {
 				boolean aux = false;
 				
 				for(int j = start; j < tspA.getOrder().size(); ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
+					if(tspB.getOrder().get(i).intValue() == tspA.getOrder().get(j).intValue())
 						aux = true;
 				}
 				
 				for(int j = 0; j <= end; ++j){
-					if(tspB.getOrder().get(i) == tspA.getOrder().get(j))
+					if(tspB.getOrder().get(i).intValue() == tspA.getOrder().get(j).intValue())
 						aux = true;
 				}
 				
