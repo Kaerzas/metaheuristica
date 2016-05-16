@@ -46,10 +46,6 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	
 	protected List<ISolution> bestSolutions;
 	
-	/** Number of iterations */
-	
-	protected int tries;
-	
 	/** Is the algorithm limited by time? */
 	protected boolean limitedTime;
 	
@@ -192,7 +188,7 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 				limitedTime = false;
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

@@ -54,7 +54,7 @@ public abstract class AbstractNeighExplorator implements INeighExplorator
 			operator = operatorClass.newInstance();
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

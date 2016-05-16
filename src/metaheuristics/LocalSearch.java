@@ -8,6 +8,10 @@ import util.config.IConfiguration;
 
 public class LocalSearch extends AbstractAlgorithm 
 {
+	
+	/** Number of iterations */
+	protected int tries;
+	
 	INeighExplorator explorer;
 	
 	@Override
@@ -16,9 +20,9 @@ public class LocalSearch extends AbstractAlgorithm
 		ISolution newSolution = generator.generate();
 		ISolution neighbour = newSolution;
 		
-		System.out.println("Solucion inicial:");
-		newSolution.printSolution();
-		System.out.println();
+		//System.out.println("Solucion inicial:");
+		//newSolution.printSolution();
+		//System.out.println();
 		
 		for(int i=0; (i<tries) && (!maxTimeReached()); i++) {
 			// Generate the neighbor
@@ -35,7 +39,7 @@ public class LocalSearch extends AbstractAlgorithm
 				newSolution = neighbour;
 			}
 			else {
-				System.out.println("Not better solution found\n");
+				//System.out.println("Not better solution found\n");
 				break;
 			}
 		}
@@ -48,17 +52,18 @@ public class LocalSearch extends AbstractAlgorithm
 		//Standard configuration
 		super.configure(configuration);
 		
-		// Number of iterations
-		this.tries = configuration.getInt("tries");
+		// Execution time
+		if(configuration.containsKey("tries"))
+			this.tries = configuration.getInt("tries");
+		else
+			this.tries = Integer.MAX_VALUE;
 		
 		try {
 			// Get the name of the explorer class
-			String instanceName = configuration.getString("explorator[@name]");
+			String instanceName = configuration.getString("explorer[@name]");
 			// Instance class
 			Class<? extends INeighExplorator> instanceClass = 
 					(Class<? extends INeighExplorator>) Class.forName(instanceName);
-			
-
 			
 			explorer = instanceClass.newInstance();
 			explorer.setInstance(instance);
@@ -66,10 +71,10 @@ public class LocalSearch extends AbstractAlgorithm
 
 			
 			if(explorer instanceof IConfiguration)
-				((IConfiguration) explorer).configure(configuration.subset("explorator"));
+				((IConfiguration) explorer).configure(configuration.subset("explorer"));
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}	
