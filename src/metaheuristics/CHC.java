@@ -49,7 +49,7 @@ public class CHC extends AbstractAlgorithm{
 				newPopulation = selection.select(newPopulation, nPopulation);
 			}
 			if(threshold < 0){
-				System.err.println("Population restarted");
+				//System.err.println("Population restarted");
 				restart(newPopulation);
 				threshold = initialThreshold;
 			}
@@ -84,7 +84,7 @@ public class CHC extends AbstractAlgorithm{
 		for(int i=0; i<nPopulation-1; i+=2){
 			int parentA = indices.get(i);
 			int parentB = indices.get(i+1);
-			if(instance.hamming(population.get(parentA), population.get(parentB)) > threshold){
+			if(instance.distance(population.get(parentA), population.get(parentB)) > threshold){
 				ISolution child = crossover.cross(population.get(parentA), population.get(parentB));
 				children.add(child);
 				thereIs=true;

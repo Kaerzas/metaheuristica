@@ -220,7 +220,7 @@ public class InstanceQMKP extends AbstractInstance
 	}
 
 	@Override
-	public int hamming(ISolution sol1, ISolution sol2) {
+	public int distance(ISolution sol1, ISolution sol2) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

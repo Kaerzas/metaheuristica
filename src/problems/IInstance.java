@@ -49,9 +49,9 @@ public interface IInstance extends IConfiguration
 	void setRandom(Random random);
 	
 	/**
-	 * Get Hamming distance between two solutions
+	 * Get distance between two solutions
 	 */
-	public int hamming(ISolution sol1, ISolution sol2);
+	public int distance(ISolution sol1, ISolution sol2);
 	
 	/**
 	 * Get length of the solution's problem

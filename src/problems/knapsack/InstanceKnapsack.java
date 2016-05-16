@@ -153,7 +153,7 @@ public class InstanceKnapsack extends AbstractInstance
 	}
 	
 	@Override
-	public int hamming(ISolution sol1, ISolution sol2){
+	public int distance(ISolution sol1, ISolution sol2){
 		byte knapsack1 [] = ((SolutionKnapsack)sol1).getObjects();
 		byte knapsack2 [] = ((SolutionKnapsack)sol2).getObjects();
 		int distance=0;

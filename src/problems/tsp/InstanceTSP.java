@@ -122,7 +122,7 @@ public class InstanceTSP extends AbstractInstance
 	}
 	
 	@Override
-	public int hamming(ISolution sol1, ISolution sol2){
+	public int distance(ISolution sol1, ISolution sol2){
 		List<Integer> order1 = ((SolutionTSP)sol1).getOrder();
 		List<Integer> order2 = ((SolutionTSP)sol2).getOrder();
 		
