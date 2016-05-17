@@ -52,6 +52,9 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	/** Max time in nanoseconds*/
 	protected long maxTime;
 	
+	/** Algorithm configuration */
+	protected String header;
+	
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -216,5 +219,10 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	@Override
 	public Random getRandom(){
 		return this.random;
+	}
+	
+	@Override
+	public String getHeader(){
+		return header;
 	}
 }

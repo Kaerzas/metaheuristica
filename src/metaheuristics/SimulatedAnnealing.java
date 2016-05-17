@@ -138,21 +138,50 @@ public class SimulatedAnnealing extends AbstractAlgorithm{
 		
 		try {
 			// Get the name of the explorator class
-			String exploratorName = configuration.getString("explorator[@name]");
+			String explorerName = configuration.getString("explorer[@name]");
 			
 			// Instance class
 			Class<? extends INeighExplorator> exploratorClass = 
-					(Class<? extends INeighExplorator>) Class.forName(exploratorName);
+					(Class<? extends INeighExplorator>) Class.forName(explorerName);
 			
 			explorator = exploratorClass.newInstance();
 			explorator.setInstance(instance);
 			
 			if(explorator instanceof IConfiguration)
-				((IConfiguration) explorator).configure(configuration.subset("explorator"));
+				((IConfiguration) explorator).configure(configuration.subset("explorer"));
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(1);
+		}
+		
+		//Get algorithm params to header
+		String algorithm = getClass().getName().split("\\.")[1];
+		String instance  = (configuration.subset("instance").getString("data")).split("/")[2];
+		String explorer  = (configuration.getString("explorer[@name]")).split("\\.")[2];
+		String operator  = (configuration.subset("explorer").getString("operator")).split("\\.")[3];
+		
+		this.header = "# " + instance;
+		this.header += "\n# Algorithm: " + algorithm;
+		this.header += "\n# Explorer: " + explorer + "\tOperator: " + operator;
+		this.header += "\n# Initial temperature: " + initialTemperature + "\tMinimum temperature: " + minimumTemperature;
+		this.header += "\n# Acceptance rule: " + acceptanceRule + "\tCooling scheme: " + coolingScheme + "\tCooling ratio: " + coolingRatio;
+		
+		String generator = configuration.getString("solGenerator[@name]");
+		
+		switch(generator.split("\\.")[2]){
+		
+			case "SolGenRandomKP":
+				this.header += "\n# Generator: SolGenRandomKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandQMKP":
+				this.header += "\n# Generator: SolGenRandQMKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandomTSP":
+				this.header += "\n# Generator: SolGenRandomTSP";
+				break;
 		}
 	}
 }

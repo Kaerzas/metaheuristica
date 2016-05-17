@@ -148,8 +148,35 @@ public class CHC extends AbstractAlgorithm{
 				((IConfiguration) crossover).configure(configuration.subset("crossover"));
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.exit(1);
+		}
+		
+		//Get algorithm params to header
+		String algorithm = getClass().getName().split("\\.")[1];
+		String selection = (configuration.getString("selection[@name]")).split("\\.")[2];
+		String crossover = (configuration.getString("crossover[@name]")).split("\\.")[3];
+		String instance  = (configuration.subset("instance").getString("data")).split("/")[2];
+		
+		this.header = "# " + instance;
+		this.header += "\n# Algorithm: " + algorithm + "\n# Selection: " + selection + "\t Crossover: " + crossover;
+		this.header += "\n# Population: " + this.nPopulation + "\t PercentThreshold: " + this.percentThreshold;
+		
+		String generator = configuration.getString("solGenerator[@name]");
+
+		switch(generator.split("\\.")[2]){
+		
+			case "SolGenRandomKP":
+				this.header += "\n# Generator: SolGenRandomKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandQMKP":
+				this.header += "\n# Generator: SolGenRandQMKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandomTSP":
+				this.header += "\n# Generator: SolGenRandomTSP";
+				break;
 		}
 	}
 }

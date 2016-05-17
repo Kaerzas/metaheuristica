@@ -61,4 +61,6 @@ public interface IAlgorithm extends IConfiguration
 	public List<ISolution> getBestSolutions();
 	
 	public Random getRandom();
+	
+	public String getHeader();
 }

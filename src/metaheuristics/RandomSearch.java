@@ -60,6 +60,31 @@ public class RandomSearch extends AbstractAlgorithm
 		
 		//Metaheuristic specific configuration
 		this.tries = configuration.getInt("tries");
+		
+		//Get algorithm params to header
+		String algorithm = getClass().getName().split("\\.")[1];
+		String instance  = (configuration.subset("instance").getString("data")).split("/")[2];
+		
+		this.header = "# " + instance;
+		this.header += "\n# Algorithm: " + algorithm;
+		this.header += "\n# Tries: " + this.tries;
+		
+		String generator = configuration.getString("solGenerator[@name]");
+
+		switch(generator.split("\\.")[2]){
+		
+			case "SolGenRandomKP":
+				this.header += "\n# Generator: SolGenRandomKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandQMKP":
+				this.header += "\n# Generator: SolGenRandQMKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandomTSP":
+				this.header += "\n# Generator: SolGenRandomTSP";
+				break;
+		}
 	}
 
 	@Override

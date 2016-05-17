@@ -4,6 +4,8 @@ import org.apache.commons.configuration.Configuration;
 
 import metaheuristics.localsearch.INeighExplorator;
 import problems.ISolution;
+import problems.tsp.heuristics.SolGenGreedyRand;
+import sun.security.x509.AlgorithmId;
 import util.config.IConfiguration;
 
 public class LocalSearch extends AbstractAlgorithm 
@@ -77,5 +79,55 @@ public class LocalSearch extends AbstractAlgorithm
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		//Get algorithm params to header
+		String algorithm = getClass().getName().split("\\.")[1];
+		String instance  = (configuration.subset("instance").getString("data")).split("/")[2];
+		String explorer  = (configuration.getString("explorer[@name]")).split("\\.")[2];
+		String operator  = (configuration.subset("explorer").getString("operator")).split("\\.")[3];
+		
+		String generator = configuration.getString("solGenerator[@name]");
+		String solGenerator = null;
+		
+		switch(generator.split("\\.")[2]){
+		
+			case "SolGenRandomKP":
+				solGenerator = "\n# Generator: SolGenRandomKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandQMKP":
+				solGenerator = "\n# Generator: SolGenRandQMKP\tprob: " + configuration.subset("solGenerator").getDouble("probability");
+				break;
+				
+			case "SolGenRandomTSP":
+				solGenerator = "\n# Generator: SolGenRandomTSP";
+				break;
+			
+			case "heuristics":
+				
+				switch(generator.split("\\.")[3]){
+				
+					case "SolGenGreedyRand":
+						solGenerator = "\n# Generator: SolGenGreedyRand\tPercentCandidates: " + configuration.subset("solGenerator").getDouble("percentCandidates");
+						algorithm = "GRASP";
+						break;
+					case "SolGenRatioKP":
+						solGenerator = "\n# Generator: SolGenRatioKP\tprobability: " + configuration.subset("solGenerator").getDouble("probability");
+						solGenerator += "\n# PercentCandidates: " + configuration.subset("solGenerator").getDouble("percentCandidates") + "\tPercentStartCapacity: " + configuration.subset("solGenerator").getDouble("percentStartCapacity");
+						algorithm = "GRASP";
+						break;
+					case "SolGenRatioQMKP":
+						solGenerator = "\n# Generator: SolGenRatioQMKP\tprobability: " + configuration.subset("solGenerator").getDouble("probability") + "\tPercentCandidates: " + configuration.subset("solGenerator").getDouble("percentCandidates");
+						algorithm = "GRASP";
+						break;
+				}
+				break;
+		}
+		
+		this.header = "# " + instance;
+		this.header += "\n# Algorithm: " + algorithm;
+		this.header += "\n# Tries: " + this.tries;
+		this.header += "\n# Explorer: " + explorer + "\tOperator: " + operator;
+		this.header += solGenerator;
 	}	
 }
