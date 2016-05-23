@@ -1,12 +1,34 @@
 package metaheuristics.localsearch.operator;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
+
 import problems.IInstance;
 import problems.ISolution;
 import problems.qmkp.InstanceQMKP;
 import problems.qmkp.SolutionQMKP;
 
+/**
+ * 
+ *
+ */
 public class ChangeObjectQMKP extends INeighOperator 
 {
+	class Neighbour{
+		public int idx;
+		public int newBag; 
+		
+		public Neighbour(int idx, int newBag){
+			this.idx = idx;
+			this.newBag = newBag;
+		}
+	}
+	
 	//////////////////////////////////////////////
 	// -------------------------------- Variables
 	/////////////////////////////////////////////
@@ -19,21 +41,7 @@ public class ChangeObjectQMKP extends INeighOperator
 	
 	private SolutionQMKP original;
 	
-	/** The number of modifications */
-	
-	private int modified;
-	
-	/** Index used in modifications */
-	
-	private int idxModified;
-	
-	/** The size of the neighborhood */
-	
-	private int neighborhoodSize;
-	
-	/** Step used changing the knapsack */
-	
-	private int step;
+	private Stack<Neighbour> neighbourhood;
 	
 	//////////////////////////////////////////////
 	// ---------------------------------- Methods
@@ -45,15 +53,7 @@ public class ChangeObjectQMKP extends INeighOperator
 		// Load the instance and the individual
 		this.instance = (InstanceQMKP) instance;
 		this.original = (SolutionQMKP) original;	
-
-		// Set the size of the neighborhood
-		this.neighborhoodSize = this.instance.getNObjects() * (this.instance.getNKnapsacks());
-		// The number of solutions explorated
-		this.modified = 0;
-		// A index to read the actual object inserted that it's going to change
-		this.idxModified = 0;
-		// The step used to change an object from one bag to another
-		this.step = 1;	
+		this.neighbourhood = null;
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class ChangeObjectQMKP extends INeighOperator
 	 * @return a neighbour for the individual
 	 */
 	
-	private ISolution generateNeighbour(int idx) 
+	private ISolution generateNeighbour(int idx, int newBag) 
 	{
 		// Get the objects of the original solution
 		int nObjects = this.original.getObjects().length;
@@ -80,15 +80,6 @@ public class ChangeObjectQMKP extends INeighOperator
 				
 		// The bag where the item was stored
 		int oldBag = newInd.getObjects()[idx];
-		// The bag where the item is going to be stores
-		int newBag;
-		
-		if(oldBag == 0)
-			newBag = -1;
-		else if(oldBag == -1)
-			newBag = 1;
-		else
-			newBag = (oldBag + step)%instance.getNKnapsacks();
 
 		// Change the bag
 		newInd.getObjects()[idx] = newBag;
@@ -127,26 +118,26 @@ public class ChangeObjectQMKP extends INeighOperator
 			}
 			// The previous was valid
 			else {
-				int [] newPartners = null;
 				// Get the previoud fitness
 				double fitness = original.getFitness();				
 				// Get the old and the new partners element from the object that has been moved
-				int [] oldPartners = newInd.getObjectsInBag(oldBag);
+				List<Integer> oldPartners = newInd.getObjectsInBag(oldBag);
+				List<Integer> newPartners = null;
 				if(newBag != -1)
 					newPartners = newInd.getObjectsInBag(newBag);
 				
 				// Disassociate with the objects of the old bag
 				if(oldBag != -1) {
-					for(int i=0; i<oldPartners.length; i++) 
-						fitness -= instance.getProfits()[idx][oldPartners[i]];
+					for(Integer o : oldPartners)
+						fitness -= instance.getProfits()[idx][o];
 				}
 				else
 					fitness += instance.getObjects().get(idx).getValue();
 				
 				// Associate with the objects the new bag
 				if(newBag != -1) {
-					for(int i=0; i<newPartners.length; i++)
-						fitness += instance.getProfits()[idx][newPartners[i]];
+					for(Integer n : newPartners)
+						fitness += instance.getProfits()[idx][n];
 				}
 				else
 					fitness -= instance.getObjects().get(idx).getValue();
@@ -157,37 +148,109 @@ public class ChangeObjectQMKP extends INeighOperator
 		}						
 		return newInd;
 	}
+	
+	private void resetNeighbourhood(){
+		int [] objects = this.original.getObjects();
+		int nBags = this.instance.getNKnapsacks();
+		
+		int bag;
+		neighbourhood = new Stack<>();
+		for(int i=0 ; i < objects.length ; ++i){
+			bag = objects[i];
+			
+			for(int b= -1 ; b < nBags ; ++b){
+				if(b == bag) //The same bag doesn't count
+					continue;
+				
+				neighbourhood.push(new Neighbour(i, b));
+			}
+		}
+		Collections.shuffle(neighbourhood, instance.getRandom());
+	}
 
 	@Override
 	public boolean hasNext() 
 	{
-		return modified < neighborhoodSize;
+		if(neighbourhood == null)
+			resetNeighbourhood();
+		
+		return neighbourhood.size() > 0;
 	}
 
 	@Override
 	public ISolution next() 
 	{
-		// Generate a neighbour
-		ISolution sol = generateNeighbour(idxModified);
-		// Increment the number of modifications and the index
-		modified++;
-		idxModified = modified % instance.getNObjects();
-		// Check if we have read all the object inserted
-		if(idxModified == 0) {
-			// Increment the step
-			step++;
-		}
-		return sol;
+		Neighbour n = neighbourhood.pop();
+		return generateNeighbour(n.idx, n.newBag);
 	}
 
 	@Override
 	public ISolution randomNeighbour() 
 	{
-		// TODO Esto habría que cambiarlo ya que el paso (step) debe de ser aleatorio
-		return null;
-		/*
-		Random random = instance.getRandom();
-		return generateNeighbour(random.nextInt(this.instance.getNObjects()));
-		*/
+		int idx = instance.getRandom().nextInt(instance.getNObjects());
+		int currentBag = original.getObjects()[idx];
+		int newBag = instance.getRandom().nextInt(instance.getNKnapsacks()); // [0, nBags)
+		newBag = newBag - 1; // [-1, nBags-1)
+		if(newBag >= currentBag)
+			newBag = newBag + 1; //[-1, currentBag), (currentBag, nBags)
+		
+		return generateNeighbour(idx, newBag);
+	}
+	
+	public static void main(String[] args){
+		//Create instance
+		InstanceQMKP instance = new InstanceQMKP();
+		Configuration c = new BaseConfiguration();
+		c.setProperty("data", "examples/QMKPInstances/jeu_100_100_1.txt");
+		instance.configure(c);
+		instance.setRandom(new Random());
+		
+		//Create solution
+		int[] objects = new int[instance.getNObjects()];
+		for(int i=0 ; i < objects.length ; ++i){
+			objects[i] = -1;
+		}
+		objects[0] = 0;
+		objects[1] = 1;
+		objects[2] = 2;
+		ISolution solution = new SolutionQMKP(objects);
+		instance.evaluate(solution);
+		
+		//Create operator
+		ChangeObjectQMKP operator = new ChangeObjectQMKP();
+		operator.initialize(instance, solution);
+		
+		System.out.println("Original solution:");
+		solution.printSolution();
+		
+		System.out.println("Neighbours:");
+		while(operator.hasNext()){
+			ISolution neigh = operator.next();
+			neigh.printSolution();
+			
+			double quickFitness = neigh.getFitness();
+			instance.evaluate(neigh);
+			double correctFitness = neigh.getFitness();
+			
+			if(quickFitness != correctFitness){
+				System.err.println("Fitness incorrectly computed");
+				System.err.println("Computed: " + quickFitness + ", Correct: " + correctFitness);
+			}
+		}
+		
+		System.out.println("Random neighbours:");
+		for(int i=0 ; i < 10 ; ++i){
+			ISolution neigh = operator.randomNeighbour();
+			neigh.printSolution();
+			
+			double quickFitness = neigh.getFitness();
+			instance.evaluate(neigh);
+			double correctFitness = neigh.getFitness();
+			
+			if(quickFitness != correctFitness){
+				System.err.println("Fitness incorrectly computed");
+				System.err.println("Computed: " + quickFitness + ", Correct: " + correctFitness);
+			}
+		}
 	}
 }

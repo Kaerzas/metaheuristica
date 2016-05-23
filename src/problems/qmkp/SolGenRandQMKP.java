@@ -42,19 +42,16 @@ public class SolGenRandQMKP extends AbstractSolGenerator implements IConfigurati
 		for(int i=0; i<nObjects; i++)
 			knapsack[i] = -1;
 		
-		int [] totalWeight = new int[nKnapsacks];
 		int chosenKP;
 		
 		for(int i=0; i<nObjects; i++) {
 			if(randGenerator.nextDouble() < addProbability){
 				chosenKP = Math.abs(randGenerator.nextInt())%nKnapsacks;
 				knapsack[i] = chosenKP;
-				totalWeight[chosenKP] += ((InstanceQMKP)instance).getObjects().get(i).getWeight();
 			}
 		}
 		
 		SolutionQMKP sol = new SolutionQMKP(knapsack);
-		sol.setTotalWeight(totalWeight);
 		instance.evaluate(sol);
 		return sol;
 	}

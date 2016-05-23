@@ -55,11 +55,37 @@ public class InstanceQMKP extends AbstractInstance
 	
 	@Override
 	public void evaluate(ISolution solution) 
-	{
-		// TODO El peso lo omito porque el generador ya se lo pone (habria que ver si no da problemas)
-		
+	{		
 		int knapsacks [] = ((SolutionQMKP)solution).getObjects();
 		int fitness = 0;
+		
+		//Compute weights
+		int[] weights = new int[getNKnapsacks()]; //Initialized to 0 by default
+		for(int i=0 ; i < knapsacks.length ; ++i){
+			if(knapsacks[i] >= 0){ // Object included in a knapsack
+				weights[knapsacks[i]] += objects.get(i).getWeight();
+			}
+		}
+		((SolutionQMKP) solution).setTotalWeight(weights);
+		
+		//Check if any knapsack is invalid (capacity condition broken)
+		List<Integer> knapsacksSurpassed = new ArrayList<>();
+		for(int i=0 ; i < weights.length ; ++i){
+			if(weights[i] > knapsackSize){
+				knapsacksSurpassed.add(i);
+			}
+		}
+		
+		//If a knapsack was invalid, evaluate to negative fitness
+		if(knapsacksSurpassed.size() > 0){
+			for(Integer k : knapsacksSurpassed){
+				fitness += knapsackSize - weights[k];
+			}
+			solution.setFitness(fitness);
+			return;
+		}
+		
+		//In any other case, go on
 		
 		// Get the individual values
 		for(int i=0; i<nObjects; i++)
@@ -80,22 +106,7 @@ public class InstanceQMKP extends AbstractInstance
 			}
 		}
 		
-		int [] totalWeight = ((SolutionQMKP)solution).getTotalWeight();
-		int exceded = 0;
-		
-		// Sum the weight o
-		for(int i=0; i<totalWeight.length; i++) {
-			if(totalWeight[i] > knapsackSize)
-				exceded += knapsackSize - totalWeight[i] ;
-		}
-		
-		// At least one bag is exceded
-		if(exceded<0)
-			solution.setFitness(exceded);
-		// The solution is valid
-		else
-			solution.setFitness(fitness);
-		
+		solution.setFitness(fitness);
 	}
 
 	@Override
@@ -209,11 +220,11 @@ public class InstanceQMKP extends AbstractInstance
 		double value = objects.get(object).getValue();
 		
 		// Get the partners
-		int [] partners = sol.getObjectsInBag(knapsack);
+		List<Integer> partners = sol.getObjectsInBag(knapsack);
 		
 		// Get the pair values
-		for(int i=0; i<partners.length; i++)
-			value += profits[object][partners[i]];
+		for(Integer p : partners)
+			value += profits[object][p];
 		
 		// Return the values
 		return value;
