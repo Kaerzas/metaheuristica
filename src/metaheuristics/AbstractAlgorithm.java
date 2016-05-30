@@ -46,11 +46,20 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	
 	protected List<ISolution> bestSolutions;
 	
+	/** Absolute best solution found */
+	protected ISolution globalBest;
+	
+	/** Time mark where globalBest was found*/
+	protected long lastGlobalBestTime;
+	
 	/** Is the algorithm limited by time? */
 	protected boolean limitedTime;
 	
 	/** Max time in nanoseconds*/
 	protected long maxTime;
+	
+	/** Max time without improvement */
+	protected long maxTimeWithoutImprovement;
 	
 	/** Algorithm configuration */
 	protected String header;
@@ -82,10 +91,18 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	protected void logSolution(ISolution sol){
 		bestSolutions.add(sol);
 		stopwatch.lap();
+		
+		if((globalBest == null) || instance.betterThan(sol, globalBest)){
+			globalBest = sol;
+			lastGlobalBestTime = stopwatch.currentElapsed();
+		}
 	}
 	
 	protected boolean maxTimeReached(){
-		return limitedTime && (stopwatch.currentElapsed() >= maxTime);
+		long current = stopwatch.currentElapsed();
+		return limitedTime && //The algorithm is time-limited and
+				((current >= maxTime) || //Max time has been reached or
+				((current - lastGlobalBestTime) >= maxTimeWithoutImprovement)); //max time without improvement has been reached
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -147,45 +164,16 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 			generator.setRandom(random);
 			generator.setInstance(instance);
 			
+			if(configuration.containsKey("maxTimeWithoutImprovement"))
+				this.maxTimeWithoutImprovement = readableTime(configuration.getString("maxTimeWithoutImprovement"));
+			else
+				this.maxTimeWithoutImprovement = Long.MAX_VALUE;
+			
+			this.lastGlobalBestTime = 0L;
+			
 			if(configuration.containsKey("maxTime")){
 				limitedTime = true;
-				String time = configuration.getString("maxTime");
-				
-				// Recognize time format
-				Pattern nano  = Pattern.compile("[0-9]+"); //Time in nanoseconds
-				Pattern human = Pattern.compile("(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?"); //Time in human readable format
-				
-				// Java regex is stupid
-				Matcher nano_m  = nano.matcher(time);
-				Matcher human_m = human.matcher(time);
-				
-				if(nano_m.matches())
-					maxTime = Long.parseLong(time);
-				
-				else if (human_m.matches() && (!time.isEmpty())){
-					final long one_second = 1000000000L; // if definition of a second changes, change this value
-					maxTime = 0L;
-					if(human_m.start(2) != -1){ // hours specified
-						long hours = Long.parseLong(time.substring(human_m.start(2), human_m.end(2)));
-						maxTime += hours * 3600L * one_second; 
-					}
-					if(human_m.start(4) != -1){ // minutes specified
-						long minutes = Long.parseLong(time.substring(human_m.start(4), human_m.end(4)));
-						maxTime += minutes * 60L * one_second; 
-					}
-					if(human_m.start(6) != -1){ // seconds specified
-						long seconds = Long.parseLong(time.substring(human_m.start(6), human_m.end(6)));
-						maxTime += seconds * one_second; 
-					}
-				}
-				
-				else{
-					String message = "Specified max time has invalid format\n";
-					message += "Correct format is one of the following:\n";
-					message += "\t<number_nanoseconds>\n";
-					message += "\t[<number_hours>h][<number_minutes>m][<number_seconds>s]";
-					throw new RuntimeException(message);
-				}
+				maxTime = readableTime(configuration.getString("maxTime"));
 			}
 			else
 				limitedTime = false;
@@ -194,6 +182,49 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	//Transforms a string specifying time
+	//(ns or human readable) into nanoseconds
+	private static long readableTime(String input){
+		long time;
+		// Recognize time format
+		Pattern nano  = Pattern.compile("[0-9]+"); //Time in nanoseconds
+		Pattern human = Pattern.compile("(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?"); //Time in human readable format
+		
+		// Java regex is stupid
+		Matcher nano_m  = nano.matcher(input);
+		Matcher human_m = human.matcher(input);
+		
+		if(nano_m.matches())
+			time = Long.parseLong(input);
+		
+		else if (human_m.matches() && (!input.isEmpty())){
+			final long one_second = 1000000000L; // if definition of a second changes, change this value
+			time = 0L;
+			if(human_m.start(2) != -1){ // hours specified
+				long hours = Long.parseLong(input.substring(human_m.start(2), human_m.end(2)));
+				time += hours * 3600L * one_second; 
+			}
+			if(human_m.start(4) != -1){ // minutes specified
+				long minutes = Long.parseLong(input.substring(human_m.start(4), human_m.end(4)));
+				time += minutes * 60L * one_second; 
+			}
+			if(human_m.start(6) != -1){ // seconds specified
+				long seconds = Long.parseLong(input.substring(human_m.start(6), human_m.end(6)));
+				time += seconds * one_second; 
+			}
+		}
+		
+		else{
+			String message = "Specified max time has invalid format\n";
+			message += "Correct format is one of the following:\n";
+			message += "\t<number_nanoseconds>\n";
+			message += "\t[<number_hours>h][<number_minutes>m][<number_seconds>s]";
+			throw new RuntimeException(message);
+		}
+		
+		return time;
 	}
 	
 	@Override

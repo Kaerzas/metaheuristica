@@ -12,7 +12,7 @@ import problems.qmkp.InstanceQMKP;
 import problems.qmkp.SolutionQMKP;
 import metaheuristics.evolutive.AbstractCrossover;
 
-public class HUXQMPK extends AbstractCrossover 
+public class HUXQMKP extends AbstractCrossover 
 {
 	InstanceQMKP instance;
 	
