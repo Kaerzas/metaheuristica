@@ -61,7 +61,10 @@ public class RandomSearch extends AbstractAlgorithm
 		super.configure(configuration);
 		
 		//Metaheuristic specific configuration
-		this.tries = configuration.getInt("tries");
+		if(configuration.containsKey("tries"))
+			this.tries = configuration.getInt("tries");
+		else
+			this.tries = Integer.MAX_VALUE;
 		
 		//Get algorithm params to header
 		String algorithm = getClass().getName().split("\\.")[1];
