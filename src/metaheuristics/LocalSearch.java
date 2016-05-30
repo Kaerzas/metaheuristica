@@ -4,8 +4,6 @@ import org.apache.commons.configuration.Configuration;
 
 import metaheuristics.localsearch.INeighExplorator;
 import problems.ISolution;
-import problems.tsp.heuristics.SolGenGreedyRand;
-import sun.security.x509.AlgorithmId;
 import util.config.IConfiguration;
 
 public class LocalSearch extends AbstractAlgorithm 
