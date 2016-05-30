@@ -84,6 +84,11 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	 */
 	abstract protected void search();
 	
+	@Override
+	public ISolution getBestSolution() {
+		return globalBest;
+	};
+	
 	/**
 	 * Add solution to the best solutions list and log the time
 	 * @param sol Solution to add

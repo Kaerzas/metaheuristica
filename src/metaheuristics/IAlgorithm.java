@@ -53,12 +53,19 @@ public interface IAlgorithm extends IConfiguration
 	public Stopwatch getStopwatch();
 	
 	/**
-	 * Get the best solution 
+	 * Get the solution list representing the algorithm execution
 	 * 
-	 * @return The best solution
+	 * @return List of solutions in each iteration
 	 */
 	
 	public List<ISolution> getBestSolutions();
+	
+	/**
+	 * Get the best solution found
+	 * 
+	 * @return Best solution found
+	 */
+	public ISolution getBestSolution();
 	
 	public Random getRandom();
 	
