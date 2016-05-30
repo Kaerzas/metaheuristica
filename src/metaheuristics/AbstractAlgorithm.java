@@ -175,6 +175,7 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 				this.maxTimeWithoutImprovement = Long.MAX_VALUE;
 			
 			this.lastGlobalBestTime = 0L;
+			this.globalBest = null;
 			
 			if(configuration.containsKey("maxTime")){
 				limitedTime = true;
