@@ -16,31 +16,33 @@ public class LocalSearch extends AbstractAlgorithm
 	
 	@Override
 	public void search() {
-		// Starting solution
-		ISolution newSolution = generator.generate();
-		ISolution neighbour = newSolution;
-		
-		//System.out.println("Solucion inicial:");
-		//newSolution.printSolution();
-		//System.out.println();
-		
-		for(int i=0; (i<tries) && (!maxTimeReached()); i++) {
-			// Generate the neighbor
-			neighbour = explorer.generateBestNeighbour(newSolution);			
+		while(!maxTimeReached()){
+			// Starting solution
+			ISolution newSolution = generator.generate();
+			ISolution neighbour = newSolution;
 			
-			if(neighbour != null) {
-				logSolution(neighbour);
-				/*System.out.println("Solucion mejorada en la iteracion "+ i + ":");
-				System.out.println("The individual is:");
-				newSolution.printSolution();
-				System.out.println("The neighbor is:");
-				neighbour.printSolution();
-				System.out.println();*/
-				newSolution = neighbour;
-			}
-			else {
-				//System.out.println("Not better solution found\n");
-				break;
+			//System.out.println("Solucion inicial:");
+			//newSolution.printSolution();
+			//System.out.println();
+			
+			for(int i=0; (i<tries) && (!maxTimeReached()); i++) {
+				// Generate the neighbor
+				neighbour = explorer.generateBestNeighbour(newSolution);			
+				
+				if(neighbour != null) {
+					logSolution(neighbour);
+					/*System.out.println("Solucion mejorada en la iteracion "+ i + ":");
+					System.out.println("The individual is:");
+					newSolution.printSolution();
+					System.out.println("The neighbor is:");
+					neighbour.printSolution();
+					System.out.println();*/
+					newSolution = neighbour;
+				}
+				else {
+					//System.out.println("Not better solution found\n");
+					break;
+				}
 			}
 		}
 	}
