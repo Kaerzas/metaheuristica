@@ -232,13 +232,20 @@ public class InstanceQMKP extends AbstractInstance
 
 	@Override
 	public int distance(ISolution sol1, ISolution sol2) {
-		// TODO Auto-generated method stub
-		return 0;
+		int[] obj1 = ((SolutionQMKP) sol1).getObjects();
+		int[] obj2 = ((SolutionQMKP) sol2).getObjects();
+		
+		int distance = 0;
+		for(int i=0 ; i < this.getLength() ; ++i){
+			if(obj1[i] != obj2[i])
+				distance++;
+		}
+		
+		return distance;
 	}
 
 	@Override
 	public int getLength() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.objects.size();
 	}
 }
