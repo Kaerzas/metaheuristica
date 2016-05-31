@@ -262,4 +262,8 @@ public abstract class AbstractAlgorithm implements IAlgorithm
 	public String getHeader(){
 		return header;
 	}
+	
+	public void removeBestSolution() {
+		globalBest = null;
+	}
 }

@@ -60,6 +60,8 @@ public interface IAlgorithm extends IConfiguration
 	
 	public List<ISolution> getBestSolutions();
 	
+	public void removeBestSolution();
+	
 	/**
 	 * Get the best solution found
 	 * 

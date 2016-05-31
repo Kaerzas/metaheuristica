@@ -65,7 +65,7 @@ public class Run
 				List<ISolution> bestSolutions = algorithm.getBestSolutions();
 				System.out.println("Time elapsed: " + stp.elapsed() + " ns");
 				if(bestSolutions.size() > 0)
-					System.out.println("Best fitness found: " + bestSolutions.get(bestSolutions.size()-1).getFitness());
+					System.out.println("Best fitness found: " + algorithm.getBestSolution().getFitness());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

@@ -1,5 +1,6 @@
 package metaheuristics.localsearch;
 
+import metaheuristics.localsearch.operator.INeighOperator;
 import problems.IInstance;
 import problems.ISolution;
 import util.config.IConfiguration;
@@ -28,4 +29,7 @@ public interface INeighExplorator extends IConfiguration
 	public IInstance getInstance();
 	
 	public void setInstance(IInstance instance);
+
+
+	public void setOperator(INeighOperator operator);
 }
