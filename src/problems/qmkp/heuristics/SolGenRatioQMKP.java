@@ -15,7 +15,7 @@ import problems.qmkp.SolutionQMKP;
 
 public class SolGenRatioQMKP extends SolGenRandQMKP {
 
-	private double percentCandidates;
+	private double percentCandidates, percentCapacity, startCapacity;
 	private int nObjectsSelection;	
 	
 	public ISolution generate()
@@ -45,25 +45,27 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			System.err.println("Incorrect percent CL");
 			System.exit(0);
 		}
-		
 		// Check if the number of candidates is correct
 		if(nObjectsSelection < nKnapsacks) {
-			System.out.println("You should set more candidates");
+			System.err.println("You should set more candidates");
 			System.exit(0);
 		}
 		
-		// Get the random candidates
-		List<Integer> listObj = new ArrayList<Integer>();
-		for(int i=0; i<nObjects; i++)
-			listObj.add(i);
-		Collections.shuffle(listObj, instance.getRandom());
-		listObj = listObj.subList(0, nObjectsSelection);
+		if(percentCapacity > 0)
+			this.startCapacity = ((InstanceQMKP)instance).getKnapsackSize()*percentCapacity;
+		else{
+			System.err.println("Knapsack capacity to fill must be greater than 0");
+			System.exit(0);
+		}
 		
-		// Put the first objects
-		for(int i=0; i<nKnapsacks; i++) {
-			// Get the index of the object
-			int idxObj = listObj.get(listObj.size()-1);
-			// Insert the last object in the knapsack 'i'
+		// First object in each knapsack is random
+		List<Integer> beginning = new ArrayList<Integer>(nObjects);
+		for(int i=0; i<nObjects; i++)
+			beginning.add(i);
+		Collections.shuffle(beginning, instance.getRandom());
+		for(int i=0; i<nKnapsacks; ++i){
+			int idxObj = beginning.get(i);
+			// Insert rand object in the knapsack 'i'
 			sol.getObjects()[idxObj] = i;
 			// Sum the weight
 			weights[i] = ((InstanceQMKP)instance).getObjects().get(idxObj).getWeight();
@@ -71,44 +73,41 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 			fitness += ((InstanceQMKP)instance).getObjects().get(idxObj).getValue();
 			// Remove the last object
 			added.add(idxObj);
-			listObj.remove(listObj.size()-1);
 		}
 		
 		boolean finished = false;
 		
-		// Put the other objects
-		while(finished == false) {
-			
+		// Insert the rest of objects
+		while(!finished) {
 			// Update the candidate list
-			listObj = new ArrayList<Integer>();
+			List<Integer> candidates = new ArrayList<Integer>(nObjects);
 			for(int i=0; i<nObjects; i++)
-				listObj.add(i);
-			Collections.shuffle(listObj, instance.getRandom());
-			listObj.removeAll(added);
-			if(listObj.size()>nObjectsSelection)
-				listObj = listObj.subList(0, nObjectsSelection);		
+				candidates.add(i);
+			Collections.shuffle(candidates, instance.getRandom());
+			candidates.removeAll(added);
+			if(candidates.size()>nObjectsSelection)
+				candidates = candidates.subList(0, nObjectsSelection);
 			
-			// Index to the best object to add to the best knapsack
+			// Best object index to add to the best knapsack
 			int bestObj = -1;
 			int bestKP = -1;
 			double bestValue = 0;
-			double auxValue = 0;
 			
-			// See which object add
-			for(int i=0; i<listObj.size(); i++) {
+			// Select best object to add to best knapsack
+			for(int i=0; i<candidates.size(); i++) {
 				for(int j=0; j<nKnapsacks; j++) {
-					int auxWeight = ((InstanceQMKP)instance).getObjects().get(listObj.get(i)).getWeight();
-					if(auxWeight + weights[j] <= ((InstanceQMKP)instance).getKnapsackSize()) {
-						auxValue = ((InstanceQMKP)instance).getIncrememtalValue(sol, listObj.get(i), j)/((InstanceQMKP)instance).getObjects().get(listObj.get(i)).getWeight();
-						if(auxValue > bestValue) {
-							bestObj = listObj.get(i);
+					int objWeight = ((InstanceQMKP)instance).getObjects().get(candidates.get(i)).getWeight();
+					if(objWeight + weights[j] <= this.startCapacity){
+						// Calculate the ratio = Total knapsack value (with current object) / weight of current object
+						double currValue = ((InstanceQMKP)instance).getIncrememtalValue(sol, candidates.get(i), j)/((InstanceQMKP)instance).getObjects().get(candidates.get(i)).getWeight();
+						if(currValue > bestValue) {
+							bestObj = candidates.get(i);
 							bestKP = j;
-							bestValue = auxValue;
+							bestValue = currValue;
 						}
 					}
 				}
 			}
-			
 			if(bestObj != -1) {
 				// Insert the best object in the best knapsack
 				sol.getObjects()[bestObj] = bestKP;
@@ -120,24 +119,10 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 				finished = true;
 		}
 		
-		// Set the weight and the fitness to the solution
+		// Set the weight and the fitness in the solution
 		sol.setTotalWeight(weights);
+		sol.setFitness(fitness);
 		
-		// Check if the knapsacks are exceded
-		int exceded = 0;
-		// Sum the weight o
-		for(int i=0; i<sol.getTotalWeight().length; i++) {
-			if(sol.getTotalWeight()[i] > ((InstanceQMKP)instance).getKnapsackSize())
-				exceded += ((InstanceQMKP)instance).getKnapsackSize() - sol.getTotalWeight()[i] ;
-		}
-		
-		// At least one bag is exceded
-		if(exceded<0)
-			sol.setFitness(exceded);
-		// The solution is valid
-		else
-			sol.setFitness(fitness);
-				
 		return sol;
 	}
 	
@@ -146,5 +131,6 @@ public class SolGenRatioQMKP extends SolGenRandQMKP {
 		// Super class configure method		
 		super.configure(configuration);
 		this.percentCandidates = configuration.getDouble("percentCandidates");
+		this.percentCapacity = configuration.getDouble("percentStartCapacity");
 	}
 }
